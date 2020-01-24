@@ -5,7 +5,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Avatar from "@material-ui/core/Avatar";
 
-const ProfileMenu = React.memo(({logout}) => {
+const ProfileMenu = React.memo(({signOut}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = event => {
@@ -16,12 +16,12 @@ const ProfileMenu = React.memo(({logout}) => {
         setAnchorEl(null);
     };
 
-    const [disableLogout, setDisableLogout] = React.useState(false);
+    const [disableSignOut, setDisableSignOut] = React.useState(false);
 
-    const handleCloseLogout = () => {
+    const handleCloseSignOut = () => {
         handleClose();
-        setDisableLogout(true);
-        logout();
+        setDisableSignOut(true);
+        signOut();
     };
 
     return (
@@ -37,7 +37,7 @@ const ProfileMenu = React.memo(({logout}) => {
                 onClose={handleClose}
             >
                 <MenuItem component={NavLink} to='/profile' onClick={handleClose}>Профиль</MenuItem>
-                <MenuItem onClick={handleCloseLogout} disabled={disableLogout}>Выйти</MenuItem>
+                <MenuItem onClick={handleCloseSignOut} disabled={disableSignOut}>Выйти</MenuItem>
             </Menu>
         </div>
     )

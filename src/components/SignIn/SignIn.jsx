@@ -6,12 +6,10 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import SignInForm from "./SignInForm/SignInForm";
-import {Redirect} from "react-router";
 import {connect} from "react-redux";
-import {login} from "../../redux/userReducer";
+import {signIn} from "../../redux/userReducer";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
-import {getIsAuth} from "../../redux/selectors/userSelectors";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -24,21 +22,14 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(1),
         backgroundColor: theme.palette.secondary.main,
     },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
 }));
 
-const SignIn = React.memo(({login, isAuth}) => {
+const SignIn = React.memo(({signIn}) => {
 
     const classes = useStyles();
 
     const onSubmit = ({email, password}) => {
-        login(email, password);
+        signIn(email, password);
     }
 
     return (
@@ -49,7 +40,7 @@ const SignIn = React.memo(({login, isAuth}) => {
                     <LockOutlinedIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign in
+                    Вход
                 </Typography>
                 <SignInForm onSubmit={onSubmit}/>
             </div>
@@ -57,10 +48,6 @@ const SignIn = React.memo(({login, isAuth}) => {
     );
 });
 
-const mapStateToProps = (state) => ({
-    isAuth: getIsAuth(state),
-})
-
 export default compose(
-    connect(mapStateToProps, {login}),
+    connect(null, {signIn}),
     withAuthRedirect)(SignIn);

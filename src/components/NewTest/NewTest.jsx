@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const NewTest = React.memo(({login, isAuth}) => {
+const NewTest = React.memo(({signIn, isAuth}) => {
 
     const classes = useStyles();
 

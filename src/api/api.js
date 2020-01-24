@@ -10,10 +10,13 @@ const authHeader = (bearerToken) => ({
 })
 
 export const userAPI = {
-    login(email, password) {
+    signIn(email, password) {
         return instance.post('users/login', {email, password});
     },
-    logout(bearerToken) {
+    signUp(username, email, password) {
+        return instance.post('users', {username, email, password});
+    },
+    signOut(bearerToken) {
         return instance.delete('users/logout', authHeader(bearerToken))
     },
     getData(bearerToken) {

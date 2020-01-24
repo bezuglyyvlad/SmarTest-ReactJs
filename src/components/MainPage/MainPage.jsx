@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const MainPage = React.memo(({login, isAuth}) => {
+const MainPage = React.memo(({signIn, isAuth}) => {
 
     const classes = useStyles();
 

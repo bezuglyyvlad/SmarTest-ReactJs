@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Profile = React.memo(({login, isAuth}) => {
+const Profile = React.memo(({signIn, isAuth}) => {
 
     const classes = useStyles();
 

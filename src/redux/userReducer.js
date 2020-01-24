@@ -39,9 +39,9 @@ export const getUserData = (bearerToken) => async (dispatch) => {
     }
 }
 
-export const login = (email, password) => async (dispatch) => {
+export const signIn = (email, password) => async (dispatch) => {
     try {
-        const response = await userAPI.login(email, password);
+        const response = await userAPI.signIn(email, password);
         setBearerTokenToLS(response.data.access_token);
         dispatch(getUserData(getBearerTokenFromLS()));
     } catch (e) {
@@ -50,8 +50,22 @@ export const login = (email, password) => async (dispatch) => {
     }
 }
 
-export const logout = () => async (dispatch) => {
-    await userAPI.logout(getBearerTokenFromLS());
+export const signUp = (username, email, password) => async (dispatch) => {
+    try {
+        await userAPI.signUp(username, email, password);
+        dispatch(signIn(email, password));
+    } catch (e) {
+        const errors = {};
+        // eslint-disable-next-line array-callback-return
+        e.response.data.map(object => {
+            errors[object.field] = object.message;
+        });
+        dispatch(stopSubmit('signup', errors));
+    }
+}
+
+export const signOut = () => async (dispatch) => {
+    await userAPI.signOut(getBearerTokenFromLS());
     dispatch(setAuthUserData(null, null, null, false));
 }
 

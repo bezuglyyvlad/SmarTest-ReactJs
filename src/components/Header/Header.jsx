@@ -13,7 +13,7 @@ import IconButton from "@material-ui/core/IconButton";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBrain} from "@fortawesome/free-solid-svg-icons";
 import {connect} from "react-redux";
-import {logout} from "../../redux/userReducer";
+import {signOut} from "../../redux/userReducer";
 import {getIsAuth} from "../../redux/selectors/userSelectors";
 
 
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Header = React.memo(({isAuth, logout}) => {
+const Header = React.memo(({isAuth, signOut}) => {
     const classes = useStyles();
 
     return (
@@ -48,7 +48,7 @@ const Header = React.memo(({isAuth, logout}) => {
                     </Button>
                 </Typography>
                 {isAuth ?
-                    <ProfileMenu logout={logout}/>
+                    <ProfileMenu signOut={signOut}/>
                     : < IconButton component={NavLink} to='signin' edge="end"
                                    color="inherit"><AccountCircleIcon/></IconButton>
                 }
@@ -61,4 +61,4 @@ const mapStateToProps = (state) => ({
     isAuth: getIsAuth(state),
 })
 
-export default connect(mapStateToProps, {logout})(Header);
+export default connect(mapStateToProps, {signOut})(Header);
