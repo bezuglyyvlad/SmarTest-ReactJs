@@ -14,7 +14,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBrain} from "@fortawesome/free-solid-svg-icons";
 import {connect} from "react-redux";
 import {signOut} from "../../redux/userReducer";
-import {getIsAuth} from "../../redux/selectors/userSelectors";
+import {getIsAuth, getUsername} from "../../redux/selectors/userSelectors";
 
 
 const useStyles = makeStyles(theme => ({
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Header = React.memo(({isAuth, signOut}) => {
+const Header = React.memo(({isAuth, signOut, username}) => {
     const classes = useStyles();
 
     return (
@@ -48,7 +48,7 @@ const Header = React.memo(({isAuth, signOut}) => {
                     </Button>
                 </Typography>
                 {isAuth ?
-                    <ProfileMenu signOut={signOut}/>
+                    <ProfileMenu signOut={signOut} username={username}/>
                     : < IconButton component={NavLink} to='signin' edge="end"
                                    color="inherit"><AccountCircleIcon/></IconButton>
                 }
@@ -59,6 +59,7 @@ const Header = React.memo(({isAuth, signOut}) => {
 
 const mapStateToProps = (state) => ({
     isAuth: getIsAuth(state),
+    username: getUsername(state),
 })
 
 export default connect(mapStateToProps, {signOut})(Header);

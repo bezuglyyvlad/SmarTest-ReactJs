@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const SignUp = ({signUp}) => {
+const SignUp = React.memo(({signUp}) => {
     const classes = useStyles();
 
     const onSubmit = ({username, email, password}) => {
@@ -45,7 +45,7 @@ const SignUp = ({signUp}) => {
             </div>
         </Container>
     );
-};
+})
 
 export default compose(
     connect(null, {signUp}),

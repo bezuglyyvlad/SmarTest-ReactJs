@@ -21,5 +21,8 @@ export const userAPI = {
     },
     getData(bearerToken) {
         return instance.get('users', authHeader(bearerToken))
+    },
+    updateData(userId, username, email, password, bearerToken) {
+        return instance.put(`users/${userId}`, {username, email, password}, authHeader(bearerToken));
     }
 }

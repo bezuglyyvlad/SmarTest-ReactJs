@@ -1,6 +1,3 @@
-import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
-import {NavLink} from "react-router-dom";
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {reduxForm} from "redux-form";
@@ -17,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const SignUpForm = React.memo(({handleSubmit, pristine, submitting, error}) => {
+const ProfileForm = React.memo(({handleSubmit, pristine, submitting, error}) => {
     const classes = useStyles();
 
     return (
@@ -26,18 +23,11 @@ const SignUpForm = React.memo(({handleSubmit, pristine, submitting, error}) => {
             {emailField()}
             {passwordFirld()}
             {error && <FormHelperText error={!!error}>{error}</FormHelperText>}
-            {submitButton('Зарегистрироваться', classes, pristine || submitting)}
-            <Grid container justify="flex-end">
-                <Grid item>
-                    <Link component={NavLink} to='/signin' variant="body2">
-                        Уже есть аккаунт? Войти
-                    </Link>
-                </Grid>
-            </Grid>
+            {submitButton('Изменить', classes, pristine || submitting)}
         </form>
     )
 })
 
 export default reduxForm({
-    form: 'signup',
-})(SignUpForm);
+    form: 'profile',
+})(ProfileForm);
