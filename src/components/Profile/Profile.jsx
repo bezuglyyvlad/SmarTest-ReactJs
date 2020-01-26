@@ -11,9 +11,8 @@ import {getEmail, getUserId, getUsername} from "../../redux/selectors/userSelect
 import {connect} from "react-redux";
 import {getAvatarUsername} from "../../utils/utils";
 import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
-import {NavLink} from "react-router-dom";
-import {updateUser} from "../../redux/userReducer";
+import {deleteUser, updateUser} from "../../redux/userReducer";
+import DeleteAccount from "./DeleteAccount/DeleteAccount";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -34,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Profile = React.memo(({userId, username, email, updateUser}) => {
+const Profile = React.memo(({userId, username, email, updateUser, deleteUser}) => {
 
     const classes = useStyles();
 
@@ -55,9 +54,7 @@ const Profile = React.memo(({userId, username, email, updateUser}) => {
                 <ProfileForm onSubmit={onSubmit} initialValues={{username: username, email: email}}/>
                 <Grid container className={classes.deleteAccount} justify='center'>
                     <Grid item>
-                        <Link component={NavLink} to='/signin' variant="body2" color={'secondary'}>
-                            Удалить аккаунт
-                        </Link>
+                        <DeleteAccount deleteUser={deleteUser} userId={userId}/>
                     </Grid>
                 </Grid>
             </div>
@@ -71,4 +68,4 @@ const mapStateToProps = (state) => ({
     email: getEmail(state),
 })
 
-export default compose(withUnAuthRedirect, connect(mapStateToProps, {updateUser}))(Profile);
+export default compose(withUnAuthRedirect, connect(mapStateToProps, {updateUser, deleteUser}))(Profile);

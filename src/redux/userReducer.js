@@ -100,4 +100,9 @@ export const updateUser = (userId, username, email, password) => async (dispatch
     }
 }
 
+export const deleteUser = (userId) => async (dispatch) => {
+    await userAPI.deleteUser(userId, getBearerTokenFromLS());
+    dispatch(setAuthUserData(null, null, null, false));
+}
+
 export default userReducer;

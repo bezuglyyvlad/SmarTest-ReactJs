@@ -24,5 +24,8 @@ export const userAPI = {
     },
     updateData(userId, username, email, password, bearerToken) {
         return instance.put(`users/${userId}`, {username, email, password}, authHeader(bearerToken));
+    },
+    deleteUser(userId, bearerToken) {
+        return instance.delete(`users/${userId}`, authHeader(bearerToken));
     }
 }
