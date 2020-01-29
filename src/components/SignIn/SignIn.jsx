@@ -10,6 +10,7 @@ import {connect} from "react-redux";
 import {signIn} from "../../redux/userReducer";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
+import {withErrorHandling} from "../../hoc/withErrorHandling";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -49,5 +50,6 @@ const SignIn = React.memo(({signIn}) => {
 });
 
 export default compose(
+    withErrorHandling,
     connect(null, {signIn}),
     withAuthRedirect)(SignIn);

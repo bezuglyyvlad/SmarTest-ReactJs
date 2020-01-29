@@ -10,6 +10,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {connect} from "react-redux";
 import SignUpForm from "./SignUpForm/SignUpForm";
 import {signUp} from "../../redux/userReducer";
+import {withErrorHandling} from "../../hoc/withErrorHandling";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -48,5 +49,6 @@ const SignUp = React.memo(({signUp}) => {
 })
 
 export default compose(
+    withErrorHandling,
     connect(null, {signUp}),
     withAuthRedirect)(SignUp);

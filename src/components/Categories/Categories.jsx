@@ -1,0 +1,70 @@
+import React, {useEffect} from 'react';
+import {makeStyles} from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import {compose} from "redux";
+import {withUnAuthRedirect} from "../../hoc/withUnAuthRedirect";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import List from "@material-ui/core/List";
+import CategoriesListItem from "./CategoriesListItem/CategoriesListItem";
+import {withRouter} from "react-router";
+import queryString from 'query-string'
+import {getCategories} from "../../redux/categoriesReducer";
+import {connect} from "react-redux";
+import {categoriesSelectors} from "../../redux/selectors/categoriesSelectors";
+import {ListCreator} from "../common/UIElements";
+import {Preloader} from "../common/Preloader";
+import Typography from "@material-ui/core/Typography";
+import {withErrorHandling} from "../../hoc/withErrorHandling";
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        flexGrow: 1,
+        maxWidth: 752,
+        marginTop: theme.spacing(8),
+    },
+    title: {
+        margin: theme.spacing(4, 0, 2),
+    },
+}));
+
+const Categories = React.memo(({location, getCategories, categories, pagination}) => {
+    const classes = useStyles();
+    const [dense, setDense] = React.useState(false);
+    const [showPreloader, setShowPreloader] = React.useState(true);
+
+    const page = +queryString.parse(location.search).page || 1;
+
+    useEffect(() => {
+        (async () => {
+            setShowPreloader(true);
+            await getCategories(page);
+            setShowPreloader(false);
+        })();
+    }, [page, getCategories]);
+
+    if (showPreloader) {
+        return <Preloader/>
+    }
+
+    return (
+        <Container component="main" className={classes.root}>
+            <CssBaseline/>
+            <Typography variant="h5" align='center' className={classes.title}>
+                Категории
+            </Typography>
+            <ListCreator pagination={pagination} dense={dense} setDense={setDense}>
+                <List dense={dense}>
+                    {categories.map(value => (
+                        <CategoriesListItem key={value.category_id} value={value}/>))}
+                </List>
+            </ListCreator>
+        </Container>
+    );
+});
+
+const mapStateToProps = (state) => ({
+    categories: categoriesSelectors.getCategories(state),
+    pagination: categoriesSelectors.getPagination(state),
+});
+
+export default compose(withErrorHandling, withUnAuthRedirect, withRouter, connect(mapStateToProps, {getCategories}))(Categories);

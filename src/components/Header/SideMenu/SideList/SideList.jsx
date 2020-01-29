@@ -1,7 +1,7 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
-import AddBoxIcon from '@material-ui/icons/AddBox';
+import CategoryIcon from '@material-ui/icons/Category';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import {withRouter} from "react-router-dom";
 import SideListItem from "./SideListItem/SideListItem";
@@ -30,8 +30,8 @@ const SideList = React.memo(({toggleDrawer, location}) => {
             onKeyDown={toggleDrawer(false)}
         >
             <List component="nav" aria-label="side-list">
-                <SideListItem link='/newtest' listItemIsActive={listItemIsActive} text='Новый тест'>
-                    <AddBoxIcon/>
+                <SideListItem link='/category' listItemIsActive={listItemIsActive} text='Категории'>
+                    <CategoryIcon/>
                 </SideListItem>
                 <SideListItem link='/statistics' listItemIsActive={listItemIsActive} text='Статистика'>
                     <AssessmentIcon/>

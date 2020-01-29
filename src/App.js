@@ -9,15 +9,16 @@ import {initializeApp} from "./redux/appReducer";
 import {Preloader} from "./components/common/Preloader";
 import {withSuspense} from "./hoc/withSuspense";
 import Header from "./components/Header/Header";
-import {getInitialized} from "./redux/selectors/appSelectors";
+import {appSelectors} from "./redux/selectors/appSelectors";
 
 
 const SignIn = React.lazy(() => import("./components/SignIn/SignIn"));
 const SignUp = React.lazy(() => import("./components/SignUp/SignUp"));
 const Profile = React.lazy(() => import("./components/Profile/Profile"));
-const NewTest = React.lazy(() => import("./components/NewTest/NewTest"));
+const Categories = React.lazy(() => import("./components/Categories/Categories"));
 const Statistics = React.lazy(() => import("./components/Statistics/Statistics"));
 const MainPage = React.lazy(() => import("./components/MainPage/MainPage"));
+const Subcategories = React.lazy(() => import("./components/Subcategories/Subcategories"));
 
 const App = ({initializeApp, initialized}) => {
     useEffect(() => {
@@ -36,7 +37,9 @@ const App = ({initializeApp, initialized}) => {
                     <Route path='/signin' render={withSuspense(SignIn)}/>
                     <Route path='/signup' render={withSuspense(SignUp)}/>
                     <Route path='/profile' render={withSuspense(Profile)}/>
-                    <Route path='/newtest' render={withSuspense(NewTest)}/>
+                    <Route path='/category/:category_id' render={withSuspense(Subcategories)}/>
+                    <Route path='/category' render={withSuspense(Categories)}/>
+                    <Route path='/test' render={() => <>Test</>}/>
                     <Route path='/statistics' render={withSuspense(Statistics)}/>
                     <Route path='/' render={withSuspense(MainPage)}/>
                 </Switch>
@@ -46,7 +49,7 @@ const App = ({initializeApp, initialized}) => {
 };
 
 const mapStateToProps = (state) => ({
-    initialized: getInitialized(state),
+    initialized: appSelectors.getInitialized(state),
 });
 
 export default compose(

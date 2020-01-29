@@ -7,12 +7,13 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import ProfileForm from "./ProfileForm/ProfileForm";
-import {getEmail, getUserId, getUsername} from "../../redux/selectors/userSelectors";
+import {userSelectors} from "../../redux/selectors/userSelectors";
 import {connect} from "react-redux";
 import {getAvatarUsername} from "../../utils/utils";
 import Grid from "@material-ui/core/Grid";
 import {deleteUser, updateUser} from "../../redux/userReducer";
 import DeleteAccount from "./DeleteAccount/DeleteAccount";
+import {withErrorHandling} from "../../hoc/withErrorHandling";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -63,9 +64,9 @@ const Profile = React.memo(({userId, username, email, updateUser, deleteUser}) =
 });
 
 const mapStateToProps = (state) => ({
-    userId: getUserId(state),
-    username: getUsername(state),
-    email: getEmail(state),
+    userId: userSelectors.getUserId(state),
+    username: userSelectors.getUsername(state),
+    email: userSelectors.getEmail(state),
 })
 
-export default compose(withUnAuthRedirect, connect(mapStateToProps, {updateUser, deleteUser}))(Profile);
+export default compose(withErrorHandling, withUnAuthRedirect, connect(mapStateToProps, {updateUser, deleteUser}))(Profile);

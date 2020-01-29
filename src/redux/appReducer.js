@@ -4,7 +4,7 @@ import {getBearerTokenFromLS} from "../utils/utils";
 const INITIALIZED_SUCCESS = 'app/INITIALIZED_SUCCESS';
 
 let initialState = {
-    initialized: false
+    initialized: false,
 };
 
 const appReducer = (state = initialState, action) => {
@@ -14,7 +14,6 @@ const appReducer = (state = initialState, action) => {
                 ...state,
                 initialized: true
             }
-
         default:
             return state;
     }

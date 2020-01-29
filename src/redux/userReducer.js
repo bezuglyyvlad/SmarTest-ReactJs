@@ -1,5 +1,5 @@
 import {userAPI} from "../api/api";
-import {stopSubmit, startSubmit} from "redux-form";
+import {stopSubmit, startSubmit, setSubmitSucceeded} from "redux-form";
 import {getBearerTokenFromLS, setBearerTokenToLS} from "../utils/utils";
 
 const SET_USER_DATA = 'user/SET_USER_DATA';
@@ -30,7 +30,7 @@ const userReducer = (state = initialState, action) => {
 }
 
 
-export const showErrorToForm = (dispatch, e, form) => {
+const showErrorToForm = (dispatch, e, form) => {
     const errors = {};
     // eslint-disable-next-line array-callback-return
     e.response.data.map(object => {
@@ -40,19 +40,19 @@ export const showErrorToForm = (dispatch, e, form) => {
 }
 
 
-export const setAuthUserData = (userId, username, email, isAuth) => ({
+const setAuthUserData = (userId, username, email, isAuth) => ({
     type: SET_USER_DATA, payload:
         {userId, username, email, isAuth}
 });
 
-export const setUsernameAndEmail = (username, email) => ({
+const setUsernameAndEmail = (username, email) => ({
     type: SET_USERNAME_AND_EMAIL, payload:
         {username, email}
 });
 
-export const getUserData = (bearerToken) => async (dispatch) => {
+export const getUserData = () => async (dispatch) => {
     try {
-        const response = await userAPI.getData(bearerToken);
+        const response = await userAPI.getData();
         const {id, username, email} = response.data;
         dispatch(setAuthUserData(id, username, email, true));
     } catch (e) {
@@ -95,6 +95,7 @@ export const updateUser = (userId, username, email, password) => async (dispatch
         const response = await userAPI.updateData(userId, username, email, password, getBearerTokenFromLS());
         dispatch(setUsernameAndEmail(response.data.username, response.data.email));
         dispatch(stopSubmit('profile'));
+        dispatch(setSubmitSucceeded('profile'));
     } catch (e) {
         showErrorToForm(dispatch, e, 'profile');
     }
