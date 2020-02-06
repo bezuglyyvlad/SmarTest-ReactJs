@@ -1,6 +1,5 @@
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
@@ -10,7 +9,6 @@ import {connect} from "react-redux";
 import {signIn} from "../../redux/userReducer";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
-import {withErrorHandling} from "../../hoc/withErrorHandling";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -35,7 +33,7 @@ const SignIn = React.memo(({signIn}) => {
 
     return (
         <Container component="main" maxWidth="xs">
-            <CssBaseline/>
+            {/*<CssBaseline/>*/}
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon/>
@@ -50,6 +48,5 @@ const SignIn = React.memo(({signIn}) => {
 });
 
 export default compose(
-    withErrorHandling,
     connect(null, {signIn}),
     withAuthRedirect)(SignIn);

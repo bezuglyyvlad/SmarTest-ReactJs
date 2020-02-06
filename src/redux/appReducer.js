@@ -1,10 +1,12 @@
 import {getUserData} from "./userReducer";
-import {getBearerTokenFromLS} from "../utils/utils";
+import {getBearerTokenFromLS, removeThemeFromLS, setThemeFromLS} from "../utils/utils";
 
 const INITIALIZED_SUCCESS = 'app/INITIALIZED_SUCCESS';
+const SET_THEME = 'app/SET_THEME';
 
 let initialState = {
     initialized: false,
+    theme: null
 };
 
 const appReducer = (state = initialState, action) => {
@@ -14,6 +16,11 @@ const appReducer = (state = initialState, action) => {
                 ...state,
                 initialized: true
             }
+        case SET_THEME:
+            return {
+                ...state,
+                theme: action.theme
+            }
         default:
             return state;
     }
@@ -21,6 +28,17 @@ const appReducer = (state = initialState, action) => {
 
 
 export const initializedSuccess = () => ({type: INITIALIZED_SUCCESS});
+export const setTheme = (theme) => ({type: SET_THEME, theme: theme});
+
+export const changeTheme = (theme) => (dispatch) => {
+    setThemeFromLS(theme);
+    dispatch(setTheme(theme));
+}
+
+export const clearTheme = () => (dispatch) => {
+    removeThemeFromLS();
+    dispatch(setTheme(null));
+}
 
 export const initializeApp = () => (dispatch) => {
     const token = getBearerTokenFromLS();

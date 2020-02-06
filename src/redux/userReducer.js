@@ -1,6 +1,6 @@
 import {userAPI} from "../api/api";
 import {stopSubmit, startSubmit, setSubmitSucceeded} from "redux-form";
-import {getBearerTokenFromLS, setBearerTokenToLS} from "../utils/utils";
+import {getBearerTokenFromLS, removeBearerTokenFromLS, setBearerTokenToLS} from "../utils/utils";
 
 const SET_USER_DATA = 'user/SET_USER_DATA';
 const SET_USERNAME_AND_EMAIL = 'user/SET_USERNAME_AND_EMAIL';
@@ -56,7 +56,7 @@ export const getUserData = () => async (dispatch) => {
         const {id, username, email} = response.data;
         dispatch(setAuthUserData(id, username, email, true));
     } catch (e) {
-        localStorage.clear();
+        removeBearerTokenFromLS();
     }
 }
 
@@ -68,8 +68,12 @@ export const signIn = (email, password) => async (dispatch) => {
         dispatch(getUserData(getBearerTokenFromLS()));
         dispatch(startSubmit('signin'));
     } catch (e) {
-        const message = e.response.data.message;
-        dispatch(stopSubmit('signin', {_error: message}));
+        if (e.response && e.response.status === 400 && e.response.data){
+            const message = e.response.data.message;
+            dispatch(stopSubmit('signin', {_error: message}));
+        } else {
+            await Promise.reject(e);
+        }
     }
 }
 
@@ -80,7 +84,11 @@ export const signUp = (username, email, password) => async (dispatch) => {
         dispatch(signIn(email, password));
         dispatch(startSubmit('signup'));
     } catch (e) {
-        showErrorToForm(dispatch, e, 'signup');
+        if (e.response && e.response.status === 422 && e.response.data){
+            showErrorToForm(dispatch, e, 'signup');
+        } else {
+            await Promise.reject(e);
+        }
     }
 }
 
@@ -97,7 +105,11 @@ export const updateUser = (userId, username, email, password) => async (dispatch
         dispatch(stopSubmit('profile'));
         dispatch(setSubmitSucceeded('profile'));
     } catch (e) {
-        showErrorToForm(dispatch, e, 'profile');
+        if (e.response && e.response.status === 422 && e.response.data){
+            showErrorToForm(dispatch, e, 'profile');
+        } else {
+            await Promise.reject(e);
+        }
     }
 }
 

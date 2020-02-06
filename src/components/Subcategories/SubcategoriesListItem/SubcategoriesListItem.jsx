@@ -14,7 +14,7 @@ const SubcategoriesListItem = ({value, number}) => {
                     <SubdirectoryArrowRightIcon/>
                 </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={`Тест №${number + 1} - ${value.name}`} secondary={value.time + ' minute'}/>
+            <ListItemText primary={value.name} secondary={value.time + ' minute'}/>
         </ListItem>
     )
 }

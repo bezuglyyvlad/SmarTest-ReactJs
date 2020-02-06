@@ -4,5 +4,8 @@ export const appSelectors = {
     },
     getError(state) {
         return state.app.error;
+    },
+    getTheme(state) {
+        return state.app.theme;
     }
 }

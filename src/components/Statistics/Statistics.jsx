@@ -3,7 +3,6 @@ import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {compose} from "redux";
 import {withUnAuthRedirect} from "../../hoc/withUnAuthRedirect";
-import {withErrorHandling} from "../../hoc/withErrorHandling";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -23,4 +22,4 @@ const Statistics = React.memo(({signIn, isAuth}) => {
     );
 });
 
-export default compose(withUnAuthRedirect, withErrorHandling)(Statistics);
+export default compose(withUnAuthRedirect)(Statistics);

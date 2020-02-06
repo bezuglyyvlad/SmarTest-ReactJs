@@ -3,7 +3,6 @@ import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {compose} from "redux";
 import {withUnAuthRedirect} from "../../hoc/withUnAuthRedirect";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import List from "@material-ui/core/List";
 import CategoriesListItem from "./CategoriesListItem/CategoriesListItem";
 import {withRouter} from "react-router";
@@ -14,7 +13,6 @@ import {categoriesSelectors} from "../../redux/selectors/categoriesSelectors";
 import {ListCreator} from "../common/UIElements";
 import {Preloader} from "../common/Preloader";
 import Typography from "@material-ui/core/Typography";
-import {withErrorHandling} from "../../hoc/withErrorHandling";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -48,7 +46,7 @@ const Categories = React.memo(({location, getCategories, categories, pagination}
 
     return (
         <Container component="main" className={classes.root}>
-            <CssBaseline/>
+            {/*<CssBaseline/>*/}
             <Typography variant="h5" align='center' className={classes.title}>
                 Категории
             </Typography>
@@ -67,4 +65,4 @@ const mapStateToProps = (state) => ({
     pagination: categoriesSelectors.getPagination(state),
 });
 
-export default compose(withErrorHandling, withUnAuthRedirect, withRouter, connect(mapStateToProps, {getCategories}))(Categories);
+export default compose(withUnAuthRedirect, withRouter, connect(mapStateToProps, {getCategories}))(Categories);

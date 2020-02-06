@@ -1,17 +1,20 @@
 import * as React from "react";
-import {connect} from "react-redux";
-import {setError} from "../../redux/errorReducer";
 import Error from "./Error";
+import {withRouter} from "react-router";
 
-class ErrorBoundary extends React.PureComponent {
+class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {hasError: false};
+        this.state = {hasError: {}};
+    }
+
+    errorExists(obj) {
+        return !(Object.entries(obj).length === 0 && obj.constructor === Object);
     }
 
     static getDerivedStateFromError(error) {
         // Обновить состояние с тем, чтобы следующий рендер показал запасной UI.
-        return {hasError: true};
+        return {hasError: {status: 'Ууууупс', name: 'Что-то пошло не так'}};
     }
 
     // componentDidCatch(error, errorInfo) {
@@ -21,34 +24,41 @@ class ErrorBoundary extends React.PureComponent {
 
     catchAllUnhandleErrors = (e) => {
         e.promise.catch(e => {
-            this.props.setError(e.response.data);
+            e.response && e.response.data ? this.setState({hasError: e.response.data}) : this.setState({
+                hasError: {
+                    status: 'Ууууупс',
+                    name: 'Что-то пошло не так'
+                }
+            })
         })
     }
 
     componentDidMount() {
         window.addEventListener("unhandledrejection", this.catchAllUnhandleErrors)
+        this.unlisten = this.props.history.listen((location, action) => {
+            if (this.errorExists(this.state.hasError)) {
+                this.setState({hasError: {}});
+            }
+        });
     }
 
     componentWillUnmount() {
         window.removeEventListener("unhandledrejection", this.catchAllUnhandleErrors)
+        this.unlisten();
     }
 
     render() {
-        if (Object.entries(this.props.error).length !== 0) {
-            return <Error error={this.props.error}/>;
-        }
-        if (this.state.hasError) {
+        if (this.errorExists(this.state.hasError)) {
             // Можно отрендерить запасной UI произвольного вида
-            console.log('Error');
-            return <h1>Что-то пошло не так.</h1>;
+            return <Error error={this.state.hasError}/>;
         }
 
         return this.props.children;
     }
 }
 
-const mapStateToProps = (state) => ({
-    error: state.error.error,
-});
+// const mapStateToProps = (state) => ({
+//     error: state.error.error,
+// });
 
-export default connect(mapStateToProps, {setError})(ErrorBoundary);
+export default withRouter(ErrorBoundary);

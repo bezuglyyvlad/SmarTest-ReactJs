@@ -4,13 +4,11 @@ import Container from '@material-ui/core/Container';
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
 import Avatar from "@material-ui/core/Avatar";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {connect} from "react-redux";
 import SignUpForm from "./SignUpForm/SignUpForm";
 import {signUp} from "../../redux/userReducer";
-import {withErrorHandling} from "../../hoc/withErrorHandling";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -34,7 +32,7 @@ const SignUp = React.memo(({signUp}) => {
 
     return (
         <Container component="main" maxWidth="xs">
-            <CssBaseline/>
+            {/*<CssBaseline/>*/}
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon/>
@@ -49,6 +47,5 @@ const SignUp = React.memo(({signUp}) => {
 })
 
 export default compose(
-    withErrorHandling,
     connect(null, {signUp}),
     withAuthRedirect)(SignUp);

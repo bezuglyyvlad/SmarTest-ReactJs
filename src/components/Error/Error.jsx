@@ -1,8 +1,4 @@
-import React, {useEffect} from 'react';
-import {compose} from "redux";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import {connect} from "react-redux";
-import {clearError} from "../../redux/errorReducer";
+import React from 'react';
 import ErrorIcon from '@material-ui/icons/Error';
 import Typography from "@material-ui/core/Typography";
 import {makeStyles} from "@material-ui/core/styles";
@@ -15,14 +11,8 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Error = React.memo(({error, clearError}) => {
+const Error = React.memo(({error}) => {
     const classes = useStyles();
-
-    useEffect(() => {
-        return () => {
-            clearError()
-        }
-    });
 
     return (
         <Grid
@@ -33,7 +23,7 @@ const Error = React.memo(({error, clearError}) => {
             justify="center"
             style={{minHeight: '80vh'}}
         >
-            <CssBaseline/>
+            {/*<CssBaseline/>*/}
             <ErrorIcon color='primary' className={classes.icon}/>
             <Typography component="h2" variant="h3">
                 {error.status}
@@ -45,4 +35,4 @@ const Error = React.memo(({error, clearError}) => {
     );
 });
 
-export default compose(connect(null, {clearError}))(Error);
+export default Error;

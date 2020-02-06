@@ -2,7 +2,8 @@ import React from "react";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Drawer from "@material-ui/core/Drawer";
-import SideList from "./SideList/SideList";
+import MainList from "./MainList/MainList";
+import SettingsList from "./SettingsList/SettingsList";
 
 const SideMenu = React.memo(() => {
     const [drawer, setDrawer] = React.useState(false);
@@ -20,7 +21,8 @@ const SideMenu = React.memo(() => {
                 <MenuIcon/>
             </IconButton>
             <Drawer open={drawer} onClose={toggleDrawer(false)}>
-                <SideList toggleDrawer={toggleDrawer}/>
+                <MainList toggleDrawer={toggleDrawer}/>
+                <SettingsList toggleDrawer={toggleDrawer}/>
             </Drawer>
         </div>
     );

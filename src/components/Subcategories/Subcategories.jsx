@@ -3,7 +3,6 @@ import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {compose} from "redux";
 import {withUnAuthRedirect} from "../../hoc/withUnAuthRedirect";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import {withRouter} from "react-router";
 import {connect} from "react-redux";
 import {ListCreator} from "../common/UIElements";
@@ -19,7 +18,6 @@ import queryString from 'query-string'
 import {subcategoriesSelectors} from "../../redux/selectors/subcategoriesSelectors";
 import {getCategory} from "../../redux/categoryReducer";
 import {categorySelectors} from "../../redux/selectors/categorySelectors";
-import {withErrorHandling} from "../../hoc/withErrorHandling";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -58,7 +56,7 @@ const Subcategories = React.memo(({
 
     return (
         <Container component="main" className={classes.root}>
-            <CssBaseline/>
+            {/*<CssBaseline/>*/}
             <Breadcrumbs aria-label="breadcrumb">
                 <Link color="inherit" component={NavLink} to='/category'>
                     Категории
@@ -71,8 +69,8 @@ const Subcategories = React.memo(({
             </Typography>
             {subcategories.length !== 0 && <ListCreator pagination={pagination} dense={dense} setDense={setDense}>
                 <List dense={dense}>
-                    {subcategories.map((value, number) => (
-                        <SubcategoriesListItem key={value.subcategory_id} number={number} value={value}/>))}
+                    {subcategories.map(value => (
+                        <SubcategoriesListItem key={value.subcategory_id} value={value}/>))}
                 </List>
             </ListCreator>}
         </Container>
@@ -85,7 +83,7 @@ const mapStateToProps = (state) => ({
     categoryName: categorySelectors.getName(state),
 });
 
-export default compose(withErrorHandling, withUnAuthRedirect, withRouter, connect(mapStateToProps, {
+export default compose(withUnAuthRedirect, withRouter, connect(mapStateToProps, {
     getSubcategories,
     getCategory
 }))(Subcategories);
