@@ -11,9 +11,10 @@ import {withSuspense} from "./hoc/withSuspense";
 import Header from "./components/Header/Header";
 import {appSelectors} from "./redux/selectors/appSelectors";
 import ErrorBoundary from "./components/Error/ErrorBoundary";
-import {createMuiTheme, MuiThemeProvider} from "@material-ui/core";
+import {MuiThemeProvider} from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {getThemeFromLS} from "./utils/utils";
+import {getTheme} from "./utils/theme";
 
 
 const SignIn = React.lazy(() => import("./components/SignIn/SignIn"));
@@ -29,26 +30,9 @@ const App = React.memo(({initializeApp, initialized, theme, changeTheme}) => {
         initializeApp();
     }, [initializeApp]);
 
-
-    const lightTheme = createMuiTheme({
-        palette: {
-            type: 'light',
-            primary: {main: '#1976d2'},
-            secondary: {main: '#dc004e'},
-        },
-    });
-
-    const darkTheme = createMuiTheme({
-        palette: {
-            type: 'dark',
-            primary: {main: '#4791db'},
-            secondary: {main: '#f48fb1'},
-        },
-    });
-
     changeTheme(getThemeFromLS());
 
-    const muiTheme = theme === 'dark' ? darkTheme : lightTheme;
+    const muiTheme = getTheme(theme);
 
     if (!initialized) {
         return <MuiThemeProvider theme={muiTheme}><Preloader/></MuiThemeProvider>;
