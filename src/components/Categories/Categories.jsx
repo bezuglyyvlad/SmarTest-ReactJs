@@ -13,6 +13,7 @@ import {categoriesSelectors} from "../../redux/selectors/categoriesSelectors";
 import {ListCreator} from "../common/UIElements";
 import {Preloader} from "../common/Preloader";
 import Typography from "@material-ui/core/Typography";
+import {appSelectors} from "../../redux/selectors/appSelectors";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -25,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Categories = React.memo(({location, getCategories, categories, pagination}) => {
+const Categories = React.memo(({location, getCategories, categories, pagination, perPage}) => {
     const classes = useStyles();
     const [dense, setDense] = React.useState(false);
     const [showPreloader, setShowPreloader] = React.useState(true);
@@ -35,10 +36,10 @@ const Categories = React.memo(({location, getCategories, categories, pagination}
     useEffect(() => {
         (async () => {
             setShowPreloader(true);
-            await getCategories(page);
+            await getCategories(page, perPage);
             setShowPreloader(false);
         })();
-    }, [page, getCategories]);
+    }, [page, getCategories, perPage]);
 
     if (showPreloader) {
         return <Preloader/>
@@ -50,7 +51,7 @@ const Categories = React.memo(({location, getCategories, categories, pagination}
             <Typography variant="h5" align='center' className={classes.title}>
                 Категории
             </Typography>
-            <ListCreator pagination={pagination} dense={dense} setDense={setDense}>
+            <ListCreator pagination={pagination} dense={dense} setDense={setDense} mainPath='/category'>
                 <List dense={dense}>
                     {categories.map(value => (
                         <CategoriesListItem key={value.category_id} value={value}/>))}
@@ -63,6 +64,7 @@ const Categories = React.memo(({location, getCategories, categories, pagination}
 const mapStateToProps = (state) => ({
     categories: categoriesSelectors.getCategories(state),
     pagination: categoriesSelectors.getPagination(state),
+    perPage: appSelectors.getPerPage(state),
 });
 
 export default compose(withUnAuthRedirect, withRouter, connect(mapStateToProps, {getCategories}))(Categories);

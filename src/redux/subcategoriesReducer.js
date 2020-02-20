@@ -4,7 +4,7 @@ const SET_SUBCATEGORIES = 'subcategory/SET_SUBCATEGORIES';
 
 let initialState = {
     subcategories: [],
-    pagination: []
+    pagination: {}
 };
 
 const subcategoriesReducer = (state = initialState, action) => {
@@ -25,8 +25,8 @@ const setSubcategories = (subcategories, pagination) => ({
         {subcategories, pagination}
 });
 
-export const getSubcategories = (category_id, page) => async (dispatch) => {
-    const response = await subcategoriesAPI.getData(category_id, page);
+export const getSubcategories = (category_id, page, perPage) => async (dispatch) => {
+    const response = await subcategoriesAPI.getData(category_id, page, perPage);
     dispatch(setSubcategories(response.data.items, response.data._meta));
 }
 

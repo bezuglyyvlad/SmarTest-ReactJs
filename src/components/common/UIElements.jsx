@@ -4,8 +4,14 @@ import React from "react";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import {makeStyles} from "@material-ui/core/styles";
+import {changePerPage} from "../../redux/appReducer";
+import {connect} from "react-redux";
 
-export const TablePaginationCreator = React.memo(({pagination, mainPath}) => {
+const TablePaginationCreator = React.memo(({pagination, mainPath, changePerPage}) => {
+    function setPerPage(event) {
+        changePerPage(event.target.value);
+    }
+
     return (
         <TablePagination
             backIconButtonProps={{
@@ -13,17 +19,20 @@ export const TablePaginationCreator = React.memo(({pagination, mainPath}) => {
                 to: pagination.currentPage !== 2 ? `?page=${pagination.currentPage - 1}` : mainPath
             }}
             nextIconButtonProps={{component: NavLink, to: `?page=${pagination.currentPage + 1}`}}
-            labelRowsPerPage={false}
-            rowsPerPageOptions={[]}
+            labelRowsPerPage='Строк на страницу'
+            rowsPerPageOptions={[5, 10, 20]}
             component="div"
             count={pagination.totalCount}
             rowsPerPage={pagination.perPage}
             page={pagination.currentPage - 1}
             onChangePage={() => {
             }}
+            onChangeRowsPerPage={setPerPage}
         />
     )
 })
+
+export const TablePaginationCreatorWithConnect = connect(null, {changePerPage})(TablePaginationCreator);
 
 
 const useStylesListCreator = makeStyles(theme => ({
@@ -32,7 +41,7 @@ const useStylesListCreator = makeStyles(theme => ({
     },
 }));
 
-export const ListCreator = React.memo(({pagination, dense, setDense, children}) => {
+export const ListCreator = React.memo(({pagination, dense, setDense, children, mainPath}) => {
     const classes = useStylesListCreator();
 
     return (
@@ -51,7 +60,7 @@ export const ListCreator = React.memo(({pagination, dense, setDense, children}) 
             <div className={classes.demo} align='center'>
                 {children}
                 {pagination && pagination.pageCount > 1 &&
-                <TablePaginationCreator pagination={pagination} mainPath='/category'/>}
+                <TablePaginationCreatorWithConnect pagination={pagination} mainPath={mainPath}/>}
             </div>
         </div>
     )

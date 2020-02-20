@@ -18,6 +18,7 @@ import queryString from 'query-string'
 import {subcategoriesSelectors} from "../../redux/selectors/subcategoriesSelectors";
 import {getCategory} from "../../redux/categoryReducer";
 import {categorySelectors} from "../../redux/selectors/categorySelectors";
+import {appSelectors} from "../../redux/selectors/appSelectors";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -32,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 
 const Subcategories = React.memo(({
                                       getSubcategories, match, location, subcategories,
-                                      pagination, getCategory, categoryName
+                                      pagination, getCategory, categoryName, perPage
                                   }) => {
     const classes = useStyles();
     const [dense, setDense] = React.useState(false);
@@ -45,10 +46,10 @@ const Subcategories = React.memo(({
         (async () => {
             setShowPreloader(true);
             await getCategory(category_id);
-            await getSubcategories(category_id, page);
+            await getSubcategories(category_id, page, perPage);
             setShowPreloader(false);
         })();
-    }, [category_id, page, getSubcategories, getCategory]);
+    }, [category_id, page, getSubcategories, getCategory, perPage]);
 
     if (showPreloader) {
         return <Preloader/>
@@ -67,7 +68,8 @@ const Subcategories = React.memo(({
                 {categoryName} {subcategories.length === 0 &&
             <p><strong>(к сожалению в данной категории нет тестов)</strong></p>}
             </Typography>
-            {subcategories.length !== 0 && <ListCreator pagination={pagination} dense={dense} setDense={setDense}>
+            {subcategories.length !== 0 && <ListCreator pagination={pagination} dense={dense} setDense={setDense}
+                                                        mainPath={'/category/' + category_id}>
                 <List dense={dense}>
                     {subcategories.map(value => (
                         <SubcategoriesListItem key={value.subcategory_id} value={value}/>))}
@@ -81,9 +83,10 @@ const mapStateToProps = (state) => ({
     subcategories: subcategoriesSelectors.getSubcategories(state),
     pagination: subcategoriesSelectors.getPagination(state),
     categoryName: categorySelectors.getName(state),
+    perPage: appSelectors.getPerPage(state),
 });
 
 export default compose(withUnAuthRedirect, withRouter, connect(mapStateToProps, {
     getSubcategories,
-    getCategory
+    getCategory,
 }))(Subcategories);

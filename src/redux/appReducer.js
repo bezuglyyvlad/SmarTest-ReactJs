@@ -1,12 +1,14 @@
 import {getUserData} from "./userReducer";
-import {getBearerTokenFromLS, removeThemeFromLS, setThemeFromLS} from "../utils/utils";
+import {getBearerTokenFromLS, getPerPageFromLS, removeThemeFromLS, setPerPageToLS, setThemeToLS} from "../utils/utils";
 
 const INITIALIZED_SUCCESS = 'app/INITIALIZED_SUCCESS';
 const SET_THEME = 'app/SET_THEME';
+const SET_PER_PAGE = 'app/SET_PER_PAGE';
 
 let initialState = {
     initialized: false,
-    theme: null
+    theme: null,
+    perPage: null
 };
 
 const appReducer = (state = initialState, action) => {
@@ -21,6 +23,11 @@ const appReducer = (state = initialState, action) => {
                 ...state,
                 theme: action.theme
             }
+        case SET_PER_PAGE:
+            return {
+                ...state,
+                perPage: action.perPage
+            }
         default:
             return state;
     }
@@ -28,10 +35,16 @@ const appReducer = (state = initialState, action) => {
 
 
 export const initializedSuccess = () => ({type: INITIALIZED_SUCCESS});
-export const setTheme = (theme) => ({type: SET_THEME, theme: theme});
+const setTheme = (theme) => ({type: SET_THEME, theme: theme});
+const setPerPage = (perPage) => ({type: SET_PER_PAGE, perPage: perPage});
+
+export const changePerPage = (perPage) => (dispatch) => {
+    setPerPageToLS(perPage);
+    dispatch(setPerPage(perPage));
+}
 
 export const changeTheme = (theme) => (dispatch) => {
-    setThemeFromLS(theme);
+    setThemeToLS(theme);
     dispatch(setTheme(theme));
 }
 
@@ -41,6 +54,9 @@ export const clearTheme = () => (dispatch) => {
 }
 
 export const initializeApp = () => (dispatch) => {
+    const perPageFromLS = getPerPageFromLS();
+    const perPage = perPageFromLS ? perPageFromLS : 10;
+    dispatch(changePerPage(perPage));
     const token = getBearerTokenFromLS();
     if (!token) {
         return dispatch(initializedSuccess())

@@ -25,8 +25,8 @@ const setCategories = (categories, pagination) => ({
         {categories, pagination}
 });
 
-export const getCategories = (page) => async (dispatch) => {
-    const response = await categoriesAPI.getData(page);
+export const getCategories = (page, perPage) => async (dispatch) => {
+    const response = await categoriesAPI.getData(page, perPage);
     dispatch(setCategories(response.data.items, response.data._meta));
 }
 

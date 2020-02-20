@@ -32,14 +32,14 @@ export const userAPI = {
 }
 
 export const categoriesAPI = {
-    getData(page) {
-        return instance.get('categories?page=' + page, authHeader());
+    getData(page, perPage) {
+        return instance.get(`categories?page=${page}&per-page=${perPage}`, authHeader());
     },
 }
 
 export const subcategoriesAPI = {
-    getData(category_id, page) {
-        return instance.get(`subcategories?category_id=${category_id}&page=${page}`, authHeader());
+    getData(category_id, page, perPage) {
+        return instance.get(`subcategories?category_id=${category_id}&page=${page}&per-page=${perPage}`, authHeader());
     },
 }
 

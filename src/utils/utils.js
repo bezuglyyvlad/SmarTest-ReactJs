@@ -18,10 +18,18 @@ export const getThemeFromLS = () => {
     return localStorage.getItem('theme');
 }
 
-export const setThemeFromLS = (name) => {
+export const setThemeToLS = (name) => {
     return localStorage.setItem('theme', name);
 }
 
 export const removeThemeFromLS = () => {
     localStorage.removeItem('theme');
+}
+
+export const getPerPageFromLS = () => {
+    return localStorage.getItem('perPage');
+}
+
+export const setPerPageToLS = (perPage) => {
+    return localStorage.setItem('perPage', perPage);
 }
