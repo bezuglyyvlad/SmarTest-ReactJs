@@ -15,7 +15,7 @@ import DeleteAccount from "./DeleteAccount/DeleteAccount";
 
 const useStyles = makeStyles(theme => ({
     paper: {
-        marginTop: theme.spacing(8),
+        marginTop: theme.spacing(5),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

@@ -32,8 +32,7 @@ export const UsernameField = React.memo(() => (
            label='Имя пользователя'
            variant="outlined"
            margin="normal"
-           fullWidth
-           required/>
+           fullWidth/>
 ))
 
 export const EmailField = React.memo(() => (
@@ -42,8 +41,7 @@ export const EmailField = React.memo(() => (
            label='Электронная почта'
            variant="outlined"
            margin="normal"
-           fullWidth
-           required/>
+           fullWidth/>
 ))
 
 export const PasswordFirld = React.memo(() => (
@@ -53,8 +51,7 @@ export const PasswordFirld = React.memo(() => (
            variant='outlined'
            margin='normal'
            type='password'
-           fullWidth
-           required/>
+           fullWidth/>
 ))
 
 const useStylesSubmitButton = makeStyles(theme => ({

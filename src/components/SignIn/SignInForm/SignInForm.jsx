@@ -12,9 +12,10 @@ import {
 } from "../../common/FormElements";
 
 const useStyles = makeStyles(theme => ({
-    form: {
+    root: {
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(2),
     },
 }));
 
@@ -22,7 +23,7 @@ const SignInForm = React.memo(({handleSubmit, pristine, submitting, error}) => {
     const classes = useStyles();
 
     return (
-        <form className={classes.form} onSubmit={handleSubmit}>
+        <form className={classes.root} onSubmit={handleSubmit}>
             <EmailField/>
             <PasswordFirld/>
             {error && <FormHelperText error={!!error}>{error}</FormHelperText>}

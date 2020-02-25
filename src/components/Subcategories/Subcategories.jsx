@@ -18,13 +18,12 @@ import queryString from 'query-string'
 import {subcategoriesSelectors} from "../../redux/selectors/subcategoriesSelectors";
 import {getCategory} from "../../redux/categoryReducer";
 import {categorySelectors} from "../../redux/selectors/categorySelectors";
-import {appSelectors} from "../../redux/selectors/appSelectors";
 
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
         maxWidth: 752,
-        marginTop: theme.spacing(8),
+        marginTop: theme.spacing(5),
     },
     title: {
         margin: theme.spacing(4, 0, 2),
@@ -33,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 
 const Subcategories = React.memo(({
                                       getSubcategories, match, location, subcategories,
-                                      pagination, getCategory, categoryName, perPage
+                                      pagination, getCategory, categoryName
                                   }) => {
     const classes = useStyles();
     const [dense, setDense] = React.useState(false);
@@ -46,10 +45,10 @@ const Subcategories = React.memo(({
         (async () => {
             setShowPreloader(true);
             await getCategory(category_id);
-            await getSubcategories(category_id, page, perPage);
+            await getSubcategories(category_id, page);
             setShowPreloader(false);
         })();
-    }, [category_id, page, getSubcategories, getCategory, perPage]);
+    }, [category_id, page, getSubcategories, getCategory]);
 
     if (showPreloader) {
         return <Preloader/>
@@ -83,7 +82,6 @@ const mapStateToProps = (state) => ({
     subcategories: subcategoriesSelectors.getSubcategories(state),
     pagination: subcategoriesSelectors.getPagination(state),
     categoryName: categorySelectors.getName(state),
-    perPage: appSelectors.getPerPage(state),
 });
 
 export default compose(withUnAuthRedirect, withRouter, connect(mapStateToProps, {

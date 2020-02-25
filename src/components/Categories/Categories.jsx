@@ -13,20 +13,19 @@ import {categoriesSelectors} from "../../redux/selectors/categoriesSelectors";
 import {ListCreator} from "../common/UIElements";
 import {Preloader} from "../common/Preloader";
 import Typography from "@material-ui/core/Typography";
-import {appSelectors} from "../../redux/selectors/appSelectors";
 
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
         maxWidth: 752,
-        marginTop: theme.spacing(8),
+        marginTop: theme.spacing(5),
     },
     title: {
         margin: theme.spacing(4, 0, 2),
     },
 }));
 
-const Categories = React.memo(({location, getCategories, categories, pagination, perPage}) => {
+const Categories = React.memo(({location, getCategories, categories, pagination}) => {
     const classes = useStyles();
     const [dense, setDense] = React.useState(false);
     const [showPreloader, setShowPreloader] = React.useState(true);
@@ -36,10 +35,10 @@ const Categories = React.memo(({location, getCategories, categories, pagination,
     useEffect(() => {
         (async () => {
             setShowPreloader(true);
-            await getCategories(page, perPage);
+            await getCategories(page);
             setShowPreloader(false);
         })();
-    }, [page, getCategories, perPage]);
+    }, [page, getCategories]);
 
     if (showPreloader) {
         return <Preloader/>
@@ -64,7 +63,6 @@ const Categories = React.memo(({location, getCategories, categories, pagination,
 const mapStateToProps = (state) => ({
     categories: categoriesSelectors.getCategories(state),
     pagination: categoriesSelectors.getPagination(state),
-    perPage: appSelectors.getPerPage(state),
 });
 
 export default compose(withUnAuthRedirect, withRouter, connect(mapStateToProps, {getCategories}))(Categories);

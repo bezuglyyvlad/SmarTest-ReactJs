@@ -25,8 +25,8 @@ const setSubcategories = (subcategories, pagination) => ({
         {subcategories, pagination}
 });
 
-export const getSubcategories = (category_id, page, perPage) => async (dispatch) => {
-    const response = await subcategoriesAPI.getData(category_id, page, perPage);
+export const getSubcategories = (category_id, page) => async (dispatch) => {
+    const response = await subcategoriesAPI.getData(category_id, page);
     dispatch(setSubcategories(response.data.items, response.data._meta));
 }
 
