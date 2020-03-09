@@ -17,7 +17,6 @@ import Typography from "@material-ui/core/Typography";
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
-        maxWidth: 752,
         marginTop: theme.spacing(5),
     },
     title: {
@@ -45,16 +44,23 @@ const Categories = React.memo(({location, getCategories, categories, pagination}
     }
 
     return (
-        <Container component="main" className={classes.root}>
-            <Typography variant="h5" align='center' className={classes.title}>
-                Категории
-            </Typography>
-            <ListCreator pagination={pagination} dense={dense} setDense={setDense} mainPath='/category'>
-                <List dense={dense}>
-                    {categories.map(value => (
-                        <CategoriesListItem key={value.category_id} value={value}/>))}
-                </List>
-            </ListCreator>
+        <Container component="main" maxWidth="md" className={classes.root}>
+            {categories.length === 0 ?
+                <Typography variant="h5" align='center' className={classes.title}>
+                    <p>Категории к сожалению отсутствуют</p>
+                </Typography> :
+                <>
+                    <Typography variant="h5" align='center' className={classes.title}>
+                        Категории
+                    </Typography>
+                    <ListCreator pagination={pagination} dense={dense} setDense={setDense} mainPath='/category'>
+                        <List dense={dense}>
+                            {categories.map(value => (
+                                <CategoriesListItem key={value.category_id} value={value}/>))}
+                        </List>
+                    </ListCreator>
+                </>
+            }
         </Container>
     );
 });

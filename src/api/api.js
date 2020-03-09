@@ -48,3 +48,15 @@ export const categoryAPI = {
         return instance.get('categories/' + category_id, authHeader());
     },
 }
+
+export const testAPI = {
+    createTest(subcategory_id) {
+        return instance.post('tests', {subcategory_id}, authHeader());
+    },
+    nextQuestion(test_id) {
+        return instance.post('tests/nextQuestion', {test_id}, authHeader());
+    },
+    getTest(test_id) {
+        return instance.get(`tests/${test_id}`, authHeader());
+    }
+}
