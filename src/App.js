@@ -40,8 +40,8 @@ const App = React.memo(({initializeApp, initialized, theme, changeTheme}) => {
 
     return (
         <BrowserRouter>
-            <ErrorBoundary>
-                <MuiThemeProvider theme={muiTheme}>
+            <MuiThemeProvider theme={muiTheme}>
+                <ErrorBoundary>
                     <CssBaseline/>
                     <Header/>
                     <Box>
@@ -56,8 +56,8 @@ const App = React.memo(({initializeApp, initialized, theme, changeTheme}) => {
                             <Route path='/' render={withSuspense(MainPage)}/>
                         </Switch>
                     </Box>
-                </MuiThemeProvider>
-            </ErrorBoundary>
+                </ErrorBoundary>
+            </MuiThemeProvider>
         </BrowserRouter>
     );
 })

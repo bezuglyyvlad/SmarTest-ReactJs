@@ -56,7 +56,6 @@ const Subcategories = React.memo(({
 
     return (
         <Container component="main" className={classes.root}>
-            {/*<CssBaseline/>*/}
             <Breadcrumbs aria-label="breadcrumb">
                 <Link color="inherit" component={NavLink} to='/category'>
                     Категории

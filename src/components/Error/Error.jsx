@@ -3,6 +3,7 @@ import ErrorIcon from '@material-ui/icons/Error';
 import Typography from "@material-ui/core/Typography";
 import {makeStyles} from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 const useStyles = makeStyles(theme => ({
     icon: {
@@ -23,7 +24,7 @@ const Error = React.memo(({error}) => {
             justify="center"
             style={{minHeight: '80vh'}}
         >
-            {/*<CssBaseline/>*/}
+            <CssBaseline/>
             <ErrorIcon color='primary' className={classes.icon}/>
             <Typography component="h2" variant="h3">
                 {error.status}

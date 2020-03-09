@@ -46,7 +46,6 @@ const Categories = React.memo(({location, getCategories, categories, pagination}
 
     return (
         <Container component="main" className={classes.root}>
-            {/*<CssBaseline/>*/}
             <Typography variant="h5" align='center' className={classes.title}>
                 Категории
             </Typography>

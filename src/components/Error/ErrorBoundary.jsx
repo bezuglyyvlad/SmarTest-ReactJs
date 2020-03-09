@@ -57,8 +57,4 @@ class ErrorBoundary extends React.Component {
     }
 }
 
-// const mapStateToProps = (state) => ({
-//     error: state.error.error,
-// });
-
 export default withRouter(ErrorBoundary);

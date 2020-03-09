@@ -6,7 +6,6 @@ import appReducer from "./appReducer";
 import categoriesReducer from "./categoriesReducer";
 import subcategoriesReducer from "./subcategoriesReducer";
 import categoryReducer from "./categoryReducer";
-import errorReducer from "./errorReducer";
 
 let reducers = combineReducers({
     form: formReducer,
@@ -15,7 +14,6 @@ let reducers = combineReducers({
     categories: categoriesReducer,
     subcategories: subcategoriesReducer,
     category: categoryReducer,
-    error: errorReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
