@@ -33,3 +33,29 @@ export const getPerPageFromLS = () => {
 export const setPerPageToLS = (perPage) => {
     return localStorage.setItem('perPage', perPage);
 }
+
+export const getTimer = (dataFinish) => {
+    const current = new Date();
+    const finish = new Date(dataFinish);
+    console.log(finish.getTime() - current.getTime());
+    const timer = finish.getTime() - current.getTime();
+
+    let day = parseInt(timer / (60 * 60 * 1000 * 24));
+    let hour = parseInt(timer / (60 * 60 * 1000)) % 24;
+    if (day !== 0) hour += day * 24;
+    if (hour < 10) {
+        hour = '0' + hour;
+    }
+
+    var min = parseInt(timer / (1000 * 60)) % 60;
+    if (min < 10) {
+        min = '0' + min;
+    }
+
+    var sec = parseInt(timer / 1000) % 60;
+    if (sec < 10) {
+        sec = '0' + sec;
+    }
+
+    return `${hour}:${min}:${sec}`;
+}

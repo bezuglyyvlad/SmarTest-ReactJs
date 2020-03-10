@@ -4,6 +4,8 @@ import {email, maxLengthCreator, minLengthCreator, required} from "../../utils/v
 import {Field} from "redux-form";
 import Button from "@material-ui/core/Button";
 import {makeStyles} from "@material-ui/core/styles";
+import FormControl from "@material-ui/core/FormControl";
+import RadioGroup from "@material-ui/core/RadioGroup";
 
 const RenderTextField = ({
                              label,
@@ -75,3 +77,11 @@ export const SubmitButton = React.memo(({textButton, disabled}) => {
             {textButton}
         </Button>)
 })
+
+export const radioButton = ({input, ...rest}) => (
+    <FormControl>
+        <RadioGroup {...input} {...rest}>
+            {rest.children}
+        </RadioGroup>
+    </FormControl>
+)

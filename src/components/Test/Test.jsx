@@ -8,38 +8,32 @@ import {testSelectors} from "../../redux/selectors/testSelectors";
 import {withRouter} from "react-router";
 import {Preloader} from "../common/Preloader";
 import {getTest} from "../../redux/testReducer";
-import {MobileStepper} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Radio from "@material-ui/core/Radio";
+import TestForm from "./TestForm/TestForm";
+import TestProgress from "./TestProgress/TestProgress";
+import TestInfo from "./TestInfo/TestInfo";
+import {getTimer} from "../../utils/utils";
 
 const useStyles = makeStyles(theme => ({
     root: {
         marginTop: theme.spacing(5),
     },
-    centerFlex: {
-        justifyContent: 'center'
-    },
     question: {
-        fontSize: '18px',
-        marginTop: theme.spacing(3),
-    },
-    form: {
+        fontSize: '20px',
         marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(2),
+    },
+    title: {
+        textAlign: 'center',
+        marginBottom: theme.spacing(3),
     }
 }));
 
 const Test = React.memo(({testInfo, question, answers, match, getTest}) => {
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
+    const [timer, setTimer] = React.useState('0');
 
     const test_id = match.params.test_id;
-
-    console.log(testInfo);
-    console.log(question);
-    console.log(answers);
 
     useEffect(() => {
         (async () => {
@@ -49,27 +43,34 @@ const Test = React.memo(({testInfo, question, answers, match, getTest}) => {
         })();
     }, [getTest, test_id]);
 
+    useEffect(() => {
+        let interval = null;
+        if (testInfo) {
+            interval = setInterval(() => {
+                setTimer(getTimer(testInfo.date_finish));
+            }, 1000);
+        }
+        return () => clearInterval(interval);
+    }, [timer, testInfo]);
+
     if (showPreloader) return <Preloader/>;
 
-    console.log(showPreloader);
+    const onSubmit = (answer) => {
+        console.log(answer);
+    }
 
     return (
         <Container component="main" maxWidth="md" className={classes.root}>
-            <MobileStepper steps={20} activeStep={5} position="static" variant="text" className={classes.centerFlex}/>
-            <MobileStepper steps={20} activeStep={5} position="static" variant="progress"
-                           className={classes.centerFlex}/>
-            <Typography className={classes.question}>
-                Какие из этих вариантов задают массив из элементов «a», «b»? Какие из этих вариантов задают массив из
-                элементов «a», «b»?Какие из этих вариантов задают массив из элементов «a», «b»?Какие из этих вариантов
-                задают массив из элементов «a», «b»?
+            <Typography component='h1' variant='h5' className={classes.title}>
+                Тест
             </Typography>
-            <form className={classes.form}>
-                <RadioGroup aria-label="answer" name="answer">
-                    <FormControlLabel value="female" control={<Radio color="primary"/>} label="Female"/>
-                    <FormControlLabel value="male" control={<Radio color="primary"/>} label="Male"/>
-                    <FormControlLabel value="other" control={<Radio color="primary"/>} label="Other"/>
-                </RadioGroup>
-            </form>
+            <TestInfo subcategory_name={testInfo.subcategory_name} category_name={testInfo.category_name}
+                      timer={timer}/>
+            <TestProgress number_question={question.number_question} count_of_question={testInfo.count_of_question}/>
+            <Typography className={classes.question}>
+                {question.text}
+            </Typography>
+            <TestForm onSubmit={onSubmit} data={answers} type={question.type}/>
         </Container>
     );
 });

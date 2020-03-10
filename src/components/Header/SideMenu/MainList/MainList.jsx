@@ -11,8 +11,8 @@ import {signOut} from "../../../../redux/userReducer";
 
 const useStyles = makeStyles(theme => ({
     root: {
-        width: 300,
-        maxWidth: 360,
+        width: 280,
+        maxWidth: 280,
         backgroundColor: theme.palette.background.paper,
     },
 }));
