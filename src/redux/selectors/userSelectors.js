@@ -10,5 +10,8 @@ export const userSelectors = {
     },
     getUserId(state) {
         return state.user.userId;
-    }
+    },
+    getRole(state) {
+        return state.user.role;
+    },
 }

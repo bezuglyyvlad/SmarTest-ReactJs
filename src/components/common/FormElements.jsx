@@ -6,6 +6,8 @@ import Button from "@material-ui/core/Button";
 import {makeStyles} from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 
 const RenderTextField = ({
                              label,
@@ -46,10 +48,10 @@ export const EmailField = React.memo(() => (
            fullWidth/>
 ))
 
-export const PasswordFirld = React.memo(() => (
+export const PasswordField = React.memo(({labelText}) => (
     <Field id="password" name='password' component={RenderTextField}
            validate={[required, minLength6, maxLength255]}
-           label='Пароль'
+           label={labelText}
            variant='outlined'
            margin='normal'
            type='password'
@@ -78,10 +80,22 @@ export const SubmitButton = React.memo(({textButton, disabled}) => {
         </Button>)
 })
 
-export const radioButton = ({input, ...rest}) => (
+export const radioButtons = ({input, ...rest}) => (
     <FormControl>
         <RadioGroup {...input} {...rest}>
             {rest.children}
         </RadioGroup>
     </FormControl>
+)
+
+export const renderCheckbox = ({input, label}) => (
+    <div>
+        <FormControlLabel
+            control={
+                <Checkbox checked={input.value ? true : false}
+                          onChange={input.onChange}/>
+            }
+            label={label}
+        />
+    </div>
 )

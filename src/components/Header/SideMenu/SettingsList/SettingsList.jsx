@@ -12,15 +12,24 @@ import {changeTheme, clearTheme} from "../../../../redux/appReducer";
 import Divider from "@material-ui/core/Divider";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import List from "@material-ui/core/List";
+import {makeStyles} from "@material-ui/core/styles";
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        width: 280,
+        maxWidth: 280,
+        backgroundColor: theme.palette.background.paper,
+    },
+}));
 
 const SettingsList = React.memo(({theme, changeTheme, clearTheme, toggleDrawer}) => {
-
+    const classes = useStyles();
     const changeDarkMode = (e) => {
         e.target.checked ? changeTheme('dark') : clearTheme()
     }
 
     return (
-        <List component="nav" aria-label="settings-list" style={{marginTop: 'auto'}}
+        <List component="nav" aria-label="settings-list" style={{marginTop: 'auto'}} className={classes.root}
             // onClick={toggleDrawer(false)}
             // onKeyDown={toggleDrawer(false)}
         >

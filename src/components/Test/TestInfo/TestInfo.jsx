@@ -19,7 +19,6 @@ const useStyles = makeStyles(theme => ({
 
 const TestInfo = React.memo(({subcategory_name, category_name, timer}) => {
     const classes = useStyles();
-    console.log(timer);
     return (
         <Grid
             container

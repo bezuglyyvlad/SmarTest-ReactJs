@@ -37,7 +37,6 @@ export const setPerPageToLS = (perPage) => {
 export const getTimer = (dataFinish) => {
     const current = new Date();
     const finish = new Date(dataFinish);
-    console.log(finish.getTime() - current.getTime());
     const timer = finish.getTime() - current.getTime();
 
     let day = parseInt(timer / (60 * 60 * 1000 * 24));

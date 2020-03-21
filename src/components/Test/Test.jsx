@@ -5,9 +5,9 @@ import {compose} from "redux";
 import {withUnAuthRedirect} from "../../hoc/withUnAuthRedirect";
 import {connect} from "react-redux";
 import {testSelectors} from "../../redux/selectors/testSelectors";
-import {withRouter} from "react-router";
+import {Redirect, withRouter} from "react-router";
 import {Preloader} from "../common/Preloader";
-import {getTest} from "../../redux/testReducer";
+import {getTest, nextQuestion} from "../../redux/testReducer";
 import Typography from "@material-ui/core/Typography";
 import TestForm from "./TestForm/TestForm";
 import TestProgress from "./TestProgress/TestProgress";
@@ -28,9 +28,10 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Test = React.memo(({testInfo, question, answers, match, getTest}) => {
+const Test = React.memo(({testInfo, question, answers, match, getTest, nextQuestion}) => {
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
+    const [testFinished, setTestFinished] = React.useState(false);
     const [timer, setTimer] = React.useState('0');
 
     const test_id = match.params.test_id;
@@ -45,19 +46,25 @@ const Test = React.memo(({testInfo, question, answers, match, getTest}) => {
 
     useEffect(() => {
         let interval = null;
+        const delay = timer === '0' ? null : 1000;
         if (testInfo) {
             interval = setInterval(() => {
                 setTimer(getTimer(testInfo.date_finish));
-            }, 1000);
+            }, delay);
         }
+        if (timer === '00:00:00') setTestFinished(true);
         return () => clearInterval(interval);
     }, [timer, testInfo]);
 
-    if (showPreloader) return <Preloader/>;
-
-    const onSubmit = (answer) => {
-        console.log(answer);
+    const onSubmit = async ({answer}) => {
+        const isLastQuestion  = question.number_question === testInfo.count_of_questions;
+        await nextQuestion(testInfo.test_id, answer);
+        setTestFinished(isLastQuestion);
     }
+
+    if (testFinished && testInfo) return <Redirect to={`/test/${testInfo.test_id}/result`}/>;
+
+    if (showPreloader) return <Preloader/>;
 
     return (
         <Container component="main" maxWidth="md" className={classes.root}>
@@ -66,7 +73,7 @@ const Test = React.memo(({testInfo, question, answers, match, getTest}) => {
             </Typography>
             <TestInfo subcategory_name={testInfo.subcategory_name} category_name={testInfo.category_name}
                       timer={timer}/>
-            <TestProgress number_question={question.number_question} count_of_question={testInfo.count_of_question}/>
+            <TestProgress number_question={question.number_question} count_of_questions={testInfo.count_of_questions}/>
             <Typography className={classes.question}>
                 {question.text}
             </Typography>
@@ -81,4 +88,4 @@ const mapStateToProps = (state) => ({
     answers: testSelectors.getAnswers(state),
 })
 
-export default compose(withUnAuthRedirect, withRouter, connect(mapStateToProps, {getTest}))(Test);
+export default compose(withUnAuthRedirect, withRouter, connect(mapStateToProps, {getTest, nextQuestion}))(Test);

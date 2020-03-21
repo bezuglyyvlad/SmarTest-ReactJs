@@ -52,8 +52,10 @@ const App = React.memo(({initializeApp, initialized, theme, changeTheme}) => {
                             <Route path='/profile' render={withSuspense(Profile)}/>
                             <Route path='/category/:category_id' render={withSuspense(Subcategories)}/>
                             <Route path='/category' render={withSuspense(Categories)}/>
+                            <Route path='/test/:test_id/result' render={() => (<>Result Test</>)}/>
                             <Route path='/test/:test_id' render={withSuspense(Test)}/>
                             <Route path='/statistics' render={withSuspense(Statistics)}/>
+                            <Route path='/expertPanel' render={() => (<>EXPERT PANEL</>)}/>
                             <Route path='/' render={withSuspense(MainPage)}/>
                         </Switch>
                     </Box>

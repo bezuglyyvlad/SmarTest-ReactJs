@@ -5,7 +5,7 @@ import Drawer from "@material-ui/core/Drawer";
 import MainList from "./MainList/MainList";
 import SettingsList from "./SettingsList/SettingsList";
 
-const SideMenu = React.memo(() => {
+const SideMenu = React.memo(({isAuth}) => {
     const [drawer, setDrawer] = React.useState(false);
 
     const toggleDrawer = (open) => event => {
@@ -21,7 +21,7 @@ const SideMenu = React.memo(() => {
                 <MenuIcon/>
             </IconButton>
             <Drawer open={drawer} onClose={toggleDrawer(false)}>
-                <MainList toggleDrawer={toggleDrawer}/>
+                {isAuth && <MainList toggleDrawer={toggleDrawer}/>}
                 <SettingsList toggleDrawer={toggleDrawer}/>
             </Drawer>
         </div>

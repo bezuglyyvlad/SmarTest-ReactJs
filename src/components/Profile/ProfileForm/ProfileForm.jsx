@@ -3,7 +3,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {reduxForm} from "redux-form";
 import {FormHelperText} from "@material-ui/core";
 import {
-    EmailField, PasswordFirld, SubmitButton, UsernameField,
+    EmailField, PasswordField, SubmitButton, UsernameField,
 } from "../../common/FormElements";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from '@material-ui/lab/Alert';
@@ -40,7 +40,7 @@ const ProfileForm = React.memo(({handleSubmit, pristine, submitting, error, ...p
             <form className={classes.form} onSubmit={handleSubmit}>
                 <UsernameField/>
                 <EmailField/>
-                <PasswordFirld/>
+                <PasswordField labelText='Новый пароль'/>
                 {error && <FormHelperText error={!!error}>{error}</FormHelperText>}
                 <SubmitButton textButton='Изменить' disabled={pristine || submitting}/>
             </form>

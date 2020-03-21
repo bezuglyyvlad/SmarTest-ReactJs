@@ -37,7 +37,7 @@ const Subcategories = React.memo(({
     const classes = useStyles();
     const [dense, setDense] = React.useState(false);
     const [showPreloader, setShowPreloader] = React.useState(true);
-    const [testCreated, setTestCreated] = React.useState(false);
+    const [testCreatedId, setTestCreated] = React.useState(false);
 
     const page = +queryString.parse(location.search).page || 1;
     const category_id = match.params.category_id;
@@ -57,7 +57,7 @@ const Subcategories = React.memo(({
         setTestCreated(test_id);
     };
 
-    if (testCreated) return <Redirect to={`/test/${testCreated}`}/>;
+    if (testCreatedId) return <Redirect to={`/test/${testCreatedId}`}/>;
 
     if (showPreloader) return <Preloader/>;
 

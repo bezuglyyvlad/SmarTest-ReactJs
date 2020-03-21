@@ -108,7 +108,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export const DialogCreator = React.memo(({open, handleClose, title, text, actionConfirm}) => {
+export const DialogCreator = React.memo(({open, handleClose, title, text, confirmButton}) => {
     return (
         <Dialog
             open={open}
@@ -128,9 +128,7 @@ export const DialogCreator = React.memo(({open, handleClose, title, text, action
                 <Button onClick={handleClose} color="primary">
                     Нет
                 </Button>
-                <Button onClick={actionConfirm} color="primary">
-                    Да
-                </Button>
+                {confirmButton}
             </DialogActions>
         </Dialog>
     )

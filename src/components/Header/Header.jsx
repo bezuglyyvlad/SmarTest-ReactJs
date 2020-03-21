@@ -42,7 +42,7 @@ const Header = React.memo(({isAuth, signOut, username}) => {
     return (
         <AppBar position="static" className={classes.root}>
             <Toolbar>
-                <SideMenu/>
+                <SideMenu isAuth={isAuth}/>
                 <Typography variant="h6" className={classes.title}>
                     <Button component={NavLink} to='/' className={classes.logo}>
                         <FontAwesomeIcon icon={faBrain} className={classes.logoIcon}/>SmarTest

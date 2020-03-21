@@ -17,14 +17,14 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TestProgress = React.memo(({number_question, count_of_question}) => {
+const TestProgress = React.memo(({number_question, count_of_questions}) => {
     const classes = useStyles();
     return (
         <Box className={classes.root}>
             <Typography className={classes.title}>
-                Вопрос {number_question}/{count_of_question}
+                Вопрос {number_question}/{count_of_questions}
             </Typography>
-            <MobileStepper steps={count_of_question} activeStep={number_question - 1}
+            <MobileStepper steps={count_of_questions} activeStep={number_question - 1}
                            position="static" variant="progress"
                            className={classes.progress}/>
         </Box>

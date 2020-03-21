@@ -7,7 +7,7 @@ import {reduxForm} from "redux-form";
 import {FormHelperText} from "@material-ui/core";
 import {
     EmailField,
-    PasswordFirld,
+    PasswordField,
     SubmitButton,
 } from "../../common/FormElements";
 
@@ -25,7 +25,7 @@ const SignInForm = React.memo(({handleSubmit, pristine, submitting, error}) => {
     return (
         <form className={classes.root} onSubmit={handleSubmit}>
             <EmailField/>
-            <PasswordFirld/>
+            <PasswordField labelText='Пароль'/>
             {error && <FormHelperText error={!!error}>{error}</FormHelperText>}
             <SubmitButton textButton='Войти' disabled={pristine || submitting}/>
             <Grid container justify="flex-end">
