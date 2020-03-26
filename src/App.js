@@ -25,13 +25,12 @@ const Statistics = React.lazy(() => import("./components/Statistics/Statistics")
 const MainPage = React.lazy(() => import("./components/MainPage/MainPage"));
 const Subcategories = React.lazy(() => import("./components/Subcategories/Subcategories"));
 const Test = React.lazy(() => import("./components/Test/Test"));
+const TestResult = React.lazy(() => import("./components/TestResult/TestResult"));
 
 const App = React.memo(({initializeApp, initialized, theme, changeTheme}) => {
     useEffect(() => {
         initializeApp();
     }, [initializeApp]);
-
-    changeTheme(getThemeFromLS());
 
     const muiTheme = getTheme(theme);
 
@@ -52,10 +51,11 @@ const App = React.memo(({initializeApp, initialized, theme, changeTheme}) => {
                             <Route path='/profile' render={withSuspense(Profile)}/>
                             <Route path='/category/:category_id' render={withSuspense(Subcategories)}/>
                             <Route path='/category' render={withSuspense(Categories)}/>
-                            <Route path='/test/:test_id/result' render={() => (<>Result Test</>)}/>
+                            <Route path='/test/:test_id/result' render={withSuspense(TestResult)}/>
                             <Route path='/test/:test_id' render={withSuspense(Test)}/>
                             <Route path='/statistics' render={withSuspense(Statistics)}/>
                             <Route path='/expertPanel' render={() => (<>EXPERT PANEL</>)}/>
+                            <Route path='/adminPanel' render={() => (<>ADMIN PANEL</>)}/>
                             <Route path='/' render={withSuspense(MainPage)}/>
                         </Switch>
                     </Box>

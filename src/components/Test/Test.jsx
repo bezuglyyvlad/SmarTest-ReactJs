@@ -19,7 +19,6 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(5),
     },
     question: {
-        fontSize: '20px',
         marginTop: theme.spacing(1),
     },
     title: {
@@ -74,7 +73,7 @@ const Test = React.memo(({testInfo, question, answers, match, getTest, nextQuest
             <TestInfo subcategory_name={testInfo.subcategory_name} category_name={testInfo.category_name}
                       timer={timer}/>
             <TestProgress number_question={question.number_question} count_of_questions={testInfo.count_of_questions}/>
-            <Typography className={classes.question}>
+            <Typography className={classes.question} variant='h6'>
                 {question.text}
             </Typography>
             <TestForm onSubmit={onSubmit} data={answers} type={question.type}/>

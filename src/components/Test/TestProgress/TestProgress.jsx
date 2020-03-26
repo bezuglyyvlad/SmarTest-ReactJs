@@ -8,10 +8,6 @@ const useStyles = makeStyles(theme => ({
     root: {
         marginTop: theme.spacing(1),
     },
-    title: {
-        fontSize: '16px',
-        textAlign: 'center'
-    },
     progress: {
         justifyContent: 'center'
     },
@@ -21,7 +17,7 @@ const TestProgress = React.memo(({number_question, count_of_questions}) => {
     const classes = useStyles();
     return (
         <Box className={classes.root}>
-            <Typography className={classes.title}>
+            <Typography align='center' variant='subtitle1'>
                 Вопрос {number_question}/{count_of_questions}
             </Typography>
             <MobileStepper steps={count_of_questions} activeStep={number_question - 1}

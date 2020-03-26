@@ -59,4 +59,7 @@ export const testAPI = {
     nextQuestion(test_id, answer) {
         return instance.post('tests/nextQuestion', {test_id, answer}, authHeader());
     },
+    getResult(test_id) {
+        return instance.get(`tests/result?test_id=${test_id}`, authHeader());
+    }
 }

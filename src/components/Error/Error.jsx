@@ -26,10 +26,10 @@ const Error = React.memo(({error}) => {
         >
             <CssBaseline/>
             <ErrorIcon color='primary' className={classes.icon}/>
-            <Typography component="h2" variant="h3">
+            <Typography variant="h3">
                 {error.status}
             </Typography>
-            <Typography component="h2" variant="h5">
+            <Typography variant="h5">
                 {error.name}
             </Typography>
         </Grid>

@@ -12,9 +12,6 @@ const useStyles = makeStyles(theme => ({
     timer: {
         textAlign: 'right'
     },
-    text: {
-        fontSize: '20px',
-    }
 }));
 
 const TestInfo = React.memo(({subcategory_name, category_name, timer}) => {
@@ -25,12 +22,12 @@ const TestInfo = React.memo(({subcategory_name, category_name, timer}) => {
             justify="space-between"
         >
             <Grid item md={10} xs={8}>
-                <Typography className={`${classes.info} ${classes.text}`}>
+                <Typography className={`${classes.info}`} variant='h6'>
                     {`${subcategory_name} - ${category_name}`}
                 </Typography>
             </Grid>
             <Grid item md={2} xs={4}>
-                <Typography className={`${classes.timer} ${classes.text}`}>
+                <Typography className={`${classes.timer}`} variant='h6'>
                     {timer}
                 </Typography>
             </Grid>

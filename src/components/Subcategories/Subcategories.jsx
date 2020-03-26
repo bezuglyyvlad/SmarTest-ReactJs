@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(5),
     },
     title: {
-        margin: theme.spacing(4, 0, 2),
+        margin: theme.spacing(2, 0),
     },
 }));
 
@@ -69,7 +69,7 @@ const Subcategories = React.memo(({
                 </Link>
                 <Typography color="textPrimary">{categoryName}</Typography>
             </Breadcrumbs>
-            <Typography variant="h5" align='center' className={classes.title}>
+            <Typography variant="h5" align='center' className={classes.title} component='h1'>
                 {categoryName} {subcategories.length === 0 &&
             <p>(к сожалению в данной категории нет тестов)</p>}
             </Typography>
