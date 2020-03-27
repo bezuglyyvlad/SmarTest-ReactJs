@@ -13,7 +13,6 @@ import {appSelectors} from "./redux/selectors/appSelectors";
 import ErrorBoundary from "./components/Error/ErrorBoundary";
 import {MuiThemeProvider} from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import {getThemeFromLS} from "./utils/utils";
 import {getTheme} from "./utils/theme";
 
 

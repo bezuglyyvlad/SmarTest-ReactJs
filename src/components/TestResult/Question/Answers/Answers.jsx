@@ -22,7 +22,6 @@ const useStyles = makeStyles(theme => ({
 const Answers = React.memo(({type, data}) => {
     const classes = useStyles();
     let answers = undefined;
-    console.log(data);
     switch (type) {
         case '1':
             answers = <FormControl>

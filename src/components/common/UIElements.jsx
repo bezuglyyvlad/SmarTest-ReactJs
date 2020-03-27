@@ -1,11 +1,8 @@
 import {NavLink} from "react-router-dom";
-import TablePagination from "@material-ui/core/TablePagination";
 import React from "react";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import {makeStyles} from "@material-ui/core/styles";
-import {changePerPage} from "../../redux/appReducer";
-import {connect} from "react-redux";
 import Pagination from "@material-ui/lab/Pagination";
 import PaginationItem from "@material-ui/lab/PaginationItem";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -15,33 +12,30 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
+import {connect} from "react-redux";
+import {changePerPage} from "../../redux/appReducer";
+import TablePagination from "@material-ui/core/TablePagination";
 
-const TablePaginationCreator = React.memo(({pagination, mainPath, changePerPage}) => {
+const TablePaginationCreator = React.memo(({pagination, changePerPage, changePage}) => {
     function setPerPage(event) {
         changePerPage(event.target.value);
     }
 
     return (
         <TablePagination
-            backIconButtonProps={{
-                component: NavLink,
-                to: pagination.currentPage !== 2 ? `?page=${pagination.currentPage - 1}` : mainPath
-            }}
-            nextIconButtonProps={{component: NavLink, to: `?page=${pagination.currentPage + 1}`}}
-            labelRowsPerPage='Строк на страницу'
+            labelRowsPerPage='На страницу'
             rowsPerPageOptions={[5, 10, 20]}
             component="div"
             count={pagination.totalCount}
             rowsPerPage={pagination.perPage}
             page={pagination.currentPage - 1}
-            onChangePage={() => {
-            }}
+            onChangePage={changePage}
             onChangeRowsPerPage={setPerPage}
         />
     )
 })
 
-const TablePaginationCreatorWithConnect = connect(null, {changePerPage})(TablePaginationCreator);
+export const TablePaginationCreatorWithConnect = connect(null, {changePerPage})(TablePaginationCreator);
 
 
 const useStylesPagination = makeStyles(theme => ({

@@ -9,9 +9,6 @@ const useStyles = makeStyles(theme => ({
         overflow: 'hidden',
         textOverflow: 'ellipsis'
     },
-    timer: {
-        textAlign: 'right'
-    },
 }));
 
 const TestInfo = React.memo(({subcategory_name, category_name, timer}) => {
@@ -27,7 +24,7 @@ const TestInfo = React.memo(({subcategory_name, category_name, timer}) => {
                 </Typography>
             </Grid>
             <Grid item md={2} xs={4}>
-                <Typography className={`${classes.timer}`} variant='h6'>
+                <Typography variant='h6' align='right'>
                     {timer}
                 </Typography>
             </Grid>

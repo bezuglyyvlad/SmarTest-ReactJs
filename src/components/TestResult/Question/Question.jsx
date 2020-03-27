@@ -22,7 +22,6 @@ const useStyles = makeStyles(theme => ({
 
 const Question = React.memo(({q, points}) => {
     const classes = useStyles();
-    console.log(q);
     return (
         <Paper className={classes.paper}>
             <Grid

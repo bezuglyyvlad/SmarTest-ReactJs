@@ -17,6 +17,7 @@ import TableBody from "@material-ui/core/TableBody";
 import {getTestResult} from "../../redux/testResultReducer";
 import {testResultSelectors} from "../../redux/selectors/testResultSelectors";
 import Question from "./Question/Question";
+import {TableContainer} from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -54,7 +55,7 @@ const TestResult = React.memo(({match, getTestResult, test, questions}) => {
         {title: 'Начало теста', value: (new Date(test.date_start)).toLocaleString()},
         {title: 'Завершение теста', value: (new Date(test.date_finish)).toLocaleString()},
         {title: 'Правильных ответов', value: `${test.count_of_right_answers} из ${test.count_of_questions}`},
-        {title: 'Результат', value: test.score},
+        {title: 'Баллов', value: test.score},
     ];
 
     return (
@@ -68,16 +69,18 @@ const TestResult = React.memo(({match, getTestResult, test, questions}) => {
             <Typography component="h1" variant="h5" align='center' className={classes.title}>
                 Результат теста {!test.subcategory_id && '(тест был удален)'}
             </Typography>
-            <Table aria-label="simple table" className={classes.table}>
-                <TableBody>
-                    {rows.map((row, key) => (
-                        <TableRow key={key}>
-                            <TableCell component="th" scope="row">{row.title}</TableCell>
-                            <TableCell align="right">{row.value}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+            <TableContainer>
+                <Table aria-label="simple table" className={classes.table}>
+                    <TableBody>
+                        {rows.map((row, key) => (
+                            <TableRow key={key}>
+                                <TableCell component="th" scope="row">{row.title}</TableCell>
+                                <TableCell align="right">{row.value}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
             {questions.map(q => (
                 <Question key={q.test_question_id} q={q} points={points}/>
             ))}
