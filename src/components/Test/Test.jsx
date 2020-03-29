@@ -56,12 +56,15 @@ const Test = React.memo(({testInfo, question, answers, match, getTest, nextQuest
     }, [timer, testInfo]);
 
     const onSubmit = async ({answer}) => {
-        const isLastQuestion  = question.number_question === testInfo.count_of_questions;
+        if (Array.isArray(answer)) {
+            answer = {...answer};
+        }
+        //const isLastQuestion = question.number_question === testInfo.count_of_questions;
         await nextQuestion(testInfo.test_id, answer);
-        setTestFinished(isLastQuestion);
     }
 
-    if (testFinished && testInfo) return <Redirect to={`/test/${testInfo.test_id}/result`}/>;
+    if (question === undefined || (testFinished && testInfo)) return <Redirect
+        to={`/test/${testInfo.test_id}/result`}/>;
 
     if (showPreloader) return <Preloader/>;
 

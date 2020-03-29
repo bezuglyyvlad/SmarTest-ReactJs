@@ -43,9 +43,9 @@ const Question = React.memo(({q, points}) => {
                 {`${q.number_question}. ${q.text}`}
             </Typography>
             <Answers type={q.type} data={q.answers}/>
-            <Typography variant='subtitle1'>
-                <strong>Объяснение: </strong> {q.description || '-'}
-            </Typography>
+            {q.description && <Typography variant='subtitle1'>
+                <strong>Объяснение: </strong> {q.description}
+            </Typography>}
         </Paper>
     );
 });

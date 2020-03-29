@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TestResult = React.memo(({match, getTestResult, test, questions}) => {
+const TestResult = React.memo(({match, getTestResult, test, questions, complexity}) => {
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
 
@@ -54,6 +54,7 @@ const TestResult = React.memo(({match, getTestResult, test, questions}) => {
         {title: 'Категория', value: test.category_name},
         {title: 'Начало теста', value: (new Date(test.date_start)).toLocaleString()},
         {title: 'Завершение теста', value: (new Date(test.date_finish)).toLocaleString()},
+        {title: 'Соотношение сложности вопросов (легкие/средние/сложные)', value: complexity},
         {title: 'Правильных ответов', value: `${test.count_of_right_answers} из ${test.count_of_questions}`},
         {title: 'Баллов', value: test.score},
     ];
@@ -91,6 +92,7 @@ const TestResult = React.memo(({match, getTestResult, test, questions}) => {
 const mapStateToProps = (state) => ({
     test: testResultSelectors.getTest(state),
     questions: testResultSelectors.getQuestions(state),
+    complexity: testResultSelectors.getComplexity(state),
 })
 
 export default compose(withUnAuthRedirect, withRouter, connect(mapStateToProps, {getTestResult}))(TestResult);

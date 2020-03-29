@@ -63,3 +63,12 @@ export const testAPI = {
         return instance.get(`tests/result?test_id=${test_id}`, authHeader());
     }
 }
+
+export const statisticsApi = {
+    getRating() {
+        return instance.get('tests/rating', authHeader());
+    },
+    getTests(page, perPage) {
+        return instance.get(`tests?page=${page}&per-page=${perPage}`, authHeader());
+    }
+}
