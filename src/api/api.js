@@ -4,7 +4,7 @@ import {getBearerTokenFromLS} from "../utils/utils";
 const instance = axios.create({
     withCredentials: true,
     // baseURL: 'http://api-test/api/v1/', //for development
-    baseURL: 'http://d-test.pp.ua/api/v1/', //for production
+    baseURL: 'https://d-test.pp.ua/api/v1/', //for production
 });
 
 const authHeader = () => ({
