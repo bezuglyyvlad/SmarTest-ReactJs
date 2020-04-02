@@ -22,8 +22,9 @@ let reducers = combineReducers({
     statistics: statisticsReducer,
 });
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
-const store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddleware)));
+// const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+//
+// const store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddleware))); //for development
+const store = createStore(reducers, applyMiddleware(thunkMiddleware)); // for production
 
 export default store;
