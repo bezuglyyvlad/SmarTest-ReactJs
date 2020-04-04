@@ -58,7 +58,11 @@ export const getUserData = () => async (dispatch) => {
         const {id, username, email} = response.data.user;
         dispatch(setAuthUserData(id, username, email, roles, true));
     } catch (e) {
-        removeBearerTokenFromLS();
+        if (e.response && e.response.status === 403) {
+            removeBearerTokenFromLS();
+        } else {
+            await Promise.reject(e);
+        }
     }
 }
 
@@ -94,6 +98,7 @@ export const signUp = (username, email, password) => async (dispatch) => {
 
 export const signOut = () => async (dispatch) => {
     await userAPI.signOut(getBearerTokenFromLS());
+    removeBearerTokenFromLS();
     dispatch(setAuthUserData(null, null, null, null, false));
 }
 

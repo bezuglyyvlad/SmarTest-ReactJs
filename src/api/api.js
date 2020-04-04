@@ -1,10 +1,12 @@
 import * as axios from "axios";
 import {getBearerTokenFromLS} from "../utils/utils";
 
+// export const apiURL = 'http://api-test/api/v1/'; //for development
+export const apiURL = 'https://d-test.pp.ua/api/v1/'; //for production
+
 const instance = axios.create({
     withCredentials: true,
-    // baseURL: 'http://api-test/api/v1/', //for development
-    baseURL: 'https://d-test.pp.ua/api/v1/', //for production
+    baseURL: apiURL,
 });
 
 const authHeader = () => ({
