@@ -14,6 +14,7 @@ import ErrorBoundary from "./components/Error/ErrorBoundary";
 import {MuiThemeProvider} from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {getTheme} from "./utils/theme";
+import Error from "./components/Error/Error";
 
 
 const SignIn = React.lazy(() => import("./components/SignIn/SignIn"));
@@ -25,6 +26,7 @@ const MainPage = React.lazy(() => import("./components/MainPage/MainPage"));
 const Subcategories = React.lazy(() => import("./components/Subcategories/Subcategories"));
 const Test = React.lazy(() => import("./components/Test/Test"));
 const TestResult = React.lazy(() => import("./components/TestResult/TestResult"));
+const AdminPanel = React.lazy(() => import("./components/AdminPanel/AdminPanel"));
 
 const App = React.memo(({initializeApp, initialized, theme, changeTheme}) => {
     useEffect(() => {
@@ -54,7 +56,7 @@ const App = React.memo(({initializeApp, initialized, theme, changeTheme}) => {
                             <Route path='/test/:test_id' render={withSuspense(Test)}/>
                             <Route path='/statistics' render={withSuspense(Statistics)}/>
                             <Route path='/expertPanel' render={() => (<>EXPERT PANEL</>)}/>
-                            <Route path='/adminPanel' render={() => (<>ADMIN PANEL</>)}/>
+                            <Route path='/adminPanel' render={withSuspense(AdminPanel)}/>
                             <Route path='/' render={withSuspense(MainPage)}/>
                         </Switch>
                     </Box>

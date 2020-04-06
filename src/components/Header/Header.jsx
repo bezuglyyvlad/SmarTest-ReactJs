@@ -51,7 +51,7 @@ const Header = React.memo(({isAuth, signOut, username}) => {
                 {isAuth ?
                     <ProfileMenu signOut={signOut} username={username}/>
                     : < IconButton component={NavLink} to='signin' edge="end"
-                                   color="inherit"><AccountCircleIcon/></IconButton>
+                                   color="inherit" aria-label="Sign In"><AccountCircleIcon/></IconButton>
                 }
             </Toolbar>
         </AppBar>

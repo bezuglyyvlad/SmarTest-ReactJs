@@ -61,7 +61,7 @@ const Statistics = React.memo(({perPage, getRating, getTests, ratingInfo, tests,
 
     return (
         <Container component="main" maxWidth="md" className={classes.root}>
-            <Typography component="h1" variant="h5" align='center' className={classes.title}>
+            <Typography component="h1" variant="h5" align='center'>
                 Статистика
             </Typography>
             <MyRating rating={ratingInfo.rating} ratingByCategory={ratingInfo.ratingByCategory}/>

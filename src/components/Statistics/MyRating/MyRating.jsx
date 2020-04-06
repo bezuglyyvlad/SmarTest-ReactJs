@@ -44,38 +44,47 @@ const MyRating = React.memo(({rating, ratingByCategory}) => {
                 </Typography>
             </Grid>
             <Grid item>
-                <Grid container alignItems='center' component={Badge} color='primary' variant='dot'
-                      aria-owns={open ? 'mouse-over-popover' : undefined}
-                      aria-haspopup="true"
-                      onMouseEnter={handlePopoverOpen}
-                      onMouseLeave={handlePopoverClose}>
-                    <Typography variant='h6'>
-                        {rating}
-                    </Typography>
-                    <GradeIcon/>
-                </Grid>
-                <Popover
-                    className={classes.popover}
-                    classes={{
-                        paper: classes.paper,
-                    }}
-                    open={open}
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'center',
-                    }}
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'center',
-                    }}
-                    onClose={handlePopoverClose}
-                    disableRestoreFocus
-                >
-                    {ratingByCategory.map(i => (
-                        <Typography key={i.category_id}>{i.name} - {i.score}</Typography>
-                    ))}
-                </Popover>
+                {ratingByCategory.length === 0 ?
+                    <Grid container alignItems='center'>
+                        <Typography variant='h6'>
+                            {rating}
+                        </Typography>
+                        <GradeIcon/>
+                    </Grid> :
+                    <>
+                        <Grid container alignItems='center' component={Badge} color='primary' variant='dot'
+                              aria-owns={open ? 'mouse-over-popover' : undefined}
+                              aria-haspopup="true"
+                              onMouseEnter={handlePopoverOpen}
+                              onMouseLeave={handlePopoverClose}>
+                            <Typography variant='h6'>
+                                {rating}
+                            </Typography>
+                            <GradeIcon/>
+                        </Grid>
+                        <Popover
+                            className={classes.popover}
+                            classes={{
+                                paper: classes.paper,
+                            }}
+                            open={open}
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                            }}
+                            onClose={handlePopoverClose}
+                            disableRestoreFocus
+                        >
+                            {ratingByCategory.map(i => (
+                                <Typography key={i.category_id}>{i.name} - {i.score}</Typography>
+                            ))}
+                        </Popover>
+                    </>}
             </Grid>
         </Grid>
     );
