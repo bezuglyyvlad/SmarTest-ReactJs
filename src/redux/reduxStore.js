@@ -9,6 +9,7 @@ import categoryReducer from "./categoryReducer";
 import testReducer from "./testReducer";
 import testResultReducer from "./testResultReducer";
 import statisticsReducer from "./statisticsReducer";
+import adminPanelReducer from "./adminPanelReducer";
 
 let reducers = combineReducers({
     form: formReducer,
@@ -20,6 +21,7 @@ let reducers = combineReducers({
     test: testReducer,
     testResult: testResultReducer,
     statistics: statisticsReducer,
+    adminPanel: adminPanelReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

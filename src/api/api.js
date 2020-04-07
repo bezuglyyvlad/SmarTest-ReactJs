@@ -67,11 +67,17 @@ export const testAPI = {
     }
 }
 
-export const statisticsApi = {
+export const statisticsAPI = {
     getRating() {
         return instance.get('tests/rating', authHeader());
     },
     getTests(page, perPage) {
         return instance.get(`tests?page=${page}&per-page=${perPage}`, authHeader());
+    }
+}
+
+export const adminPanelAPI = {
+    getCategories() {
+        return instance.get('categories?expand=user', authHeader());
     }
 }

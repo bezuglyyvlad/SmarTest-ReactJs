@@ -1,4 +1,4 @@
-import {statisticsApi} from "../api/api";
+import {statisticsAPI} from "../api/api";
 
 const SET_RATING = 'statistics/SET_RATING';
 const SET_TESTS = 'statistics/SET_TESTS';
@@ -31,12 +31,12 @@ const setRatingAC = (ratingInfo) => ({type: SET_RATING, ratingInfo});
 const setTestsAC = (tests, pagination) => ({type: SET_TESTS, tests, pagination});
 
 export const getRating = () => async (dispatch) => {
-    const response = await statisticsApi.getRating();
+    const response = await statisticsAPI.getRating();
     dispatch(setRatingAC(response.data));
 }
 
 export const getTests = (page, perPage) => async (dispatch) => {
-    const response = await statisticsApi.getTests(page, perPage);
+    const response = await statisticsAPI.getTests(page, perPage);
     const {items, _meta} = response.data;
     dispatch(setTestsAC(items, _meta));
 }
