@@ -79,5 +79,8 @@ export const statisticsAPI = {
 export const adminPanelAPI = {
     getCategories() {
         return instance.get('categories?expand=user', authHeader());
+    },
+    updateCategory(category_id, name, userEmail) {
+        return instance.put(`categories/${category_id}`, {name, userEmail}, authHeader());
     }
 }

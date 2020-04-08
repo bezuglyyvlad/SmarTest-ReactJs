@@ -14,7 +14,6 @@ import ErrorBoundary from "./components/Error/ErrorBoundary";
 import {MuiThemeProvider} from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {getTheme} from "./utils/theme";
-import Error from "./components/Error/Error";
 
 
 const SignIn = React.lazy(() => import("./components/SignIn/SignIn"));

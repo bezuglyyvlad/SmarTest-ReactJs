@@ -6,7 +6,7 @@ import {
     EmailField, PasswordField, SubmitButton, UsernameField,
 } from "../../common/FormElements";
 import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from '@material-ui/lab/Alert';
+import {Alert} from "../../common/UIElements";
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -14,10 +14,6 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(1),
     },
 }));
-
-function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 const ProfileForm = React.memo(({handleSubmit, pristine, submitting, error, ...props}) => {
     const classes = useStyles();

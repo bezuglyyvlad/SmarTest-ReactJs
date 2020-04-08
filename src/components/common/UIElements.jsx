@@ -15,6 +15,7 @@ import Slide from "@material-ui/core/Slide";
 import {connect} from "react-redux";
 import {changePerPage} from "../../redux/appReducer";
 import TablePagination from "@material-ui/core/TablePagination";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const TablePaginationCreator = React.memo(({pagination, changePerPage, changePage}) => {
     function setPerPage(event) {
@@ -127,3 +128,7 @@ export const DialogCreator = React.memo(({open, handleClose, title, text, confir
         </Dialog>
     )
 })
+
+export function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
