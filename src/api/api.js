@@ -82,5 +82,11 @@ export const adminPanelAPI = {
     },
     updateCategory(category_id, name, userEmail) {
         return instance.put(`categories/${category_id}`, {name, userEmail}, authHeader());
+    },
+    addCategory(name, userEmail) {
+        return instance.post('categories', {name, userEmail}, authHeader());
+    },
+    deleteCategory(category_id) {
+        return instance.delete(`categories/${category_id}`, authHeader());
     }
 }

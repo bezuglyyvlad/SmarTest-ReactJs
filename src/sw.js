@@ -1,4 +1,3 @@
-console.log("Its my service worker")
 workbox.precaching.precacheAndRoute(self.__precacheManifest || [])
 
 workbox.routing.registerRoute(
