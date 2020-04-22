@@ -1,21 +1,21 @@
 export const email = value => {
     if (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
-        return 'Некорректный адрес электронной почты';
+        return 'Некоректна адреса електронної пошти';
     }
     return undefined;
 }
 
 export const required = value => {
     if (value) return undefined;
-    return 'Это поле обязательно для заполнения';
+    return 'Це поле є обов`язковим для заповнення';
 }
 
 export const minLengthCreator = (minLength) => (value) => {
-    if (value.length < minLength) return `Значение слишком короткое (минимум ${minLength}).`;
+    if (value.length < minLength) return `Значення занадто коротке (мінімум ${minLength}).`;
     return undefined;
 }
 
 export const maxLengthCreator = (maxLength) => (value) => {
-    if (value.length > maxLength) return `Значение слишком длинное (максимум ${maxLength}).`;
+    if (value.length > maxLength) return `Значення задовге (максимум ${maxLength}).`;
     return undefined;
 }

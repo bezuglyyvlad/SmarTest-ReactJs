@@ -33,7 +33,7 @@ const maxLength255 = maxLengthCreator(255);
 export const UsernameField = React.memo(() => (
     <Field id="username" name='username' component={RenderTextField}
            validate={[required, minLength2, maxLength255]}
-           label='Имя пользователя'
+           label='Ім`я користувача'
            variant="outlined"
            margin="normal"
            fullWidth/>
@@ -42,7 +42,7 @@ export const UsernameField = React.memo(() => (
 export const EmailField = React.memo(() => (
     <Field id="email" name='email' component={RenderTextField}
            validate={[required, email]}
-           label='Электронная почта'
+           label='Електронна пошта'
            variant="outlined"
            margin="normal"
            fullWidth/>

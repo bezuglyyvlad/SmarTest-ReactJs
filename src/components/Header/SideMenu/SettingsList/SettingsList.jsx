@@ -34,12 +34,12 @@ const SettingsList = React.memo(({theme, changeTheme, clearTheme, toggleDrawer})
             // onKeyDown={toggleDrawer(false)}
         >
             <Divider/>
-            <ListSubheader>Настройки</ListSubheader>
+            <ListSubheader>Налаштування</ListSubheader>
             <ListItem>
                 <ListItemIcon>
                     <Brightness4Icon/>
                 </ListItemIcon>
-                <ListItemText primary="Ночной режим"/>
+                <ListItemText primary="Нічний режим"/>
                 <ListItemSecondaryAction>
                     <Switch
                         edge="end"

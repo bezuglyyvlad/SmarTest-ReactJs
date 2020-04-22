@@ -30,7 +30,7 @@ const Question = React.memo(({q, points}) => {
             >
                 <Grid item>
                     <Typography variant='subtitle2'>
-                        Баллы - {`${q.score} из ${points}`}
+                        Бали - {`${q.score} из ${points}`}
                     </Typography>
                 </Grid>
                 <Grid item>
@@ -44,7 +44,7 @@ const Question = React.memo(({q, points}) => {
             </Typography>
             <Answers type={q.type} data={q.answers}/>
             {q.description && <Typography variant='subtitle1'>
-                <strong>Объяснение: </strong> {q.description}
+                <strong>Пояснення: </strong> {q.description}
             </Typography>}
         </Paper>
     );

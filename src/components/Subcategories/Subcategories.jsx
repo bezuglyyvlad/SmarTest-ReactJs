@@ -65,13 +65,13 @@ const Subcategories = React.memo(({
         <Container component="main" maxWidth="md" className={classes.root}>
             <Breadcrumbs aria-label="breadcrumb">
                 <Link color="inherit" component={NavLink} to='/category'>
-                    Категории
+                    Категорії
                 </Link>
                 <Typography color="textPrimary">{categoryName}</Typography>
             </Breadcrumbs>
             <Typography variant="h5" align='center' className={classes.title} component='h1'>
                 {categoryName} {subcategories.length === 0 &&
-            <p>(к сожалению в данной категории нет тестов)</p>}
+            <p>(на жаль в даній категорії немає тестів)</p>}
             </Typography>
             {subcategories.length !== 0 && <ListCreator pagination={pagination} dense={dense} setDense={setDense}
                                                         mainPath={'/category/' + category_id}>

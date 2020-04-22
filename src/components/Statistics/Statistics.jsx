@@ -72,7 +72,7 @@ const Statistics = React.memo(({perPage, getRating, getTests, ratingInfo, tests,
                 changePage={changePage}/>
             <FormControlLabel
                 control={<Switch checked={dense} onChange={handleChangeDense} color='primary'/>}
-                label="Сделать компактнее"
+                label='Зробити компактніше'
                 className={classes.dense}
             />
         </Container>

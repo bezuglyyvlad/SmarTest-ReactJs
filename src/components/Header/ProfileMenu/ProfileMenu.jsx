@@ -37,8 +37,8 @@ const ProfileMenu = React.memo(({signOut, username}) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem component={NavLink} to='/profile' onClick={handleClose}>Профиль</MenuItem>
-                <MenuItem onClick={handleCloseSignOut} disabled={disableSignOut}>Выйти</MenuItem>
+                <MenuItem component={NavLink} to='/profile' onClick={handleClose}>Профіль</MenuItem>
+                <MenuItem onClick={handleCloseSignOut} disabled={disableSignOut}>Вийти</MenuItem>
             </Menu>
         </div>
     )

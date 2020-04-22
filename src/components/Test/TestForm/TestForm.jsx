@@ -18,7 +18,7 @@ const TestForm = React.memo(({handleSubmit, pristine, submitting, data, type}) =
     return (
         <form className={classes.root} onSubmit={handleSubmit}>
             <Answers type={type} data={data}/>
-            <SubmitButton textButton='Ответить' disabled={pristine || submitting}/>
+            <SubmitButton textButton='Відповісти' disabled={pristine || submitting}/>
         </form>
     );
 });

@@ -7,6 +7,7 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import {DialogCreator} from "../../common/UIElements";
 import Button from "@material-ui/core/Button";
 import {NavLink} from "react-router-dom";
+import {num2str} from "../../../utils/utils";
 
 const SubcategoriesListItem = ({value, startTest}) => {
     const [open, setOpen] = React.useState(false);
@@ -19,7 +20,8 @@ const SubcategoriesListItem = ({value, startTest}) => {
         setOpen(false);
     };
 
-    const testInfo = `${value.time} минут - ${value.count_of_questions} вопросов`;
+    const testInfo = `${value.time} ${num2str(value.time, ['хвилина', 'хвилини', 'хвилин'])} - 
+        ${value.count_of_questions} ${num2str(value.time, ['питання', 'питання', 'питань'])}`;
     return (
         <>
             <ListItem button onClick={handleClickOpen}>
@@ -32,17 +34,17 @@ const SubcategoriesListItem = ({value, startTest}) => {
                               secondary={testInfo}/>
             </ListItem>
             {Array.isArray(value.test) ?
-                <DialogCreator open={open} handleClose={handleClose} title='Начало теста'
-                               text={`Вы действительно хотите начать тест "${value.name}" (${testInfo})?`}
+                <DialogCreator open={open} handleClose={handleClose} title='Початок тесту'
+                               text={`Ви дійсно хочете розпочати тест "${value.name}" (${testInfo})?`}
                                confirmButton={
                                    <Button onClick={() => startTest(value.subcategory_id)} color="primary">
-                                       Да
+                                       Так
                                    </Button>}/>
-                : <DialogCreator open={open} handleClose={handleClose} title='Продолжение теста'
-                                 text={`У вас уже начат тест "${value.name}" (закончиться ${(new Date(value.test.date_finish)).toLocaleString()}). Хотите его продолжить?`}
+                : <DialogCreator open={open} handleClose={handleClose} title='Продовження тесту'
+                                 text={`У вас вже розпочато тест "${value.name}" (закінчитися ${(new Date(value.test.date_finish)).toLocaleString()}). Хочете його продовжити?`}
                                  confirmButton={
                                      <Button component={NavLink} to={`/test/${value.test.test_id}`} color="primary">
-                                         Да
+                                         Так
                                      </Button>}/>
             }
         </>

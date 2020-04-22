@@ -36,14 +36,14 @@ const ProfileForm = React.memo(({handleSubmit, pristine, submitting, error, ...p
             <form className={classes.form} onSubmit={handleSubmit}>
                 <UsernameField/>
                 <EmailField/>
-                <PasswordField labelText='Новый пароль'/>
+                <PasswordField labelText='Новий пароль'/>
                 {error && <FormHelperText error={!!error}>{error}</FormHelperText>}
-                <SubmitButton textButton='Изменить' disabled={pristine || submitting}/>
+                <SubmitButton textButton='Змінити' disabled={pristine || submitting}/>
             </form>
 
             {open && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success">
-                    Профиль успешно обновлен!
+                    Профіль успішно оновлено!
                 </Alert>
             </Snackbar>}
         </>

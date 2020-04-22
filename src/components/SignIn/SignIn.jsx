@@ -38,7 +38,7 @@ const SignIn = React.memo(({signIn}) => {
                     <LockOutlinedIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Вход
+                    Вхід
                 </Typography>
                 <SignInForm onSubmit={onSubmit}/>
             </div>

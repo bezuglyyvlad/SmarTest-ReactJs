@@ -47,7 +47,7 @@ const Profile = React.memo(({userId, username, email, updateUser, deleteUser}) =
                     {getAvatarUsername(username)}
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Профиль
+                    Профіль
                 </Typography>
                 <ProfileForm onSubmit={onSubmit} initialValues={{username: username, email: email}}/>
                 <Grid container className={classes.deleteAccount} justify='center'>

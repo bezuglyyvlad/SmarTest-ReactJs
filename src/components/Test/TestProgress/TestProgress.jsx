@@ -18,7 +18,7 @@ const TestProgress = React.memo(({number_question, count_of_questions}) => {
     return (
         <Box className={classes.root}>
             <Typography align='center' variant='subtitle1'>
-                Вопрос {number_question}/{count_of_questions}
+                Питання {number_question}/{count_of_questions}
             </Typography>
             <MobileStepper steps={count_of_questions} activeStep={number_question - 1}
                            position="static" variant="progress"

@@ -22,7 +22,7 @@ const MainList = React.memo(({toggleDrawer, location, role}) => {
         <List component="nav" aria-label="main-list"
               onClick={toggleDrawer(false)}
               onKeyDown={toggleDrawer(false)}>
-            <MainListItem link='/category' listItemIsActive={listItemIsActive} text='Категории'
+            <MainListItem link='/category' listItemIsActive={listItemIsActive} text='Категорії'
                           icon={<CategoryIcon/>}/>
             <MainListItem link='/statistics' listItemIsActive={listItemIsActive} text='Статистика'
                           icon={<AssessmentIcon/>}/>

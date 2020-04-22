@@ -24,16 +24,16 @@ const TestsTable = React.memo(({dense, history, data}) => {
     return (
         <TableContainer component={Paper}>
             <Typography variant='h6' className={classes.titleTable}>
-                Тесты
+                Тести
             </Typography>
             <Table
                 size={dense ? 'small' : 'medium'}
             >
                 <TableHead>
                     <TableRow>
-                        <TableCell>Название</TableCell>
-                        <TableCell>Категория</TableCell>
-                        <TableCell>Баллы</TableCell>
+                        <TableCell>Назва</TableCell>
+                        <TableCell>Категорія</TableCell>
+                        <TableCell>Бали</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

@@ -37,7 +37,7 @@ const SignUp = React.memo(({signUp}) => {
                     <LockOutlinedIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Регистрация
+                    Реєстрація
                 </Typography>
                 <SignUpForm onSubmit={onSubmit}/>
             </div>

@@ -7,6 +7,7 @@ import {addCategory, deleteCategory, updateCategory} from "../../../redux/adminP
 import {changePerPage} from "../../../redux/appReducer";
 import {adminPanelSelectors} from "../../../redux/selectors/adminPanelSelectors";
 import {appSelectors} from "../../../redux/selectors/appSelectors";
+import {materialTableLocalization} from "../../../utils/localization";
 
 const AdminTable = React.memo(({
                                    showError, categories, addCategory, updateCategory,
@@ -14,14 +15,14 @@ const AdminTable = React.memo(({
                                }) => {
     const columns = [
         {title: 'Id', field: 'category_id', editable: 'never'},
-        {title: 'Название*', field: 'name'},
-        {title: 'Электронная почта (Эксперта)', field: 'user.email'},
+        {title: 'Назва*', field: 'name'},
+        {title: 'Електронна пошта (Експерта)', field: 'user.email'},
     ];
 
     function validateName(name) {
         const requiredError = required(name);
         if (requiredError) {
-            showError(["Название обязательно для заполнения."]);
+            showError(['Назва є обов`язковим для заповнення']);
             return false;
         }
         return true;
@@ -33,10 +34,11 @@ const AdminTable = React.memo(({
 
     return (
         <MaterialTable
-            title="Категории"
+            title="Категорії"
             columns={columns}
             data={categories.categories}
             options={{sorting: true, pageSize: +perPage}}
+            localization={materialTableLocalization}
             onChangeRowsPerPage={setPerPage}
             editable={{
                 onRowAdd: newData =>

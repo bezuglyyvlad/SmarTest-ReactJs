@@ -33,7 +33,7 @@ const Chart = React.memo(({data}) => {
                 options={{
                     title: {
                         display: true,
-                        text: 'Баллы за последних 30 дней',
+                        text: 'Бали за останніх 30 днів',
                         fontSize: 16
                     },
                     legend: {

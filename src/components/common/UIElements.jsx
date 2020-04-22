@@ -24,9 +24,11 @@ const TablePaginationCreator = React.memo(({pagination, changePerPage, changePag
 
     return (
         <TablePagination
-            labelRowsPerPage='На страницу'
+            labelRowsPerPage='На сторінку'
+            backIconButtonText='Попередня сторінка'
+            nextIconButtonText='Наступна сторінка'
             rowsPerPageOptions={[5, 10, 20]}
-            component="div"
+            component='div'
             count={pagination.totalCount}
             rowsPerPage={pagination.perPage}
             page={pagination.currentPage - 1}
@@ -84,11 +86,11 @@ export const ListCreator = React.memo(({pagination, dense, setDense, children, m
                     <Checkbox
                         checked={dense}
                         onChange={event => setDense(event.target.checked)}
-                        value="dense"
-                        color="primary"
+                        value='dense'
+                        color='primary'
                     />
                 }
-                label="Сделать компактнее"
+                label='Зробити компактніше'
             />
             <div className={classes.demo} align='center'>
                 {children}
@@ -121,7 +123,7 @@ export const DialogCreator = React.memo(({open, handleClose, title, text, confir
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">
-                    Нет
+                    Ні
                 </Button>
                 {confirmButton}
             </DialogActions>

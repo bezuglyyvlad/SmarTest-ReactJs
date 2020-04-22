@@ -29,11 +29,11 @@ const SignUpForm = React.memo(({handleSubmit, pristine, submitting, error}) => {
             <EmailField/>
             <PasswordField labelText='Пароль'/>
             {error && <FormHelperText error={!!error}>{error}</FormHelperText>}
-            <SubmitButton textButton='Зарегистрироваться' disabled={pristine || submitting}/>
+            <SubmitButton textButton='Зареєструватися' disabled={pristine || submitting}/>
             <Grid container justify="flex-end">
                 <Grid item>
                     <Link component={NavLink} to='/signin' variant="body2">
-                        Уже есть аккаунт? Войти
+                        Вже є аккаунт? Увійти
                     </Link>
                 </Grid>
             </Grid>

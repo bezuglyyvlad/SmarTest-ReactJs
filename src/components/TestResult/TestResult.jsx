@@ -50,13 +50,13 @@ const TestResult = React.memo(({match, getTestResult, test, questions, complexit
     const points = 100 / test.count_of_questions;
 
     const rows = [
-        {title: 'Название', value: test.subcategory_name},
-        {title: 'Категория', value: test.category_name},
-        {title: 'Начало теста', value: (new Date(test.date_start)).toLocaleString()},
-        {title: 'Завершение теста', value: (new Date(test.date_finish)).toLocaleString()},
-        {title: 'Соотношение сложности вопросов (легкие/средние/сложные)', value: complexity},
-        {title: 'Правильных ответов', value: `${test.count_of_right_answers} из ${test.count_of_questions}`},
-        {title: 'Баллов', value: test.score},
+        {title: 'Назва', value: test.subcategory_name},
+        {title: 'Категорія', value: test.category_name},
+        {title: 'Початок тесту', value: (new Date(test.date_start)).toLocaleString()},
+        {title: 'Завершення тесту', value: (new Date(test.date_finish)).toLocaleString()},
+        {title: 'Співвідношення складності питань (легкі/середні/складні)', value: complexity},
+        {title: 'Правильних відповідей', value: `${test.count_of_right_answers} з ${test.count_of_questions}`},
+        {title: 'Балів', value: test.score},
     ];
 
     return (
@@ -68,7 +68,7 @@ const TestResult = React.memo(({match, getTestResult, test, questions, complexit
                 <Typography color="textPrimary">{test.subcategory_name}</Typography>
             </Breadcrumbs>
             <Typography component="h1" variant="h5" align='center' className={classes.title}>
-                Результат теста {!test.subcategory_id && '(тест был удален)'}
+                Результат тесту {!test.subcategory_id && '(тест був видалений)'}
             </Typography>
             <TableContainer>
                 <Table aria-label="simple table" className={classes.table}>

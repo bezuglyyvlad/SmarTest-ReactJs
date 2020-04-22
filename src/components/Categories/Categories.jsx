@@ -47,11 +47,11 @@ const Categories = React.memo(({location, getCategories, categories, pagination}
         <Container component="main" maxWidth="md" className={classes.root}>
             {categories.length === 0 ?
                 <Typography variant="h5" align='center' className={classes.title} component='h1'>
-                    <p>Категории к сожалению отсутствуют</p>
+                    <p>Категорії на жаль відсутні</p>
                 </Typography> :
                 <>
                     <Typography variant="h5" align='center' className={classes.title} component='h1'>
-                        Категории
+                        Категорії
                     </Typography>
                     <ListCreator pagination={pagination} dense={dense} setDense={setDense} mainPath='/category'>
                         <List dense={dense}>

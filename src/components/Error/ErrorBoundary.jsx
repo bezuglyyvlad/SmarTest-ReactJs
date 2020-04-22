@@ -14,7 +14,7 @@ class ErrorBoundary extends React.Component {
 
     static getDerivedStateFromError(error) {
         // Обновить состояние с тем, чтобы следующий рендер показал запасной UI.
-        return {hasError: {status: 'Ууууупс', name: 'Что-то пошло не так'}};
+        return {hasError: {status: 'Ууууупс', name: 'Щось пішло не так'}};
     }
 
     // componentDidCatch(error, errorInfo) {
@@ -27,7 +27,7 @@ class ErrorBoundary extends React.Component {
             e.response && e.response.data ? this.setState({hasError: e.response.data}) : this.setState({
                 hasError: {
                     status: 'Ууууупс',
-                    name: 'Что-то пошло не так'
+                    name: 'Щось пішло не так'
                 }
             })
         })
