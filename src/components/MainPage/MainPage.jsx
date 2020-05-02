@@ -29,32 +29,32 @@ const MainPage = React.memo(() => {
         <Container component="main" maxWidth="lg" className={classes.root}>
             <Paper className={classes.paper}>
                 <Typography variant='h4' component='h1' className={classes.title}>
-                    Попробуйте динамическое тестирование с SmarTest
+                    Спробуйте динамічне тестування з SmarTest
                 </Typography>
                 <Typography variant='h5'>
-                    Тест будет подстраиваться под ваш уровень знаний.
-                    Проверь свои знания прямо сейчас.
+                    Тест буде підлаштовуватися під ваш рівень знань. Перевір свої знання прямо зараз.
                 </Typography>
                 <Button component={NavLink} to='/category' variant="contained" color="primary"
                         className={classes.button}>
-                    Начать
+                    Почати
                 </Button>
             </Paper>
             <Paper className={classes.paper}>
-                <Typography variant='h4' component='h1' className={classes.title}>
-                    Наш сервис сделан в виде PWA приложения
+                <Typography variant='h4' component='h2' className={classes.title}>
+                    Наш сервіс зроблений у вигляді PWA
                 </Typography>
                 <Typography variant='h5'>
-                    Теперь не нужно скачивать приложение через сторонние магазины. Нужно всего лишь подтвердить
-                    предложение для установки либо сделать это вручную (смотреть в руководстве для вашего браузера)
+                    Працюйте швидше, переглядайте дані в офлайні, встановлюйте додаток на будь-які платформи прямо з
+                    браузера і тепер не думайте про поновлення програми.
                 </Typography>
             </Paper>
             <Paper className={classes.paper}>
-                <Typography variant='h4' component='h1' className={classes.title}>
-                    Стать Експертом
+                <Typography variant='h4' component='h2' className={classes.title}>
+                    Стати Експертом
                 </Typography>
                 <Typography variant='h5'>
-                    Хотите стать Экспертом и создавать тесты самому? Тогда свяжитесь с администратором - notrealemail@gmail.com
+                    Хочете стати Експертом і створювати тести самому? Тоді зв'яжіться з адміністратором -
+                    notrealemail@gmail.com
                 </Typography>
             </Paper>
         </Container>

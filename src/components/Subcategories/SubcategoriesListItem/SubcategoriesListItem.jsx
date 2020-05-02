@@ -21,7 +21,7 @@ const SubcategoriesListItem = ({value, startTest}) => {
     };
 
     const testInfo = `${value.time} ${num2str(value.time, ['хвилина', 'хвилини', 'хвилин'])} - 
-        ${value.count_of_questions} ${num2str(value.time, ['питання', 'питання', 'питань'])}`;
+        ${value.count_of_questions} ${num2str(value.count_of_questions, ['питання', 'питання', 'питань'])}`;
     return (
         <>
             <ListItem button onClick={handleClickOpen}>
