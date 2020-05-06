@@ -5,7 +5,7 @@ import {Switch} from "react-router";
 import Box from "@material-ui/core/Box";
 import {connect} from "react-redux";
 import {compose} from "redux";
-import {changeTheme, initializeApp} from "./redux/appReducer";
+import {initializeApp} from "./redux/appReducer";
 import {Preloader} from "./components/common/Preloader";
 import {withSuspense} from "./hoc/withSuspense";
 import Header from "./components/Header/Header";
@@ -26,8 +26,10 @@ const Subcategories = React.lazy(() => import("./components/Subcategories/Subcat
 const Test = React.lazy(() => import("./components/Test/Test"));
 const TestResult = React.lazy(() => import("./components/TestResult/TestResult"));
 const AdminPanel = React.lazy(() => import("./components/AdminPanel/AdminPanel"));
+const ExpertCategories = React.lazy(() => import("./components/ExpertCategories/ExpertCategories"));
+const ExpertTests = React.lazy(() => import("./components/ExpertTests/ExpertTests"));
 
-const App = React.memo(({initializeApp, initialized, theme, changeTheme}) => {
+const App = React.memo(({initializeApp, initialized, theme}) => {
     useEffect(() => {
         initializeApp();
     }, [initializeApp]);
@@ -54,7 +56,8 @@ const App = React.memo(({initializeApp, initialized, theme, changeTheme}) => {
                             <Route path='/test/:test_id/result' render={withSuspense(TestResult)}/>
                             <Route path='/test/:test_id' render={withSuspense(Test)}/>
                             <Route path='/statistics' render={withSuspense(Statistics)}/>
-                            <Route path='/expertPanel' render={() => (<>EXPERT PANEL</>)}/>
+                            <Route path='/expertPanel/:category_id' render={withSuspense(ExpertTests)}/>
+                            <Route path='/expertPanel' render={withSuspense(ExpertCategories)}/>
                             <Route path='/adminPanel' render={withSuspense(AdminPanel)}/>
                             <Route path='/' render={withSuspense(MainPage)}/>
                         </Switch>
@@ -71,4 +74,4 @@ const mapStateToProps = (state) => ({
 });
 
 export default compose(
-    connect(mapStateToProps, {initializeApp, changeTheme}))(App);
+    connect(mapStateToProps, {initializeApp}))(App);

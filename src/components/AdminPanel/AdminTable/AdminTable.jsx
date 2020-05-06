@@ -1,6 +1,6 @@
 import React from 'react';
 import MaterialTable from 'material-table';
-import {required} from "../../../utils/validators";
+import {email, required} from "../../../utils/validators";
 import {compose} from "redux";
 import {connect} from "react-redux";
 import {addCategory, deleteCategory, updateCategory} from "../../../redux/adminPanelReducer";
@@ -19,13 +19,13 @@ const AdminTable = React.memo(({
         {title: 'Електронна пошта (Експерта)', field: 'user.email'},
     ];
 
-    function validateName(name) {
-        const requiredError = required(name);
-        if (requiredError) {
-            showError(['Назва є обов`язковим для заповнення']);
-            return false;
-        }
-        return true;
+    function validate(data) {
+        let errors = [];
+        required(data.name) && errors.push('Назва є обов`язковим для заповнення');
+        const validateEmail = data.user && email(data.user.email);
+        validateEmail && errors.push(validateEmail);
+        showError(errors);
+        return errors.length === 0;
     }
 
     function setPerPage(perPage) {
@@ -36,14 +36,14 @@ const AdminTable = React.memo(({
         <MaterialTable
             title="Категорії"
             columns={columns}
-            data={categories.categories}
+            data={categories}
             options={{sorting: true, pageSize: +perPage}}
             localization={materialTableLocalization}
             onChangeRowsPerPage={setPerPage}
             editable={{
                 onRowAdd: newData =>
                     new Promise(async (resolve, reject) => {
-                        if (!validateName(newData.name)) {
+                        if (!validate(newData)) {
                             reject();
                         } else {
                             const {name, userEmail} = {
@@ -60,7 +60,7 @@ const AdminTable = React.memo(({
                     }),
                 onRowUpdate: (newData, oldData) =>
                     new Promise(async (resolve, reject) => {
-                        if (!validateName(newData.name)) {
+                        if (!validate(newData)) {
                             reject();
                         } else {
                             let myOldData = {...oldData};

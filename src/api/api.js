@@ -90,3 +90,9 @@ export const adminPanelAPI = {
         return instance.delete(`categories/${category_id}`, authHeader());
     }
 }
+
+export const expertPanelAPI = {
+    getCategories() {
+        return instance.get('experts', authHeader());
+    },
+}

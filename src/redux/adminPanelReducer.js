@@ -18,7 +18,7 @@ const adminPanelReducer = (state = initialState, action) => {
     }
 }
 
-const setCategoriesAC = (categories) => ({type: SET_CATEGORIES, categories: {categories}});
+const setCategoriesAC = (categories) => ({type: SET_CATEGORIES, categories: categories});
 
 const errorInArrayOfString = array => {
     return array.map(i => {
@@ -28,8 +28,7 @@ const errorInArrayOfString = array => {
 
 export const getAdminCategories = () => async (dispatch) => {
     const response = await adminPanelAPI.getCategories();
-    const categories = response.data;
-    dispatch(setCategoriesAC(categories));
+    dispatch(setCategoriesAC(response.data));
 }
 
 export const updateCategory = (category_id, name, userEmail) => async (dispatch) => {

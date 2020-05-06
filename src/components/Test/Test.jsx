@@ -50,9 +50,9 @@ const Test = React.memo(({testInfo, question, answers, match, getTest, nextQuest
             interval = setInterval(() => {
                 setTimer(getTimer(testInfo.date_finish));
             }, delay);
-        }
-        if ((new Date()) >= (new Date(testInfo.date_finish))) {
-            setTestFinished(true);
+            if ((new Date()) >= (new Date(testInfo.date_finish))) {
+                setTestFinished(true);
+            }
         }
         return () => clearInterval(interval);
     }, [timer, testInfo]);
