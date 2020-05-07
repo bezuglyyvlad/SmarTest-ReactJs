@@ -91,8 +91,14 @@ export const adminPanelAPI = {
     }
 }
 
-export const expertPanelAPI = {
+export const expertCategoriesAPI = {
     getCategories() {
         return instance.get('experts', authHeader());
+    },
+}
+
+export const expertTestsAPI = {
+    getTests(category_id) {
+        return instance.get('experts/subcategories?category_id='+category_id, authHeader());
     },
 }

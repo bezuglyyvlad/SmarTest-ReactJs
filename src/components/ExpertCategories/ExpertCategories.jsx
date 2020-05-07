@@ -10,8 +10,8 @@ import {withNotExpertRedirect} from "../../hoc/withNotExpertRedirect";
 import List from "@material-ui/core/List";
 import {ListCreator} from "../common/UIElements";
 import ExpertCategoriesListItem from "./ExpertCategoriesListItem/ExpertCategoriesListItem";
-import {getExpertCategories} from "../../redux/expertPanelReducer";
-import {expertPanelSelectors} from "../../redux/selectors/expertPanelSelectors";
+import {getExpertCategories} from "../../redux/expertCategoriesReducer";
+import {expertCategoriesSelectors} from "../../redux/selectors/expertCategoriesSelectors";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -56,7 +56,7 @@ const ExpertCategories = React.memo(({categories, getExpertCategories}) => {
 });
 
 const mapStateToProps = (state) => ({
-    categories: expertPanelSelectors.getCategories(state),
+    categories: expertCategoriesSelectors.getCategories(state),
 })
 
 export default compose(withUnAuthRedirect, withNotExpertRedirect,

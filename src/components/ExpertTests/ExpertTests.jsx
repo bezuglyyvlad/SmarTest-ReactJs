@@ -10,8 +10,12 @@ import {withNotExpertRedirect} from "../../hoc/withNotExpertRedirect";
 import Link from "@material-ui/core/Link";
 import {NavLink} from "react-router-dom";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import {materialTableLocalization} from "../../utils/localization";
-import MaterialTable from "material-table";
+import {withRouter} from "react-router";
+import Box from "@material-ui/core/Box";
+import {getCategory} from "../../redux/categoryReducer";
+import {categorySelectors} from "../../redux/selectors/categorySelectors";
+import ExpertTestsTable from "./ExpertTestsTable/ExpertTestsTable";
+import {getExpertTests} from "../../redux/expertTestsReducer";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -20,39 +24,33 @@ const useStyles = makeStyles(theme => ({
     title: {
         margin: theme.spacing(2, 0),
     },
-    tableRow: {
-        backgroundColor: "aqua",
-    }
+    table: {
+        margin: theme.spacing(2, 0),
+    },
 }));
 
-const ExpertTests = React.memo(({}) => {
+const ExpertTests = React.memo(({history, match, getCategory, categoryName, getExpertTests}) => {
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
+
+    const category_id = match.params.category_id;
 
     useEffect(() => {
         (async () => {
             setShowPreloader(true);
-            // запрос на сервер
+            await getCategory(category_id);
+            await getExpertTests(category_id);
             setShowPreloader(false);
         })();
-    }, []);
+    }, [category_id, getCategory, getExpertTests]);
 
     if (showPreloader) {
         return <Preloader/>
     }
 
-
-    const columns = [
-        {title: 'Id', field: 'subcategory_id', editable: 'never'},
-        {title: 'Назва', field: 'name'},
-        {title: 'Час', field: 'time'},
-        {title: 'Кількість питань', field: 'count_of_questions'},
-        {title: 'Доступ', field: 'is_open', lookup: {0: 'Закритий', 1: 'Відкритий'}},
-    ];
-
-    const subcategories = [
-        {subcategory_id: 1, name: 'Name 1', time: 1, count_of_questions: 10, is_open: 1}
-    ];
+    const rowClick = (event, rowData) => {
+        history.push(`/expertPanel/${category_id}/${rowData.subcategory_id}`);
+    }
 
     return (
         <Container component="main" maxWidth="md" className={classes.root}>
@@ -60,20 +58,17 @@ const ExpertTests = React.memo(({}) => {
                 <Link color="inherit" component={NavLink} to='/expertPanel'>
                     Expert панель
                 </Link>
-                <Typography color="textPrimary">Назва категорії</Typography>
+                <Typography color="textPrimary">{categoryName}</Typography>
             </Breadcrumbs>
-            <Typography component="h1" variant="h5" align='center' className={classes.title}>
-                Тести
-            </Typography>
-            <MaterialTable
-                title="Тести"
-                columns={columns}
-                data={subcategories}
-                options={{sorting: true}}
-                localization={materialTableLocalization}
-            />
+            <Box className={classes.table}>
+                <ExpertTestsTable rowClick={rowClick}/>
+            </Box>
         </Container>
     );
 });
 
-export default compose(withUnAuthRedirect, withNotExpertRedirect, connect(null, {}))(ExpertTests);
+const mapStateToProps = (state) => ({
+    categoryName: categorySelectors.getName(state),
+});
+
+export default compose(withUnAuthRedirect, withNotExpertRedirect, withRouter, connect(mapStateToProps, {getCategory, getExpertTests}))(ExpertTests);
