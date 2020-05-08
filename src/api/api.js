@@ -101,4 +101,13 @@ export const expertTestsAPI = {
     getTests(category_id) {
         return instance.get('experts/subcategories?category_id='+category_id, authHeader());
     },
+    addTest(data) {
+        return instance.post('subcategories', data, authHeader());
+    },
+    updateTest(data) {
+        return instance.put(`subcategories/${data.subcategory_id}`, data, authHeader());
+    },
+    deleteTest(subcategory_id) {
+        return instance.delete(`subcategories/${subcategory_id}`, authHeader());
+    }
 }

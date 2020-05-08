@@ -1,6 +1,6 @@
 import React from 'react';
 import MaterialTable from 'material-table';
-import {email, required} from "../../../utils/validators";
+import {email, maxLengthCreator, required} from "../../../utils/validators";
 import {compose} from "redux";
 import {connect} from "react-redux";
 import {addCategory, deleteCategory, updateCategory} from "../../../redux/adminPanelReducer";
@@ -22,6 +22,8 @@ const AdminTable = React.memo(({
     function validate(data) {
         let errors = [];
         required(data.name) && errors.push('Назва є обов`язковим для заповнення');
+        const maxLengthName = 255;
+        maxLengthCreator(maxLengthName)(data.name) && errors.push(`Назва задовга (максимум ${maxLengthName})`);
         const validateEmail = data.user && email(data.user.email);
         validateEmail && errors.push(validateEmail);
         showError(errors);

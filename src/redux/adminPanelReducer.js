@@ -1,4 +1,5 @@
 import {adminPanelAPI} from "../api/api";
+import {errorInArrayOfString} from "../utils/utils";
 
 const SET_CATEGORIES = 'adminPanel/SET_CATEGORIES';
 
@@ -19,12 +20,6 @@ const adminPanelReducer = (state = initialState, action) => {
 }
 
 const setCategoriesAC = (categories) => ({type: SET_CATEGORIES, categories: categories});
-
-const errorInArrayOfString = array => {
-    return array.map(i => {
-        return i.message
-    });
-}
 
 export const getAdminCategories = () => async (dispatch) => {
     const response = await adminPanelAPI.getCategories();

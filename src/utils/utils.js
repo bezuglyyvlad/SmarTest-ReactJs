@@ -74,3 +74,9 @@ export const num2str = (n, text_forms) => {
     }
     return text_forms[2];
 }
+
+export const errorInArrayOfString = array => {
+    return array.map(i => {
+        return i.message
+    });
+}

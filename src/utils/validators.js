@@ -19,3 +19,13 @@ export const maxLengthCreator = (maxLength) => (value) => {
     if (value.length > maxLength) return `Значення задовге (максимум ${maxLength}).`;
     return undefined;
 }
+
+export const minNumberCreator = (minNumber) => (value) => {
+    if (value < minNumber) return `Значення менше ніж ${minNumber}).`;
+    return undefined;
+}
+
+export const maxNumberCreator = (maxNumber) => (value) => {
+    if (value > maxNumber) return `Значення більше ніж ${maxNumber}).`;
+    return undefined;
+}
