@@ -5,13 +5,8 @@ import {connect} from "react-redux";
 import {changePerPage} from "../../../redux/appReducer";
 import {appSelectors} from "../../../redux/selectors/appSelectors";
 import {materialTableLocalization} from "../../../utils/localization";
-import {expertCategoriesSelectors} from "../../../redux/selectors/expertTestsSelectors";
-import {
-    maxLengthCreator,
-    maxNumberCreator,
-    minNumberCreator,
-    required
-} from "../../../utils/validators";
+import {expertTestsSelectors} from "../../../redux/selectors/expertTestsSelectors";
+import {expertTestsValidate} from "../../../utils/validators";
 import {addTest, deleteTest, updateTest} from "../../../redux/expertTestsReducer";
 
 const ExpertTestsTable = React.memo(({
@@ -25,25 +20,6 @@ const ExpertTestsTable = React.memo(({
         {title: 'Кількість питань*', field: 'count_of_questions', type: 'numeric'},
         {title: 'Доступ*', field: 'is_open', lookup: {0: 'Закритий', 1: 'Відкритий'}, initialEditValue: 0},
     ];
-
-    function validate(data) {
-        let errors = [];
-        required(data.name) && errors.push('Назва є обов`язковим для заповнення');
-        required(data.time) && errors.push('Час є обов`язковим для заповнення');
-        required(data.count_of_questions) && errors.push('Кількість питань є обов`язковим для заповнення');
-        const maxLengthName = 255;
-        const minLenghtTime = 1;
-        const maxLenghtTime = 1440;
-        const minLenghtQues = 5;
-        const maxLenghtQues = 500;
-        maxLengthCreator(maxLengthName)(data.name) && errors.push(`Назва задовга (максимум ${maxLengthName})`);
-        minNumberCreator(minLenghtTime)(data.time) && errors.push(`Час може бути мінімум ${minLenghtTime}`);
-        maxNumberCreator(maxLenghtTime)(data.time) && errors.push(`Час може бути максимум ${maxLenghtTime}`);
-        minNumberCreator(minLenghtQues)(data.count_of_questions) && errors.push(`Кількість питань може бути мінімум ${minLenghtQues}`);
-        maxNumberCreator(maxLenghtQues)(data.count_of_questions) && errors.push(`Кількість питань може бути максимум ${maxLenghtQues}`);
-        showError(errors);
-        return errors.length === 0;
-    }
 
     function setPerPage(perPage) {
         changePerPage(perPage);
@@ -61,7 +37,7 @@ const ExpertTestsTable = React.memo(({
             editable={{
                 onRowAdd: newData =>
                     new Promise(async (resolve, reject) => {
-                        if (!validate(newData)) {
+                        if (!expertTestsValidate(newData, showError)) {
                             reject();
                         } else {
                             const apiErrors = await addTest({category_id, ...newData});
@@ -74,7 +50,7 @@ const ExpertTestsTable = React.memo(({
                     }),
                 onRowUpdate: (newData, oldData) =>
                     new Promise(async (resolve, reject) => {
-                        if (!validate(newData)) {
+                        if (!expertTestsValidate(newData, showError)) {
                             reject();
                         } else {
                             let myOldData = {...oldData};
@@ -100,7 +76,7 @@ const ExpertTestsTable = React.memo(({
 });
 
 const mapStateToProps = (state) => ({
-    tests: expertCategoriesSelectors.getTests(state),
+    tests: expertTestsSelectors.getTests(state),
     perPage: appSelectors.getPerPage(state),
 })
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import MaterialTable from 'material-table';
-import {email, maxLengthCreator, required} from "../../../utils/validators";
+import {adminPanelValidate} from "../../../utils/validators";
 import {compose} from "redux";
 import {connect} from "react-redux";
 import {addCategory, deleteCategory, updateCategory} from "../../../redux/adminPanelReducer";
@@ -19,16 +19,16 @@ const AdminTable = React.memo(({
         {title: 'Електронна пошта (Експерта)', field: 'user.email'},
     ];
 
-    function validate(data) {
-        let errors = [];
-        required(data.name) && errors.push('Назва є обов`язковим для заповнення');
-        const maxLengthName = 255;
-        maxLengthCreator(maxLengthName)(data.name) && errors.push(`Назва задовга (максимум ${maxLengthName})`);
-        const validateEmail = data.user && email(data.user.email);
-        validateEmail && errors.push(validateEmail);
-        showError(errors);
-        return errors.length === 0;
-    }
+    // function validate(data) {
+    //     let errors = [];
+    //     required(data.name) && errors.push('Назва є обов`язковим для заповнення');
+    //     const maxLengthName = 255;
+    //     maxLengthCreator(maxLengthName)(data.name) && errors.push(`Назва задовга (максимум ${maxLengthName})`);
+    //     const validateEmail = data.user && email(data.user.email);
+    //     validateEmail && errors.push(validateEmail);
+    //     showError(errors);
+    //     return errors.length === 0;
+    // }
 
     function setPerPage(perPage) {
         changePerPage(perPage);
@@ -45,7 +45,7 @@ const AdminTable = React.memo(({
             editable={{
                 onRowAdd: newData =>
                     new Promise(async (resolve, reject) => {
-                        if (!validate(newData)) {
+                        if (!adminPanelValidate(newData, showError)) {
                             reject();
                         } else {
                             const {name, userEmail} = {
@@ -62,7 +62,7 @@ const AdminTable = React.memo(({
                     }),
                 onRowUpdate: (newData, oldData) =>
                     new Promise(async (resolve, reject) => {
-                        if (!validate(newData)) {
+                        if (!adminPanelValidate(newData, showError)) {
                             reject();
                         } else {
                             let myOldData = {...oldData};

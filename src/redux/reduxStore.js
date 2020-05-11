@@ -12,6 +12,8 @@ import statisticsReducer from "./statisticsReducer";
 import adminPanelReducer from "./adminPanelReducer";
 import expertCategoriesReducer from "./expertCategoriesReducer";
 import expertTestsReducer from "./expertTestsReducer";
+import subcategoryReducer from "./subcategoryReducer";
+import expertQuestionsReducer from "./expertQuestionsReducer";
 
 let reducers = combineReducers({
     form: formReducer,
@@ -20,12 +22,14 @@ let reducers = combineReducers({
     categories: categoriesReducer,
     subcategories: subcategoriesReducer,
     category: categoryReducer,
+    subcategory: subcategoryReducer,
     test: testReducer,
     testResult: testResultReducer,
     statistics: statisticsReducer,
     adminPanel: adminPanelReducer,
     expertCategories: expertCategoriesReducer,
-    expertTests: expertTestsReducer
+    expertTests: expertTestsReducer,
+    expertQuestions: expertQuestionsReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

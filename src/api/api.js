@@ -52,6 +52,12 @@ export const categoryAPI = {
     },
 }
 
+export const subcategoryAPI = {
+    getData(subcategory_id) {
+        return instance.get(`subcategories/${subcategory_id}?fields=subcategory_id,name`, authHeader());
+    },
+}
+
 export const testAPI = {
     createTest(subcategory_id) {
         return instance.post('tests', {subcategory_id}, authHeader());
@@ -99,7 +105,7 @@ export const expertCategoriesAPI = {
 
 export const expertTestsAPI = {
     getTests(category_id) {
-        return instance.get('experts/subcategories?category_id='+category_id, authHeader());
+        return instance.get('experts/subcategories?category_id=' + category_id, authHeader());
     },
     addTest(data) {
         return instance.post('subcategories', data, authHeader());
@@ -109,5 +115,14 @@ export const expertTestsAPI = {
     },
     deleteTest(subcategory_id) {
         return instance.delete(`subcategories/${subcategory_id}`, authHeader());
+    }
+}
+
+export const expertQuestionsAPI = {
+    getQuestions(subcategory_id) {
+        return instance.get('experts/questions?subcategory_id=' + subcategory_id, authHeader());
+    },
+    deleteQuestion(question_id) {
+        return instance.delete(`questions/${question_id}`, authHeader());
     }
 }

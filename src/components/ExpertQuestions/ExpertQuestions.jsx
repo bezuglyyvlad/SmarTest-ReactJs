@@ -11,13 +11,13 @@ import Link from "@material-ui/core/Link";
 import {NavLink} from "react-router-dom";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import {withRouter} from "react-router";
-import Box from "@material-ui/core/Box";
 import {getCategory} from "../../redux/categoryReducer";
 import {categorySelectors} from "../../redux/selectors/categorySelectors";
-import ExpertTestsTable from "./ExpertTestsTable/ExpertTestsTable";
-import {getExpertTests} from "../../redux/expertTestsReducer";
-import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
+import {getSubcategory} from "../../redux/subcategoryReducer";
+import {subcategorySelectors} from "../../redux/selectors/subcategorySelectors";
+import {getExpertQuestions} from "../../redux/expertQuestionsReducer";
+import Box from "@material-ui/core/Box";
+import ExpertQuestionsTable from "./ExpertQuestionsTable/ExpertQuestionsTable";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -28,41 +28,26 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ExpertTests = React.memo(({history, match, getCategory, categoryName, getExpertTests}) => {
+const ExpertQuestions = React.memo(({match, getCategory, getSubcategory,
+                                        categoryName, subcategoryName, getExpertQuestions, history}) => {
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
-    const [errors, setErrors] = React.useState([]);
-    const [open, setOpen] = React.useState(false);
 
     const category_id = match.params.category_id;
+    const subcategory_id = match.params.subcategory_id;
 
     useEffect(() => {
         (async () => {
             setShowPreloader(true);
             await getCategory(category_id);
-            await getExpertTests(category_id);
+            await getSubcategory(subcategory_id);
+            await getExpertQuestions(subcategory_id);
             setShowPreloader(false);
         })();
-    }, [category_id, getCategory, getExpertTests]);
+    }, [category_id, getCategory, getExpertQuestions, getSubcategory, subcategory_id]);
 
     if (showPreloader) {
         return <Preloader/>
-    }
-
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setOpen(false);
-    };
-
-    function showError(array) {
-        setErrors(array);
-        setOpen(true);
-    }
-
-    const rowClick = (event, rowData) => {
-        history.push(`/expertPanel/${category_id}/${rowData.subcategory_id}`);
     }
 
     return (
@@ -71,25 +56,25 @@ const ExpertTests = React.memo(({history, match, getCategory, categoryName, getE
                 <Link color="inherit" component={NavLink} to='/expertPanel'>
                     Expert панель
                 </Link>
-                <Typography color="textPrimary">{categoryName}</Typography>
+                <Link color="inherit" component={NavLink} to={`/expertPanel/${category_id}`}>
+                    {categoryName}
+                </Link>
+                <Typography color="textPrimary">{subcategoryName}</Typography>
             </Breadcrumbs>
             <Box className={classes.table}>
-                <ExpertTestsTable rowClick={rowClick} showError={showError} category_id={category_id}/>
+                <ExpertQuestionsTable history={history} category_id={category_id} subcategory_id={subcategory_id}/>
             </Box>
-            {open && errors &&
-            errors.map((e, key) => (
-                <Snackbar key={key} open={open} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="error">
-                        {e}
-                    </Alert>
-                </Snackbar>
-            ))}
         </Container>
     );
 });
 
 const mapStateToProps = (state) => ({
     categoryName: categorySelectors.getName(state),
+    subcategoryName: subcategorySelectors.getName(state),
 });
 
-export default compose(withUnAuthRedirect, withNotExpertRedirect, withRouter, connect(mapStateToProps, {getCategory, getExpertTests}))(ExpertTests);
+export default compose(withUnAuthRedirect, withNotExpertRedirect, withRouter, connect(mapStateToProps, {
+    getCategory,
+    getSubcategory,
+    getExpertQuestions
+}))(ExpertQuestions);
