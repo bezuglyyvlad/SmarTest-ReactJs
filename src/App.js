@@ -29,6 +29,8 @@ const AdminPanel = React.lazy(() => import("./components/AdminPanel/AdminPanel")
 const ExpertCategories = React.lazy(() => import("./components/ExpertCategories/ExpertCategories"));
 const ExpertTests = React.lazy(() => import("./components/ExpertTests/ExpertTests"));
 const ExpertQuestions = React.lazy(() => import("./components/ExpertQuestions/ExpertQuestions"));
+const ExpertQuestionAdd = React.lazy(() => import("./components/ExpertQuestionAdd/ExpertQuestionAdd"));
+const ExpertQuestionEdit = React.lazy(() => import("./components/ExpertQuestionEdit/ExpertQuestionEdit"));
 
 const App = React.memo(({initializeApp, initialized, theme}) => {
     useEffect(() => {
@@ -57,7 +59,12 @@ const App = React.memo(({initializeApp, initialized, theme}) => {
                             <Route path='/test/:test_id/result' render={withSuspense(TestResult)}/>
                             <Route path='/test/:test_id' render={withSuspense(Test)}/>
                             <Route path='/statistics' render={withSuspense(Statistics)}/>
-                            <Route path='/expertPanel/:category_id/:subcategory_id' render={withSuspense(ExpertQuestions)}/>
+                            <Route path='/expertPanel/:category_id/:subcategory_id/edit/:question_id'
+                                   render={withSuspense(ExpertQuestionEdit)}/>
+                            <Route path='/expertPanel/:category_id/:subcategory_id/add'
+                                   render={withSuspense(ExpertQuestionAdd)}/>
+                            <Route path='/expertPanel/:category_id/:subcategory_id'
+                                   render={withSuspense(ExpertQuestions)}/>
                             <Route path='/expertPanel/:category_id' render={withSuspense(ExpertTests)}/>
                             <Route path='/expertPanel' render={withSuspense(ExpertCategories)}/>
                             <Route path='/adminPanel' render={withSuspense(AdminPanel)}/>

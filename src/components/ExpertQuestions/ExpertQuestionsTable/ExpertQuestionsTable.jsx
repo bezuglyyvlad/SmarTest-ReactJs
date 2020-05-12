@@ -48,7 +48,7 @@ const ExpertQuestionsTable = React.memo(({
                 },
                 {
                     icon: 'edit',
-                    tooltip: 'Додати',
+                    tooltip: 'Редагувати',
                     onClick: (event, rowData) =>
                         history.push(`/expertPanel/${category_id}/${subcategory_id}/edit/${rowData.question_id}`)
                 }
