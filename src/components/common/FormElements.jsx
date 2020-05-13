@@ -44,12 +44,12 @@ const useStylesSelect = makeStyles((theme) => ({
 }));
 
 const renderSelectField = React.memo(({
-                               input,
-                               label,
-                               meta: {touched, error},
-                               children,
-                               ...custom
-                           }) => {
+                                          input,
+                                          label,
+                                          meta: {touched, error},
+                                          children,
+                                          ...custom
+                                      }) => {
     const classes = useStylesSelect();
 
     return (
@@ -120,10 +120,11 @@ export const SubmitButton = React.memo(({textButton, disabled}) => {
         </Button>)
 })
 
-export const TextareaField = React.memo(({label, name}) => (
+export const TextareaField = React.memo(({label, name, validators}) => (
     <Field
         name={name}
         component={renderTextField}
+        validate={validators}
         label={label}
         multiline
         rowsMax="10"
@@ -132,12 +133,11 @@ export const TextareaField = React.memo(({label, name}) => (
     />
 ))
 
-export const SelectField = React.memo(({children, name, label, defaultValue}) => (
+export const SelectField = React.memo(({children, name, label}) => (
     <Field
         name={name}
         component={renderSelectField}
         label={label}
-        defaultValue={defaultValue}
     >
         {children}
     </Field>
