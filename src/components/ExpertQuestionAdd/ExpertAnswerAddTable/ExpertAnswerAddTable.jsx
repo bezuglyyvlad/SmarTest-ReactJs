@@ -2,7 +2,7 @@ import React from 'react';
 import MaterialTable from 'material-table';
 import {materialTableLocalization} from "../../../utils/localization";
 
-const ExpertQuestionAddTable = React.memo(({answers, setAnswers}) => {
+const ExpertAnswerAddTable = React.memo(({answers, setAnswers}) => {
     const columns = [
         {title: 'Текст', field: 'text'},
         {title: 'Є вірною', field: 'is_right', lookup: {0: 'Ні', 1: 'Так'}, initialEditValue: 0},
@@ -54,4 +54,4 @@ const ExpertQuestionAddTable = React.memo(({answers, setAnswers}) => {
     );
 });
 
-export default ExpertQuestionAddTable;
+export default ExpertAnswerAddTable;

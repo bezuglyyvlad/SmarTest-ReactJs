@@ -15,11 +15,12 @@ import {categorySelectors} from "../../redux/selectors/categorySelectors";
 import {subcategorySelectors} from "../../redux/selectors/subcategorySelectors";
 import {getCategory} from "../../redux/categoryReducer";
 import {getSubcategory} from "../../redux/subcategoryReducer";
-import QuestionAddForm from "./QuestionAddForm/QuestionAddForm";
 import Box from "@material-ui/core/Box";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
-import ExpertQuestionAddTable from "./ExpertQuestionAddTable/ExpertQuestionAddTable";
+import ExpertAnswerAddTable from "./ExpertAnswerAddTable/ExpertAnswerAddTable";
+import {addQuestion} from "../../redux/expertQuestionsReducer";
+import ExpertQuestionForm from "../common/ExpertQuestionForm/ExpertQuestionForm";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -32,14 +33,11 @@ const useStyles = makeStyles(theme => ({
 
 const ExpertQuestionAdd = React.memo(({
                                           match, getCategory, getSubcategory,
-                                          categoryName, subcategoryName, getExpertQuestions, history
+                                          categoryName, subcategoryName, addQuestion
                                       }) => {
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
-    const [answers, setAnswers] = React.useState([
-        {text: "answers1", is_right: 0},
-        {text: "answers2", is_right: 1},
-    ]);
+    const [answers, setAnswers] = React.useState([]);
     const [errors, setErrors] = React.useState([]);
     const [open, setOpen] = React.useState(false);
     const [added, setAdded] = React.useState(false);
@@ -54,7 +52,7 @@ const ExpertQuestionAdd = React.memo(({
             await getSubcategory(subcategory_id);
             setShowPreloader(false);
         })();
-    }, [category_id, getCategory, getExpertQuestions, getSubcategory, subcategory_id]);
+    }, [category_id, getCategory, getSubcategory, subcategory_id]);
 
     if (showPreloader) {
         return <Preloader/>
@@ -79,11 +77,11 @@ const ExpertQuestionAdd = React.memo(({
     const onSubmit = (data) => {
         let errors = [];
         answers.length < 2 && errors.push('Кількість відповідей не може бути менше 2.');
-        answers.filter(i => i.is_right === 1).length === 0 && errors.push('Хоча б одна відповідь повинна бути вірною.');
+        answers.filter(i => i.is_right === '1').length === 0 && errors.push('Хоча б одна відповідь повинна бути вірною.');
         if (errors.length !== 0) {
             showError(errors);
         } else {
-            console.log({...data, subcategory_id, answers});
+            addQuestion({...data, subcategory_id, answers});
             setAdded(true);
         }
     }
@@ -103,9 +101,9 @@ const ExpertQuestionAdd = React.memo(({
                 <Typography color="textPrimary">Створення питання</Typography>
             </Breadcrumbs>
             <Container component='main'>
-                <QuestionAddForm onSubmit={onSubmit} initialValues={{lvl: 1, type: 1}}/>
+                <ExpertQuestionForm onSubmit={onSubmit} initialValues={{lvl: 1, type: 1}}/>
                 <Box className={classes.table}>
-                    <ExpertQuestionAddTable answers={answers} setAnswers={setAnswers}/>
+                    <ExpertAnswerAddTable answers={answers} setAnswers={setAnswers}/>
                 </Box>
             </Container>
             {open && errors &&
@@ -128,4 +126,5 @@ const mapStateToProps = (state) => ({
 export default compose(withUnAuthRedirect, withNotExpertRedirect, withRouter, connect(mapStateToProps, {
     getCategory,
     getSubcategory,
+    addQuestion
 }))(ExpertQuestionAdd);

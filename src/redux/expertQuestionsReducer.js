@@ -1,4 +1,5 @@
 import {expertQuestionsAPI} from "../api/api";
+import {startSubmit} from "redux-form";
 
 const SET_QUESTIONS = 'expertQuestions/SET_QUESTIONS';
 
@@ -28,6 +29,11 @@ export const getExpertQuestions = (subcategory_id) => async (dispatch) => {
 export const deleteQuestion = (question_id, subcategory_id) => async (dispatch) => {
     await expertQuestionsAPI.deleteQuestion(question_id);
     await dispatch(getExpertQuestions(subcategory_id));
+}
+
+export const addQuestion = (data) => async (dispatch) => {
+    dispatch(startSubmit('questionForm'));
+    await expertQuestionsAPI.addQuestion(data);
 }
 
 export default expertQuestionsReducer;

@@ -1,5 +1,5 @@
 export const expertQuestionsSelectors = {
-    getTests(state) {
+    getQuestions(state) {
         return state.expertQuestions.questions;
     },
 }

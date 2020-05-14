@@ -58,7 +58,7 @@ const ExpertQuestionsTable = React.memo(({
 });
 
 const mapStateToProps = (state) => ({
-    questions: expertQuestionsSelectors.getTests(state),
+    questions: expertQuestionsSelectors.getQuestions(state),
     perPage: appSelectors.getPerPage(state),
 })
 

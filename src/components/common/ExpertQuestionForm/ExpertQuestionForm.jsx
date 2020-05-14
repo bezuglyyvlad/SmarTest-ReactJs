@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const QuestionAddForm = React.memo(({handleSubmit, pristine, submitting, error}) => {
+const ExpertQuestionForm = React.memo(({handleSubmit, pristine, submitting, error}) => {
     const classes = useStyles();
 
     return (
@@ -40,5 +40,5 @@ const QuestionAddForm = React.memo(({handleSubmit, pristine, submitting, error})
 })
 
 export default reduxForm({
-    form: 'questionAdd',
-})(QuestionAddForm);
+    form: 'questionForm',
+})(ExpertQuestionForm);

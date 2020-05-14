@@ -124,5 +124,32 @@ export const expertQuestionsAPI = {
     },
     deleteQuestion(question_id) {
         return instance.delete(`questions/${question_id}`, authHeader());
+    },
+    addQuestion(data) {
+        return instance.post('experts/question', data, authHeader());
     }
+}
+
+export const expertQuestionAPI = {
+    getQuestion(question_id) {
+        return instance.get(`questions/${question_id}`, authHeader());
+    },
+    updateQuestion(data) {
+        return instance.put(`questions/${data.question_id}`, data, authHeader());
+    },
+}
+
+export const expertAnswersAPI = {
+    getAnswers(question_id) {
+        return instance.get(`answers?question_id=${question_id}`, authHeader());
+    },
+    addAnswer(data) {
+        return instance.post('answers', data, authHeader());
+    },
+    updateAnswer(data) {
+        return instance.put(`answers/${data.answer_id}`, data, authHeader());
+    },
+    deleteAnswer(answer_id) {
+        return instance.delete(`answers/${answer_id}`, authHeader());
+    },
 }
