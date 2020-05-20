@@ -21,6 +21,9 @@ import Alert from "@material-ui/lab/Alert";
 import ExpertAnswerAddTable from "./ExpertAnswerAddTable/ExpertAnswerAddTable";
 import {addQuestion} from "../../redux/expertQuestionsReducer";
 import ExpertQuestionForm from "../common/ExpertQuestionForm/ExpertQuestionForm";
+import {uploadImageQuestionValidate} from "../../utils/validators";
+import {getFormData, imageAcceptTypes} from "../../utils/utils";
+import {UploadBox} from "../common/UIElements";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -38,6 +41,7 @@ const ExpertQuestionAdd = React.memo(({
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
     const [answers, setAnswers] = React.useState([]);
+    const [image, setImage] = React.useState(null);
     const [errors, setErrors] = React.useState([]);
     const [open, setOpen] = React.useState(false);
     const [added, setAdded] = React.useState(false);
@@ -81,8 +85,19 @@ const ExpertQuestionAdd = React.memo(({
         if (errors.length !== 0) {
             showError(errors);
         } else {
-            addQuestion({...data, subcategory_id, answers});
+            answers.map(i => (delete i.tableData));
+            const dataObject = {...data, image, subcategory_id, answers};
+            const formData = new FormData();
+            getFormData(formData, dataObject);
+            addQuestion(formData);
             setAdded(true);
+        }
+    }
+
+    const onUploadChange = (e) => {
+        const files = e.target.files;
+        if (files.length && uploadImageQuestionValidate(files[0], imageAcceptTypes, showError)) {
+            setImage(files[0]);
         }
     }
 
@@ -101,6 +116,7 @@ const ExpertQuestionAdd = React.memo(({
                 <Typography color="textPrimary">Створення питання</Typography>
             </Breadcrumbs>
             <Container component='main'>
+                <UploadBox onUploadChange={onUploadChange} image={image} setImage={setImage}/>
                 <ExpertQuestionForm onSubmit={onSubmit} initialValues={{lvl: 1, type: 1}}/>
                 <Box className={classes.table}>
                     <ExpertAnswerAddTable answers={answers} setAnswers={setAnswers}/>

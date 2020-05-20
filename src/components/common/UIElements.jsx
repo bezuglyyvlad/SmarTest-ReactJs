@@ -16,6 +16,12 @@ import {connect} from "react-redux";
 import {changePerPage} from "../../redux/appReducer";
 import TablePagination from "@material-ui/core/TablePagination";
 import MuiAlert from "@material-ui/lab/Alert";
+import IconButton from "@material-ui/core/IconButton";
+import {PhotoCamera} from "@material-ui/icons";
+import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
+import ClearIcon from "@material-ui/icons/Clear";
+import {imageAcceptTypes} from "../../utils/utils";
 
 const TablePaginationCreator = React.memo(({pagination, changePerPage, changePage}) => {
     function setPerPage(event) {
@@ -134,3 +140,49 @@ export const DialogCreator = React.memo(({open, handleClose, title, text, confir
 export function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
+
+
+const useStylesUpload = makeStyles(theme => ({
+    uploadBox: {
+        marginTop: theme.spacing(2),
+        display: 'flex',
+        alignItems: "center",
+        flexDirection: "column"
+    },
+    input: {
+        display: 'none'
+    },
+    uploadSubtitle: {
+        display: "flex",
+        flexDirection: "row"
+    },
+    clearButton: {
+        margin: theme.spacing(0, 1),
+    }
+}));
+
+export const UploadBox = React.memo(({onUploadChange, image, setImage}) => {
+    const classes = useStylesUpload();
+
+    return (
+        <Box className={classes.uploadBox}>
+            <input accept={imageAcceptTypes} className={classes.input} id="image" type="file"
+                   onChange={onUploadChange}/>
+            <label htmlFor="image">
+                <IconButton color="primary" aria-label="upload image" component="span">
+                    <PhotoCamera fontSize='large'/>
+                </IconButton>
+            </label>
+            {image && <Box className={classes.uploadSubtitle}>
+                <Typography variant='subtitle1'>
+                    {image.name}
+                </Typography>
+                <IconButton aria-label="delete" size='small' className={classes.clearButton} onClick={() => {
+                    setImage(null)
+                }}>
+                    <ClearIcon fontSize='inherit'/>
+                </IconButton>
+            </Box>}
+        </Box>
+    )
+});

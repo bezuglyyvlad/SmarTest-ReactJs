@@ -80,3 +80,29 @@ export const errorInArrayOfString = array => {
         return i.message
     });
 }
+
+export function getFormData(formData, data, previousKey) {
+    if (data instanceof Object) {
+        Object.keys(data).forEach(key => {
+            const value = data[key];
+            if (value instanceof Object && !(value instanceof File) && !Array.isArray(value)) {
+                return getFormData(formData, value, key);
+            }
+            if (previousKey) {
+                key = `${previousKey}[${key}]`;
+            }
+            if (Array.isArray(value)) {
+                value.forEach((val, index) => {
+                    if (val instanceof Object && !Array.isArray(val)) {
+                        return getFormData(formData, val, `${key}[${index}]`);
+                    }
+                    formData.append(`${key}[]`, val);
+                });
+            } else {
+                formData.append(key, value);
+            }
+        });
+    }
+}
+
+export const imageAcceptTypes = ["image/png", "image/jpg", "image/jpeg", "image/webp"];

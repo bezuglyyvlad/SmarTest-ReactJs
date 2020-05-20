@@ -59,3 +59,13 @@ export function adminPanelValidate(data, showError) {
     showError(errors);
     return errors.length === 0;
 }
+
+export function uploadImageQuestionValidate(uploadImage, imageAcceptTypes, showError) {
+    let errors = [];
+    uploadImage.size > 204800 && errors.push('Файл більше ніж 200 kB.');
+    if (!uploadImage.type || !imageAcceptTypes.includes(uploadImage.type)) {
+        errors.push(`Файл з таким типом (${uploadImage.type}) не можна завантажити як зображення.`);
+    }
+    showError(errors);
+    return errors.length === 0;
+}

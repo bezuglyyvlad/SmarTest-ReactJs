@@ -126,7 +126,8 @@ export const expertQuestionsAPI = {
         return instance.delete(`questions/${question_id}`, authHeader());
     },
     addQuestion(data) {
-        return instance.post('experts/question', data, authHeader());
+        return instance.post('experts/question', data,
+            {headers: Object.assign(authHeader().headers, {'Content-Type': 'multipart/form-data'})});
     }
 }
 
