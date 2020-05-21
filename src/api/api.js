@@ -69,7 +69,7 @@ export const testAPI = {
         return instance.post('tests/nextQuestion', {test_id, answer}, authHeader());
     },
     getResult(test_id) {
-        return instance.get(`tests/result?test_id=${test_id}`, authHeader());
+        return instance.get(`tests/result?test_id=${test_id}&XDEBUG_SESSION_START=PHPSTORM`, authHeader());
     }
 }
 
@@ -138,6 +138,13 @@ export const expertQuestionAPI = {
     updateQuestion(data) {
         return instance.put(`questions/${data.question_id}`, data, authHeader());
     },
+    uploadImage(data, question_id) {
+        return instance.post(`experts/upload?id=${question_id}`, data,
+            {headers: Object.assign(authHeader().headers, {'Content-Type': 'multipart/form-data'})});
+    },
+    deleteImage(question_id) {
+        return instance.delete(`experts/deleteImage?id=${question_id}`, authHeader());
+    }
 }
 
 export const expertAnswersAPI = {

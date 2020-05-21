@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TestResult = React.memo(({match, getTestResult, test, questions, complexity}) => {
+const TestResult = React.memo(({match, getTestResult, test, questions, answers, complexity}) => {
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
 
@@ -83,7 +83,7 @@ const TestResult = React.memo(({match, getTestResult, test, questions, complexit
                 </Table>
             </TableContainer>
             {questions.map(q => (
-                <Question key={q.test_question_id} q={q} points={points}/>
+                <Question key={q.test_question_id} q={q} answers={answers[q.test_question_id]} points={points}/>
             ))}
         </Container>
     );
@@ -92,6 +92,7 @@ const TestResult = React.memo(({match, getTestResult, test, questions, complexit
 const mapStateToProps = (state) => ({
     test: testResultSelectors.getTest(state),
     questions: testResultSelectors.getQuestions(state),
+    answers: testResultSelectors.getAnswers(state),
     complexity: testResultSelectors.getComplexity(state),
 })
 

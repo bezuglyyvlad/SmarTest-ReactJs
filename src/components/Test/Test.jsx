@@ -13,6 +13,7 @@ import TestForm from "./TestForm/TestForm";
 import TestProgress from "./TestProgress/TestProgress";
 import TestInfo from "./TestInfo/TestInfo";
 import {getTimer} from "../../utils/utils";
+import ImageBox from "../common/UIElements";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -81,6 +82,7 @@ const Test = React.memo(({testInfo, question, answers, match, getTest, nextQuest
             <Typography className={classes.question} variant='h6'>
                 {question.text}
             </Typography>
+            {question.image && <ImageBox imageSrc={question.image}/>}
             <TestForm onSubmit={onSubmit} data={answers} type={question.type}/>
         </Container>
     );

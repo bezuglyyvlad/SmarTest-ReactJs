@@ -5,6 +5,7 @@ const SET_TEST_RESULT_DATA = 'testResult/SET_TEST_RESULT_DATA';
 let initialState = {
     test: null,
     questions: null,
+    answers: null
 };
 
 const testResultReducer = (state = initialState, action) => {
@@ -19,12 +20,15 @@ const testResultReducer = (state = initialState, action) => {
     }
 }
 
-const setTestResultDataAC = (test, questions) => ({type: SET_TEST_RESULT_DATA, payload: {test, questions}});
+const setTestResultDataAC = (test, questions, answers) => ({
+    type: SET_TEST_RESULT_DATA,
+    payload: {test, questions, answers}
+});
 
 export const getTestResult = (test_id) => async (dispatch) => {
     const response = await testAPI.getResult(test_id);
-    const {test, questions} = response.data;
-    dispatch(setTestResultDataAC(test, questions));
+    const {test, questions, answers} = response.data;
+    dispatch(setTestResultDataAC(test, questions, answers));
 }
 
 export default testResultReducer;

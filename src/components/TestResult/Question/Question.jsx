@@ -6,6 +6,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Answers from "./Answers/Answers";
+import ImageBox from "../../common/UIElements";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -20,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Question = React.memo(({q, points}) => {
+const Question = React.memo(({q, answers, points}) => {
     const classes = useStyles();
     return (
         <Paper className={classes.paper}>
@@ -34,7 +35,7 @@ const Question = React.memo(({q, points}) => {
                     </Typography>
                 </Grid>
                 <Grid item>
-                    {q.right_answer === '1' ?
+                    {q.right_answer === 1 ?
                         <CheckCircleIcon className={classes.checkIcon}/> :
                         <CancelIcon className={classes.cancelIcon}/>}
                 </Grid>
@@ -42,7 +43,8 @@ const Question = React.memo(({q, points}) => {
             <Typography variant='h6'>
                 {`${q.number_question}. ${q.text}`}
             </Typography>
-            <Answers type={q.type} data={q.answers}/>
+            {q.image && <ImageBox imageSrc={q.image}/>}
+            <Answers type={q.type} data={answers}/>
             {q.description && <Typography variant='subtitle1'>
                 <strong>Пояснення: </strong> {q.description}
             </Typography>}

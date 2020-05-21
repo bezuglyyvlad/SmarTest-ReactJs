@@ -2,7 +2,7 @@ import {NavLink} from "react-router-dom";
 import React from "react";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import {makeStyles} from "@material-ui/core/styles";
+import {makeStyles, useTheme} from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
 import PaginationItem from "@material-ui/lab/PaginationItem";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -17,11 +17,15 @@ import {changePerPage} from "../../redux/appReducer";
 import TablePagination from "@material-ui/core/TablePagination";
 import MuiAlert from "@material-ui/lab/Alert";
 import IconButton from "@material-ui/core/IconButton";
-import {PhotoCamera} from "@material-ui/icons";
+import {PhotoCamera, Delete as DeleteIcon} from "@material-ui/icons";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import ClearIcon from "@material-ui/icons/Clear";
 import {imageAcceptTypes} from "../../utils/utils";
+import Image from "material-ui-image";
+import Skeleton from "@material-ui/lab/Skeleton";
+import {withWidth} from "@material-ui/core";
+import queryString from "query-string";
 
 const TablePaginationCreator = React.memo(({pagination, changePerPage, changePage}) => {
     function setPerPage(event) {
@@ -161,18 +165,46 @@ const useStylesUpload = makeStyles(theme => ({
     }
 }));
 
-export const UploadBox = React.memo(({onUploadChange, image, setImage}) => {
+export const UploadBox = React.memo(({onUploadChange, image, setImage, visibleDelete, deleteAction}) => {
     const classes = useStylesUpload();
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = (e) => {
+        setOpen(false);
+    };
+
+    const deleteImage = () => {
+        handleClose();
+        deleteAction();
+    }
 
     return (
         <Box className={classes.uploadBox}>
-            <input accept={imageAcceptTypes} className={classes.input} id="image" type="file"
-                   onChange={onUploadChange}/>
-            <label htmlFor="image">
-                <IconButton color="primary" aria-label="upload image" component="span">
-                    <PhotoCamera fontSize='large'/>
-                </IconButton>
-            </label>
+            <Box>
+                <input accept={imageAcceptTypes} className={classes.input} id="image" type="file"
+                       onChange={onUploadChange}/>
+                <label htmlFor="image">
+                    <IconButton color="primary" aria-label="upload image" component="span">
+                        <PhotoCamera fontSize='large'/>
+                    </IconButton>
+                </label>
+                {visibleDelete && <>
+                    <IconButton aria-label="delete" className={classes.margin}
+                                onClick={handleClickOpen}>
+                        <DeleteIcon color="error" fontSize="large"/>
+                    </IconButton>
+                    <DialogCreator open={open} handleClose={handleClose} title='Видалення зображення'
+                                   text='Ви дійсно хочете видалити зображення?' confirmButton={
+                        <Button onClick={deleteImage} color="primary">
+                            Так
+                        </Button>}/>
+                </>
+                }
+            </Box>
             {image && <Box className={classes.uploadSubtitle}>
                 <Typography variant='subtitle1'>
                     {image.name}
@@ -186,3 +218,35 @@ export const UploadBox = React.memo(({onUploadChange, image, setImage}) => {
         </Box>
     )
 });
+
+
+const useStylesImageBox = makeStyles(theme => ({
+    root: {
+        display: "flex",
+        justifyContent: 'center',
+        margin: theme.spacing(2, 0),
+    }
+}));
+
+const ImageBox = React.memo(({imageSrc, width}) => {
+    const classes = useStylesImageBox();
+    const theme = useTheme();
+
+    const imageSize = queryString.parseUrl(imageSrc).query;
+    const imageW = +imageSize.w;
+    const imageH = +imageSize.h;
+
+    return (
+        <Box className={classes.root}>
+            <Box style={{width: imageW > (theme.breakpoints.values[width] || 320) ? '100%' : imageW}}>
+                <Image color={theme.palette.background.default} animationDuration={2000}
+                       src={imageSrc}
+                       loading={<Skeleton animation='pulse' variant='rect' width={'inherit'}
+                                          height={'inherit'}/>}
+                       style={{width: '100%'}} aspectRatio={imageW / imageH}/>
+            </Box>
+        </Box>
+    );
+});
+
+export default withWidth()(ImageBox);

@@ -42,6 +42,16 @@ export const editQuestion = (data) => async (dispatch) => {
     dispatch(stopSubmit('questionForm'));
 }
 
+export const uploadQuestionImage = (data, question_id) => async (dispatch) => {
+    const response = await expertQuestionAPI.uploadImage(data, question_id);
+    dispatch(setQuestionAC(response.data));
+}
+
+export const deleteQuestionImage = (question_id) => async (dispatch) => {
+    const response = await expertQuestionAPI.deleteImage(question_id);
+    dispatch(setQuestionAC(response.data));
+}
+
 export const getExpertAnswers = (question_id) => async (dispatch) => {
     const response = await expertAnswersAPI.getAnswers(question_id);
     dispatch(setAnswersAC(response.data));

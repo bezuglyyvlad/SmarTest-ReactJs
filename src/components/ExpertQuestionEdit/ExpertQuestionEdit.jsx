@@ -17,11 +17,20 @@ import {getCategory} from "../../redux/categoryReducer";
 import {getSubcategory} from "../../redux/subcategoryReducer";
 import ExpertQuestionForm from "../common/ExpertQuestionForm/ExpertQuestionForm";
 import Box from "@material-ui/core/Box";
-import {editQuestion, getExpertAnswers, getExpertQuestion} from "../../redux/expertQuestionEditReducer";
+import {
+    deleteQuestionImage,
+    editQuestion,
+    getExpertAnswers,
+    getExpertQuestion,
+    uploadQuestionImage
+} from "../../redux/expertQuestionEditReducer";
 import {expertQuestionEditSelectors} from "../../redux/selectors/expertQuestionEditSelectors";
 import ExpertAnswersTable from "./ExpertAnswersTable/ExpertAnswersTable";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
+import {uploadImageQuestionValidate} from "../../utils/validators";
+import {getFormData, imageAcceptTypes} from "../../utils/utils";
+import ImageBox, {UploadBox} from "../common/UIElements";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -35,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 const ExpertQuestionEdit = React.memo(({
                                            match, getCategory, getSubcategory,
                                            categoryName, subcategoryName, getExpertQuestion, question, editQuestion,
-                                           getExpertAnswers
+                                           getExpertAnswers, uploadQuestionImage, deleteQuestionImage
                                        }) => {
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
@@ -77,6 +86,16 @@ const ExpertQuestionEdit = React.memo(({
         editQuestion(data);
     }
 
+    const onUploadChange = (e) => {
+        const files = e.target.files;
+        if (files.length && uploadImageQuestionValidate(files[0], imageAcceptTypes, showError)) {
+            console.log(files[0]);
+            const formData = new FormData();
+            getFormData(formData, {image: files[0]});
+            uploadQuestionImage(formData, question_id);
+        }
+    }
+
     return (
         <Container component="main" maxWidth="md" className={classes.root}>
             <Breadcrumbs aria-label="breadcrumb">
@@ -92,6 +111,12 @@ const ExpertQuestionEdit = React.memo(({
                 <Typography color="textPrimary">Редагування питання</Typography>
             </Breadcrumbs>
             <Container component='main'>
+                {question.image &&
+                <ImageBox imageSrc={question.image}/>}
+                <UploadBox onUploadChange={onUploadChange} image={false} setImage={() => {
+                }} visibleDelete={!!question.image} deleteAction={() => {
+                    deleteQuestionImage(question_id);
+                }}/>
                 <ExpertQuestionForm onSubmit={onSubmit}
                                     initialValues={{
                                         text: question.text,
@@ -125,6 +150,8 @@ export default compose(withUnAuthRedirect, withNotExpertRedirect, withRouter, co
     getCategory,
     getSubcategory,
     getExpertQuestion,
+    uploadQuestionImage,
+    deleteQuestionImage,
     editQuestion,
-    getExpertAnswers
+    getExpertAnswers,
 }))(ExpertQuestionEdit);

@@ -23,7 +23,7 @@ const Answers = React.memo(({type, data}) => {
     const classes = useStyles();
     let answers = undefined;
     switch (type) {
-        case '1':
+        case 1:
             answers = <FormControl>
                 <RadioGroup name='answers'>
                     {data.map(a => {
@@ -45,7 +45,7 @@ const Answers = React.memo(({type, data}) => {
                 </RadioGroup>
             </FormControl>
             break;
-        case '2':
+        case 2:
             answers = <FormGroup>
                 {data.map(a => {
                     const ckeckbox = a.is_user_answer === 1 ?

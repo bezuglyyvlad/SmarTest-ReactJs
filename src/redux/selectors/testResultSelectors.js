@@ -7,6 +7,9 @@ export const testResultSelectors = {
     getQuestions(state) {
         return state.testResult.questions;
     },
+    getAnswers(state) {
+        return state.testResult.answers;
+    }
 }
 
 const questionReselect = createSelector(testResultSelectors.getQuestions, questions => {

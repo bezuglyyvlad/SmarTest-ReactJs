@@ -27,7 +27,7 @@ const DeleteAccount = React.memo(({deleteUser, userId}) => {
             <DialogCreator open={open} handleClose={handleClose} title='Видалення акаунта'
                            text='Ви дійсно хочете видалити акаунт?' confirmButton={
                 <Button onClick={deleteAccount} color="primary">
-                    Да
+                    Так
                 </Button>}/>
         </>
     )
