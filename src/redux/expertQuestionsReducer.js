@@ -36,4 +36,9 @@ export const addQuestion = (data) => async (dispatch) => {
     await expertQuestionsAPI.addQuestion(data);
 }
 
+export const importQuestions = (data, subcategory_id) => async (dispatch) => {
+    await expertQuestionsAPI.importQuestions(data);
+    await dispatch(getExpertQuestions(subcategory_id));
+}
+
 export default expertQuestionsReducer;

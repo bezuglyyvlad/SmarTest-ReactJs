@@ -106,3 +106,4 @@ export function getFormData(formData, data, previousKey) {
 }
 
 export const imageAcceptTypes = ["image/png", "image/jpg", "image/jpeg", "image/webp"];
+export const importAcceptTypes = ["text/xml"];

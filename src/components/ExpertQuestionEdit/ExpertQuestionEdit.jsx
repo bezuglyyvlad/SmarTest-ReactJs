@@ -29,7 +29,7 @@ import ExpertAnswersTable from "./ExpertAnswersTable/ExpertAnswersTable";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import {uploadImageQuestionValidate} from "../../utils/validators";
-import {getFormData, imageAcceptTypes} from "../../utils/utils";
+import {getFormData} from "../../utils/utils";
 import ImageBox, {UploadBox} from "../common/UIElements";
 
 const useStyles = makeStyles(theme => ({
@@ -83,12 +83,12 @@ const ExpertQuestionEdit = React.memo(({
     }
 
     const onSubmit = (data) => {
-        editQuestion(data);
+        editQuestion(data, question_id);
     }
 
     const onUploadChange = (e) => {
         const files = e.target.files;
-        if (files.length && uploadImageQuestionValidate(files[0], imageAcceptTypes, showError)) {
+        if (files.length && uploadImageQuestionValidate(files[0], showError)) {
             console.log(files[0]);
             const formData = new FormData();
             getFormData(formData, {image: files[0]});

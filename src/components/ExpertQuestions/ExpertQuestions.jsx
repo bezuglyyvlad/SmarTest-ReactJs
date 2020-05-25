@@ -18,6 +18,8 @@ import {subcategorySelectors} from "../../redux/selectors/subcategorySelectors";
 import {getExpertQuestions} from "../../redux/expertQuestionsReducer";
 import Box from "@material-ui/core/Box";
 import ExpertQuestionsTable from "./ExpertQuestionsTable/ExpertQuestionsTable";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -28,10 +30,14 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ExpertQuestions = React.memo(({match, getCategory, getSubcategory,
-                                        categoryName, subcategoryName, getExpertQuestions, history}) => {
+const ExpertQuestions = React.memo(({
+                                        match, getCategory, getSubcategory,
+                                        categoryName, subcategoryName, getExpertQuestions, history
+                                    }) => {
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
+    const [errors, setErrors] = React.useState([]);
+    const [open, setOpen] = React.useState(false);
 
     const category_id = match.params.category_id;
     const subcategory_id = match.params.subcategory_id;
@@ -50,6 +56,18 @@ const ExpertQuestions = React.memo(({match, getCategory, getSubcategory,
         return <Preloader/>
     }
 
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
+
+    function showError(array) {
+        setErrors(array);
+        setOpen(true);
+    }
+
     return (
         <Container component="main" maxWidth="md" className={classes.root}>
             <Breadcrumbs aria-label="breadcrumb">
@@ -62,8 +80,17 @@ const ExpertQuestions = React.memo(({match, getCategory, getSubcategory,
                 <Typography color="textPrimary">{subcategoryName}</Typography>
             </Breadcrumbs>
             <Box className={classes.table}>
-                <ExpertQuestionsTable history={history} category_id={category_id} subcategory_id={subcategory_id}/>
+                <ExpertQuestionsTable history={history} category_id={category_id} subcategory_id={subcategory_id}
+                                      showError={showError}/>
             </Box>
+            {open && errors &&
+            errors.map((e, key) => (
+                <Snackbar key={key} open={open} autoHideDuration={6000} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="error">
+                        {e}
+                    </Alert>
+                </Snackbar>
+            ))}
         </Container>
     );
 });

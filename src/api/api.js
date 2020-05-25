@@ -128,6 +128,10 @@ export const expertQuestionsAPI = {
     addQuestion(data) {
         return instance.post('experts/question', data,
             {headers: Object.assign(authHeader().headers, {'Content-Type': 'multipart/form-data'})});
+    },
+    importQuestions(data) {
+        return instance.post('experts/import', data,
+            {headers: Object.assign(authHeader().headers, {'Content-Type': 'multipart/form-data'})});
     }
 }
 
@@ -135,8 +139,8 @@ export const expertQuestionAPI = {
     getQuestion(question_id) {
         return instance.get(`questions/${question_id}`, authHeader());
     },
-    updateQuestion(data) {
-        return instance.put(`questions/${data.question_id}`, data, authHeader());
+    updateQuestion(data, question_id) {
+        return instance.put(`questions/${question_id}`, data, authHeader());
     },
     uploadImage(data, question_id) {
         return instance.post(`experts/upload?id=${question_id}`, data,

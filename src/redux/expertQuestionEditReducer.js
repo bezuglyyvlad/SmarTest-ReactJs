@@ -34,10 +34,10 @@ export const getExpertQuestion = (question_id) => async (dispatch) => {
     dispatch(setQuestionAC(response.data));
 }
 
-export const editQuestion = (data) => async (dispatch) => {
+export const editQuestion = (data, question_id) => async (dispatch) => {
     dispatch(startSubmit('questionForm'));
-    await expertQuestionAPI.updateQuestion(data);
-    dispatch(getExpertQuestion(data.question_id));
+    await expertQuestionAPI.updateQuestion(data, question_id);
+    dispatch(getExpertQuestion(question_id));
     dispatch(initialize('questionForm', data));
     dispatch(stopSubmit('questionForm'));
 }
