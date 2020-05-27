@@ -13,17 +13,22 @@ import {makeStyles} from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import {getFormData, importAcceptTypes} from "../../../utils/utils";
 import {importQuestionsValidate} from "../../../utils/validators";
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 
 const useStyles = makeStyles(theme => ({
     input: {
         display: 'none'
     },
+    importButton: {
+        color: 'inherit',
+    }
 }));
 
 const ExpertQuestionsTable = React.memo(({
                                              perPage, changePerPage,
                                              questions, history, category_id, subcategory_id,
-                                             deleteQuestion, showError, importQuestions
+                                             deleteQuestion, showError, importQuestions,
+                                             exportQuestionsAction
                                          }) => {
     const classes = useStyles();
     const [loading, setLoading] = React.useState(false);
@@ -89,13 +94,20 @@ const ExpertQuestionsTable = React.memo(({
                         onClick: event => {
                         }
                     },
+                    {
+                        icon: () => <CloudDownloadIcon/>,
+                        tooltip: 'Експорт',
+                        isFreeAction: true,
+                        onClick: event => {exportQuestionsAction()}
+                    },
                 ]}
                 components={{
                     Action: props => {
                         if (props.action.tooltip === 'Імпорт') {
                             return <label htmlFor="import">
                                 <Tooltip title={props.action.tooltip}>
-                                    <IconButton aria-label="upload image" component="span">
+                                    <IconButton aria-label="upload image" component="span"
+                                                classes={{root: classes.importButton}}>
                                         <CloudUploadIcon/>
                                     </IconButton>
                                 </Tooltip>
@@ -120,5 +132,5 @@ const mapStateToProps = (state) => ({
 export default compose(connect(mapStateToProps, {
     changePerPage,
     deleteQuestion,
-    importQuestions
+    importQuestions,
 }))(ExpertQuestionsTable);

@@ -132,6 +132,9 @@ export const expertQuestionsAPI = {
     importQuestions(data) {
         return instance.post('experts/import', data,
             {headers: Object.assign(authHeader().headers, {'Content-Type': 'multipart/form-data'})});
+    },
+    exportQuestions(subcategory_id) {
+        return instance.get(`experts/export?id=${subcategory_id}&expand=answers`, authHeader());
     }
 }
 

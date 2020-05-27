@@ -1,5 +1,6 @@
 import {expertQuestionsAPI} from "../api/api";
 import {startSubmit} from "redux-form";
+import {downloadFile} from "../utils/utils";
 
 const SET_QUESTIONS = 'expertQuestions/SET_QUESTIONS';
 
@@ -39,6 +40,11 @@ export const addQuestion = (data) => async (dispatch) => {
 export const importQuestions = (data, subcategory_id) => async (dispatch) => {
     await expertQuestionsAPI.importQuestions(data);
     await dispatch(getExpertQuestions(subcategory_id));
+}
+
+export const exportQuestions = (subcategory_id, categoryName, subcategoryName) => async (dispatch) => {
+    const response = await expertQuestionsAPI.exportQuestions(subcategory_id);
+    downloadFile(response.data, `${categoryName}-${subcategoryName}`);
 }
 
 export default expertQuestionsReducer;

@@ -107,3 +107,13 @@ export function getFormData(formData, data, previousKey) {
 
 export const imageAcceptTypes = ["image/png", "image/jpg", "image/jpeg", "image/webp"];
 export const importAcceptTypes = ["text/xml"];
+
+export const downloadFile = (data, fileName) => {
+    const blob = new Blob([data], { type: 'text/xml' });
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}

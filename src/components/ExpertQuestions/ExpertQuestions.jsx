@@ -15,7 +15,7 @@ import {getCategory} from "../../redux/categoryReducer";
 import {categorySelectors} from "../../redux/selectors/categorySelectors";
 import {getSubcategory} from "../../redux/subcategoryReducer";
 import {subcategorySelectors} from "../../redux/selectors/subcategorySelectors";
-import {getExpertQuestions} from "../../redux/expertQuestionsReducer";
+import {exportQuestions, getExpertQuestions} from "../../redux/expertQuestionsReducer";
 import Box from "@material-ui/core/Box";
 import ExpertQuestionsTable from "./ExpertQuestionsTable/ExpertQuestionsTable";
 import Snackbar from "@material-ui/core/Snackbar";
@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 
 const ExpertQuestions = React.memo(({
                                         match, getCategory, getSubcategory,
-                                        categoryName, subcategoryName, getExpertQuestions, history
+                                        categoryName, subcategoryName, getExpertQuestions, history, exportQuestions
                                     }) => {
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
@@ -68,6 +68,10 @@ const ExpertQuestions = React.memo(({
         setOpen(true);
     }
 
+    function exportQuestionsAction() {
+        exportQuestions(subcategory_id, categoryName, subcategoryName);
+    }
+
     return (
         <Container component="main" maxWidth="md" className={classes.root}>
             <Breadcrumbs aria-label="breadcrumb">
@@ -81,7 +85,7 @@ const ExpertQuestions = React.memo(({
             </Breadcrumbs>
             <Box className={classes.table}>
                 <ExpertQuestionsTable history={history} category_id={category_id} subcategory_id={subcategory_id}
-                                      showError={showError}/>
+                                      showError={showError} exportQuestionsAction={exportQuestionsAction}/>
             </Box>
             {open && errors &&
             errors.map((e, key) => (
@@ -103,5 +107,6 @@ const mapStateToProps = (state) => ({
 export default compose(withUnAuthRedirect, withNotExpertRedirect, withRouter, connect(mapStateToProps, {
     getCategory,
     getSubcategory,
-    getExpertQuestions
+    getExpertQuestions,
+    exportQuestions
 }))(ExpertQuestions);
