@@ -14,6 +14,7 @@ import IconButton from "@material-ui/core/IconButton";
 import {getFormData, importAcceptTypes} from "../../../utils/utils";
 import {importQuestionsValidate} from "../../../utils/validators";
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import InfoIcon from '@material-ui/icons/Info';
 
 const useStyles = makeStyles(theme => ({
     input: {
@@ -28,7 +29,7 @@ const ExpertQuestionsTable = React.memo(({
                                              perPage, changePerPage,
                                              questions, history, category_id, subcategory_id,
                                              deleteQuestion, showError, importQuestions,
-                                             exportQuestionsAction
+                                             exportQuestionsAction, disableExport
                                          }) => {
     const classes = useStyles();
     const [loading, setLoading] = React.useState(false);
@@ -98,7 +99,16 @@ const ExpertQuestionsTable = React.memo(({
                         icon: () => <CloudDownloadIcon/>,
                         tooltip: 'Експорт',
                         isFreeAction: true,
-                        onClick: event => {exportQuestionsAction()}
+                        disabled: disableExport,
+                        onClick: event => {
+                            exportQuestionsAction()
+                        }
+                    },
+                    {
+                        icon: () => <InfoIcon/>,
+                        tooltip: 'Документація для створення XML-файла',
+                        isFreeAction: true,
+                        onClick: event => history.push(`/documentation/xml`)
                     },
                 ]}
                 components={{

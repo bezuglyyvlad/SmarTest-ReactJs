@@ -24,9 +24,10 @@ import Alert from "@material-ui/lab/Alert";
 const useStyles = makeStyles(theme => ({
     root: {
         marginTop: theme.spacing(5),
+        marginBottom: theme.spacing(2),
     },
     table: {
-        margin: theme.spacing(2, 0),
+        marginTop: theme.spacing(2),
     },
 }));
 
@@ -36,6 +37,7 @@ const ExpertQuestions = React.memo(({
                                     }) => {
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
+    const [disableExport, setDisableExport] = React.useState(false);
     const [errors, setErrors] = React.useState([]);
     const [open, setOpen] = React.useState(false);
 
@@ -68,8 +70,10 @@ const ExpertQuestions = React.memo(({
         setOpen(true);
     }
 
-    function exportQuestionsAction() {
-        exportQuestions(subcategory_id, categoryName, subcategoryName);
+    async function exportQuestionsAction() {
+        setDisableExport(true);
+        await exportQuestions(subcategory_id, categoryName, subcategoryName);
+        setDisableExport(false);
     }
 
     return (
@@ -85,7 +89,8 @@ const ExpertQuestions = React.memo(({
             </Breadcrumbs>
             <Box className={classes.table}>
                 <ExpertQuestionsTable history={history} category_id={category_id} subcategory_id={subcategory_id}
-                                      showError={showError} exportQuestionsAction={exportQuestionsAction}/>
+                                      showError={showError} exportQuestionsAction={exportQuestionsAction}
+                                      disableExport={disableExport}/>
             </Box>
             {open && errors &&
             errors.map((e, key) => (

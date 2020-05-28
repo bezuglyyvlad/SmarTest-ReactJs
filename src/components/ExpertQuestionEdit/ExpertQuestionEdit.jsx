@@ -35,9 +35,10 @@ import ImageBox, {UploadBox} from "../common/UIElements";
 const useStyles = makeStyles(theme => ({
     root: {
         marginTop: theme.spacing(5),
+        marginBottom: theme.spacing(2),
     },
     table: {
-        margin: theme.spacing(2, 0),
+        marginTop: theme.spacing(2),
     },
 }));
 

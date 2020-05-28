@@ -18,6 +18,7 @@ import ImageBox from "../common/UIElements";
 const useStyles = makeStyles(theme => ({
     root: {
         marginTop: theme.spacing(5),
+        marginBottom: theme.spacing(2)
     },
     question: {
         marginTop: theme.spacing(1),
@@ -46,7 +47,7 @@ const Test = React.memo(({testInfo, question, answers, match, getTest, nextQuest
 
     useEffect(() => {
         let interval = null;
-        const delay = timer === '0' ? null : 1000;
+        const delay = timer === '0' ? null : 1000; //for delete begin delay
         if (testInfo) {
             interval = setInterval(() => {
                 setTimer(getTimer(testInfo.date_finish));
@@ -59,17 +60,19 @@ const Test = React.memo(({testInfo, question, answers, match, getTest, nextQuest
     }, [timer, testInfo]);
 
     const onSubmit = async ({answer}) => {
+        //swap array [0: '', ..., 85 - 'answer_id': true]; to object {85: true}
         if (Array.isArray(answer)) {
             answer = {...answer};
         }
-        //const isLastQuestion = question.number_question === testInfo.count_of_questions;
+        const isLastQuestion = question.number_question === testInfo.count_of_questions;
         await nextQuestion(testInfo.test_id, answer);
+        setTestFinished(isLastQuestion);
     }
 
-    if (question === undefined || (testFinished && testInfo)) return <Redirect
+    if (testFinished) return <Redirect
         to={`/test/${testInfo.test_id}/result`}/>;
 
-    if (showPreloader) return <Preloader/>;
+    if (showPreloader || !question) return <Preloader/>;
 
     return (
         <Container component="main" maxWidth="md" className={classes.root}>

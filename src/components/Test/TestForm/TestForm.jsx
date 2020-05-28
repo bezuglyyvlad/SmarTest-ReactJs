@@ -9,7 +9,6 @@ const useStyles = makeStyles(theme => ({
     root: {
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(2),
     }
 }));
 

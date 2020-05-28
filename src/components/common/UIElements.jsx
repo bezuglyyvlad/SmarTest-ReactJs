@@ -228,13 +228,15 @@ const useStylesImageBox = makeStyles(theme => ({
     }
 }));
 
-const ImageBox = React.memo(({imageSrc, width}) => {
+const ImageBox = React.memo(({imageSrc, width, imageW, imageH}) => {
     const classes = useStylesImageBox();
     const theme = useTheme();
 
-    const imageSize = queryString.parseUrl(imageSrc).query;
-    const imageW = +imageSize.w;
-    const imageH = +imageSize.h;
+    if (!(imageW && imageH)) {
+        const imageSize = queryString.parseUrl(imageSrc).query;
+        imageW = +imageSize.w;
+        imageH = +imageSize.h;
+    }
 
     return (
         <Box className={classes.root}>

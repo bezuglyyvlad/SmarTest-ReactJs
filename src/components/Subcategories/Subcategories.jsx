@@ -22,7 +22,6 @@ import {createTest} from "../../redux/testReducer";
 
 const useStyles = makeStyles(theme => ({
     root: {
-        flexGrow: 1,
         marginTop: theme.spacing(5),
     },
     title: {

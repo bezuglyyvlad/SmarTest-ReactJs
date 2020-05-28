@@ -19,9 +19,7 @@ import {statisticsSelectors} from "../../redux/selectors/statisticsSelectors";
 const useStyles = makeStyles(theme => ({
     root: {
         marginTop: theme.spacing(5),
-    },
-    dense: {
-        margin: theme.spacing(0, 0, 1),
+        marginBottom: theme.spacing(2)
     },
 }));
 
@@ -73,7 +71,6 @@ const Statistics = React.memo(({perPage, getRating, getTests, ratingInfo, tests,
             <FormControlLabel
                 control={<Switch checked={dense} onChange={handleChangeDense} color='primary'/>}
                 label='Зробити компактніше'
-                className={classes.dense}
             />
         </Container>
     );

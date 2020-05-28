@@ -69,7 +69,7 @@ export const testAPI = {
         return instance.post('tests/nextQuestion', {test_id, answer}, authHeader());
     },
     getResult(test_id) {
-        return instance.get(`tests/result?test_id=${test_id}&XDEBUG_SESSION_START=PHPSTORM`, authHeader());
+        return instance.get(`tests/result?test_id=${test_id}`, authHeader());
     }
 }
 

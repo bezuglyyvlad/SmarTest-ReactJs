@@ -22,9 +22,10 @@ import Alert from "@material-ui/lab/Alert";
 const useStyles = makeStyles(theme => ({
     root: {
         marginTop: theme.spacing(5),
+        marginBottom: theme.spacing(2),
     },
     table: {
-        margin: theme.spacing(2, 0),
+        marginTop: theme.spacing(2),
     },
 }));
 
