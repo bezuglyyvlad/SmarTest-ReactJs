@@ -16,14 +16,13 @@ import {subcategorySelectors} from "../../redux/selectors/subcategorySelectors";
 import {getCategory} from "../../redux/categoryReducer";
 import {getSubcategory} from "../../redux/subcategoryReducer";
 import Box from "@material-ui/core/Box";
-import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
 import ExpertAnswerAddTable from "./ExpertAnswerAddTable/ExpertAnswerAddTable";
 import {addQuestion} from "../../redux/expertQuestionsReducer";
 import ExpertQuestionForm from "../common/ExpertQuestionForm/ExpertQuestionForm";
 import {uploadImageQuestionValidate} from "../../utils/validators";
 import {getFormData, imageAcceptTypes} from "../../utils/utils";
 import {UploadBox} from "../common/UIElements";
+import {useSnackbar} from "notistack";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -43,8 +42,7 @@ const ExpertQuestionAdd = React.memo(({
     const [showPreloader, setShowPreloader] = React.useState(true);
     const [answers, setAnswers] = React.useState([]);
     const [image, setImage] = React.useState(null);
-    const [errors, setErrors] = React.useState([]);
-    const [open, setOpen] = React.useState(false);
+    const {enqueueSnackbar} = useSnackbar();
     const [added, setAdded] = React.useState(false);
 
     const category_id = match.params.category_id;
@@ -67,16 +65,10 @@ const ExpertQuestionAdd = React.memo(({
         return <Redirect to={`/expertPanel/${category_id}/${subcategory_id}`}/>
     }
 
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setOpen(false);
-    };
-
     function showError(array) {
-        setErrors(array);
-        setOpen(true);
+        array.forEach(item => {
+            enqueueSnackbar(item, {variant: "error"})
+        });
     }
 
     const onSubmit = (data) => {
@@ -123,14 +115,6 @@ const ExpertQuestionAdd = React.memo(({
                     <ExpertAnswerAddTable answers={answers} setAnswers={setAnswers}/>
                 </Box>
             </Container>
-            {open && errors &&
-            errors.map((e, key) => (
-                <Snackbar key={key} open={open} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="error">
-                        {e}
-                    </Alert>
-                </Snackbar>
-            ))}
         </Container>
     );
 });

@@ -26,11 +26,10 @@ import {
 } from "../../redux/expertQuestionEditReducer";
 import {expertQuestionEditSelectors} from "../../redux/selectors/expertQuestionEditSelectors";
 import ExpertAnswersTable from "./ExpertAnswersTable/ExpertAnswersTable";
-import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
 import {uploadImageQuestionValidate} from "../../utils/validators";
 import {getFormData} from "../../utils/utils";
 import ImageBox, {UploadBox} from "../common/UIElements";
+import {useSnackbar} from "notistack";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -49,8 +48,7 @@ const ExpertQuestionEdit = React.memo(({
                                        }) => {
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
-    const [errors, setErrors] = React.useState([]);
-    const [open, setOpen] = React.useState(false);
+    const {enqueueSnackbar} = useSnackbar();
 
     const category_id = match.params.category_id;
     const subcategory_id = match.params.subcategory_id;
@@ -71,16 +69,10 @@ const ExpertQuestionEdit = React.memo(({
         return <Preloader/>
     }
 
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setOpen(false);
-    };
-
     function showError(array) {
-        setErrors(array);
-        setOpen(true);
+        array.forEach(item => {
+            enqueueSnackbar(item, {variant: "error"})
+        });
     }
 
     const onSubmit = (data) => {
@@ -90,7 +82,6 @@ const ExpertQuestionEdit = React.memo(({
     const onUploadChange = (e) => {
         const files = e.target.files;
         if (files.length && uploadImageQuestionValidate(files[0], showError)) {
-            console.log(files[0]);
             const formData = new FormData();
             getFormData(formData, {image: files[0]});
             uploadQuestionImage(formData, question_id);
@@ -129,14 +120,6 @@ const ExpertQuestionEdit = React.memo(({
                     <ExpertAnswersTable showError={showError} question_id={question_id}/>
                 </Box>
             </Container>
-            {open && errors &&
-            errors.map((e, key) => (
-                <Snackbar key={key} open={open} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="error">
-                        {e}
-                    </Alert>
-                </Snackbar>
-            ))}
         </Container>
     );
 });

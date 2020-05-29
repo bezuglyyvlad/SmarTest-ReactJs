@@ -14,21 +14,10 @@ const AdminTable = React.memo(({
                                    deleteCategory, perPage, changePerPage
                                }) => {
     const columns = [
-        {title: 'Id', field: 'category_id', editable: 'never'},
+        {title: '№', field: 'tableData.id', editable: 'never', render: rowData => rowData.tableData.id + 1},
         {title: 'Назва*', field: 'name'},
         {title: 'Електронна пошта (Експерта)', field: 'user.email'},
     ];
-
-    // function validate(data) {
-    //     let errors = [];
-    //     required(data.name) && errors.push('Назва є обов`язковим для заповнення');
-    //     const maxLengthName = 255;
-    //     maxLengthCreator(maxLengthName)(data.name) && errors.push(`Назва задовга (максимум ${maxLengthName})`);
-    //     const validateEmail = data.user && email(data.user.email);
-    //     validateEmail && errors.push(validateEmail);
-    //     showError(errors);
-    //     return errors.length === 0;
-    // }
 
     function setPerPage(perPage) {
         changePerPage(perPage);

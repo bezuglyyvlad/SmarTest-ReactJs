@@ -8,10 +8,9 @@ import {connect} from "react-redux";
 import {withNotAdminRedirect} from "../../hoc/withNotAdminRedirect";
 import {getAdminCategories} from "../../redux/adminPanelReducer";
 import {Preloader} from "../common/Preloader";
-import Alert from "@material-ui/lab/Alert";
 import Box from "@material-ui/core/Box";
-import Snackbar from "@material-ui/core/Snackbar";
 import AdminTable from "./AdminTable/AdminTable";
+import {useSnackbar} from "notistack";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -26,8 +25,7 @@ const useStyles = makeStyles(theme => ({
 const AdminPanel = React.memo(({getAdminCategories}) => {
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
-    const [errors, setErrors] = React.useState([]);
-    const [open, setOpen] = React.useState(false);
+    const {enqueueSnackbar} = useSnackbar();
 
     useEffect(() => {
         (async () => {
@@ -41,16 +39,10 @@ const AdminPanel = React.memo(({getAdminCategories}) => {
         return <Preloader/>
     }
 
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setOpen(false);
-    };
-
     function showError(array) {
-        setErrors(array);
-        setOpen(true);
+        array.forEach(item => {
+            enqueueSnackbar(item, {variant: "error"})
+        });
     }
 
     return (
@@ -61,14 +53,6 @@ const AdminPanel = React.memo(({getAdminCategories}) => {
             <Box className={classes.table}>
                 <AdminTable showError={showError}/>
             </Box>
-            {open && errors &&
-            errors.map((e, key) => (
-                <Snackbar key={key} open={open} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="error">
-                        {e}
-                    </Alert>
-                </Snackbar>
-            ))}
         </Container>
     );
 });

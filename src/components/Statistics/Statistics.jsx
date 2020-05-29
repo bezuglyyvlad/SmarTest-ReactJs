@@ -57,6 +57,8 @@ const Statistics = React.memo(({perPage, getRating, getTests, ratingInfo, tests,
 
     if (ratingRequest || testsRequest) return <Preloader/>;
 
+    const indexFirstItem = pagination.totalCount - ((pagination.currentPage-1)*pagination.perPage);
+
     return (
         <Container component="main" maxWidth="md" className={classes.root}>
             <Typography component="h1" variant="h5" align='center'>
@@ -64,7 +66,7 @@ const Statistics = React.memo(({perPage, getRating, getTests, ratingInfo, tests,
             </Typography>
             <MyRating rating={ratingInfo.rating} ratingByCategory={ratingInfo.ratingByCategory}/>
             <Chart data={ratingInfo.chartData}/>
-            <TestsTable dense={dense} data={tests}/>
+            <TestsTable dense={dense} data={tests} indexFirstItem={indexFirstItem}/>
             <TablePaginationCreatorWithConnect
                 pagination={pagination}
                 changePage={changePage}/>

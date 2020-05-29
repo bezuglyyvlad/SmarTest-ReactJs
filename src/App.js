@@ -14,6 +14,7 @@ import ErrorBoundary from "./components/Error/ErrorBoundary";
 import {MuiThemeProvider} from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {getTheme} from "./utils/theme";
+import {SnackbarProvider} from "notistack";
 
 
 const SignIn = React.lazy(() => import("./components/SignIn/SignIn"));
@@ -48,31 +49,36 @@ const App = React.memo(({initializeApp, initialized, theme}) => {
         <BrowserRouter>
             <MuiThemeProvider theme={muiTheme}>
                 <ErrorBoundary>
-                    <CssBaseline/>
-                    <Header/>
-                    <Box>
-                        <Switch>
-                            <Route path='/signin' render={withSuspense(SignIn)}/>
-                            <Route path='/signup' render={withSuspense(SignUp)}/>
-                            <Route path='/profile' render={withSuspense(Profile)}/>
-                            <Route path='/category/:category_id' render={withSuspense(Subcategories)}/>
-                            <Route path='/category' render={withSuspense(Categories)}/>
-                            <Route path='/test/:test_id/result' render={withSuspense(TestResult)}/>
-                            <Route path='/test/:test_id' render={withSuspense(Test)}/>
-                            <Route path='/statistics' render={withSuspense(Statistics)}/>
-                            <Route path='/documentation/xml' render={withSuspense(XmlDocumentation)}/>
-                            <Route path='/expertPanel/:category_id/:subcategory_id/edit/:question_id'
-                                   render={withSuspense(ExpertQuestionEdit)}/>
-                            <Route path='/expertPanel/:category_id/:subcategory_id/add'
-                                   render={withSuspense(ExpertQuestionAdd)}/>
-                            <Route path='/expertPanel/:category_id/:subcategory_id'
-                                   render={withSuspense(ExpertQuestions)}/>
-                            <Route path='/expertPanel/:category_id' render={withSuspense(ExpertTests)}/>
-                            <Route path='/expertPanel' render={withSuspense(ExpertCategories)}/>
-                            <Route path='/adminPanel' render={withSuspense(AdminPanel)}/>
-                            <Route path='/' render={withSuspense(MainPage)}/>
-                        </Switch>
-                    </Box>
+                    <SnackbarProvider maxSnack={3} preventDuplicate anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                    }}>
+                        <CssBaseline/>
+                        <Header/>
+                        <Box>
+                            <Switch>
+                                <Route path='/signin' render={withSuspense(SignIn)}/>
+                                <Route path='/signup' render={withSuspense(SignUp)}/>
+                                <Route path='/profile' render={withSuspense(Profile)}/>
+                                <Route path='/category/:category_id' render={withSuspense(Subcategories)}/>
+                                <Route path='/category' render={withSuspense(Categories)}/>
+                                <Route path='/test/:test_id/result' render={withSuspense(TestResult)}/>
+                                <Route path='/test/:test_id' render={withSuspense(Test)}/>
+                                <Route path='/statistics' render={withSuspense(Statistics)}/>
+                                <Route path='/documentation/xml' render={withSuspense(XmlDocumentation)}/>
+                                <Route path='/expertPanel/:category_id/:subcategory_id/edit/:question_id'
+                                       render={withSuspense(ExpertQuestionEdit)}/>
+                                <Route path='/expertPanel/:category_id/:subcategory_id/add'
+                                       render={withSuspense(ExpertQuestionAdd)}/>
+                                <Route path='/expertPanel/:category_id/:subcategory_id'
+                                       render={withSuspense(ExpertQuestions)}/>
+                                <Route path='/expertPanel/:category_id' render={withSuspense(ExpertTests)}/>
+                                <Route path='/expertPanel' render={withSuspense(ExpertCategories)}/>
+                                <Route path='/adminPanel' render={withSuspense(AdminPanel)}/>
+                                <Route path='/' render={withSuspense(MainPage)}/>
+                            </Switch>
+                        </Box>
+                    </SnackbarProvider>
                 </ErrorBoundary>
             </MuiThemeProvider>
         </BrowserRouter>

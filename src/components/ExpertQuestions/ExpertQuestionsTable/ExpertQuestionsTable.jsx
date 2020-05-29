@@ -35,10 +35,10 @@ const ExpertQuestionsTable = React.memo(({
     const [loading, setLoading] = React.useState(false);
 
     const columns = [
-        {title: 'Id', field: 'question_id', editable: 'never'},
+        {title: '№', field: 'tableData.id', editable: 'never', render: rowData => rowData.tableData.id + 1},
         {title: 'Текст', field: 'text'},
         {title: 'Складність', field: 'lvl', lookup: {1: 'Легкий', 2: 'Середній', 3: 'Складний'}},
-        {title: 'Кількість відповідей', field: 'type', lookup: {1: 'Одна', 2: 'Декілька'}},
+        {title: 'Тип', field: 'type', lookup: {1: 'Одиночний', 2: 'Множинний'}},
         {title: 'Опис', field: 'description'},
     ];
 

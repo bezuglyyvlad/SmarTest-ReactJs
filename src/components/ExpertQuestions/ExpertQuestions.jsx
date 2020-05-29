@@ -18,8 +18,7 @@ import {subcategorySelectors} from "../../redux/selectors/subcategorySelectors";
 import {exportQuestions, getExpertQuestions} from "../../redux/expertQuestionsReducer";
 import Box from "@material-ui/core/Box";
 import ExpertQuestionsTable from "./ExpertQuestionsTable/ExpertQuestionsTable";
-import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
+import {useSnackbar} from "notistack";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -38,8 +37,7 @@ const ExpertQuestions = React.memo(({
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
     const [disableExport, setDisableExport] = React.useState(false);
-    const [errors, setErrors] = React.useState([]);
-    const [open, setOpen] = React.useState(false);
+    const {enqueueSnackbar} = useSnackbar();
 
     const category_id = match.params.category_id;
     const subcategory_id = match.params.subcategory_id;
@@ -58,16 +56,10 @@ const ExpertQuestions = React.memo(({
         return <Preloader/>
     }
 
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setOpen(false);
-    };
-
     function showError(array) {
-        setErrors(array);
-        setOpen(true);
+        array.forEach(item => {
+            enqueueSnackbar(item, {variant: "error"})
+        });
     }
 
     async function exportQuestionsAction() {
@@ -92,14 +84,6 @@ const ExpertQuestions = React.memo(({
                                       showError={showError} exportQuestionsAction={exportQuestionsAction}
                                       disableExport={disableExport}/>
             </Box>
-            {open && errors &&
-            errors.map((e, key) => (
-                <Snackbar key={key} open={open} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="error">
-                        {e}
-                    </Alert>
-                </Snackbar>
-            ))}
         </Container>
     );
 });

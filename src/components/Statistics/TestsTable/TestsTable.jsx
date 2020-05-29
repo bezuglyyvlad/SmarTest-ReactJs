@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TestsTable = React.memo(({dense, history, data}) => {
+const TestsTable = React.memo(({dense, history, data, indexFirstItem}) => {
     const classes = useStyles();
     return (
         <TableContainer component={Paper}>
@@ -31,15 +31,17 @@ const TestsTable = React.memo(({dense, history, data}) => {
             >
                 <TableHead>
                     <TableRow>
+                        <TableCell>№</TableCell>
                         <TableCell>Назва</TableCell>
                         <TableCell>Категорія</TableCell>
                         <TableCell>Бали</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data.map(t => (
+                    {data.map((t, index) => (
                         <TableRow key={t.test_id} hover onClick={() => history.push(`/test/${t.test_id}/result`)}
                                   className={classes.tableRow}>
+                            <TableCell>{indexFirstItem-index}</TableCell>
                             <TableCell>{t.subcategory_name}</TableCell>
                             <TableCell>{t.category_name}</TableCell>
                             <TableCell>{t.score}</TableCell>
