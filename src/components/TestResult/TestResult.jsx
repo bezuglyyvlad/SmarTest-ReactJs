@@ -38,16 +38,18 @@ const TestResult = React.memo(({match, getTestResult, test, questions, answers, 
     const test_id = match.params.test_id;
 
     useEffect(() => {
+        let mounted = true; // exclude memory leak
         (async () => {
             setShowPreloader(true);
             await getTestResult(test_id);
-            setShowPreloader(false);
+            mounted && setShowPreloader(false);
         })();
+        return () => mounted = false;
     }, [getTestResult, test_id]);
 
     if (showPreloader) return <Preloader/>;
 
-    const points = 100 / test.count_of_questions;
+    const points = Math.round((100 / test.count_of_questions) * 100) / 100;
 
     const rows = [
         {title: 'Назва', value: test.subcategory_name},

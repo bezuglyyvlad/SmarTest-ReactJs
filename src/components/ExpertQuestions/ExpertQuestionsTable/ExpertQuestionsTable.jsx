@@ -100,6 +100,7 @@ const ExpertQuestionsTable = React.memo(({
                         tooltip: 'Експорт',
                         isFreeAction: true,
                         disabled: disableExport,
+                        hidden: questions.length === 0,
                         onClick: event => {
                             exportQuestionsAction()
                         }

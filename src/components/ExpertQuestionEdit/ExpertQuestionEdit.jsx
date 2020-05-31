@@ -55,14 +55,16 @@ const ExpertQuestionEdit = React.memo(({
     const question_id = match.params.question_id;
 
     useEffect(() => {
+        let mounted = true; // exclude memory leak
         (async () => {
             setShowPreloader(true);
             await getCategory(category_id);
             await getSubcategory(subcategory_id);
             await getExpertQuestion(question_id);
             await getExpertAnswers(question_id);
-            setShowPreloader(false);
+            mounted && setShowPreloader(false);
         })();
+        return () => mounted = false;
     }, [category_id, getCategory, getExpertAnswers, getExpertQuestion, getSubcategory, question_id, subcategory_id]);
 
     if (showPreloader) {

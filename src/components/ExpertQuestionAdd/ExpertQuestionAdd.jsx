@@ -49,12 +49,14 @@ const ExpertQuestionAdd = React.memo(({
     const subcategory_id = match.params.subcategory_id;
 
     useEffect(() => {
+        let mounted = true; // exclude memory leak
         (async () => {
             setShowPreloader(true);
             await getCategory(category_id);
             await getSubcategory(subcategory_id);
-            setShowPreloader(false);
+            mounted && setShowPreloader(false);
         })();
+        return () => mounted = false;
     }, [category_id, getCategory, getSubcategory, subcategory_id]);
 
     if (showPreloader) {

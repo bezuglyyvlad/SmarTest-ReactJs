@@ -28,11 +28,13 @@ const ExpertCategories = React.memo(({categories, getExpertCategories}) => {
     const [dense, setDense] = React.useState(false);
 
     useEffect(() => {
+        let mounted = true; // exclude memory leak
         (async () => {
             setShowPreloader(true);
             await getExpertCategories();
-            setShowPreloader(false);
+            mounted && setShowPreloader(false);
         })();
+        return () => mounted = false;
     }, [getExpertCategories]);
 
     if (showPreloader) {

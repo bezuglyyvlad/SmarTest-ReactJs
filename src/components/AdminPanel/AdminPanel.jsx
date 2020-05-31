@@ -28,11 +28,13 @@ const AdminPanel = React.memo(({getAdminCategories}) => {
     const {enqueueSnackbar} = useSnackbar();
 
     useEffect(() => {
+        let mounted = true; // exclude memory leak
         (async () => {
             setShowPreloader(true);
             await getAdminCategories();
-            setShowPreloader(false);
+            mounted && setShowPreloader(false);
         })();
+        return () => mounted = false;
     }, [getAdminCategories]);
 
     if (showPreloader) {

@@ -36,12 +36,14 @@ const ExpertTests = React.memo(({history, match, getCategory, categoryName, getE
     const category_id = match.params.category_id;
 
     useEffect(() => {
+        let mounted = true; // exclude memory leak
         (async () => {
             setShowPreloader(true);
             await getCategory(category_id);
             await getExpertTests(category_id);
-            setShowPreloader(false);
+            mounted && setShowPreloader(false);
         })();
+        return () => mounted = false;
     }, [category_id, getCategory, getExpertTests]);
 
     if (showPreloader) {
@@ -67,7 +69,8 @@ const ExpertTests = React.memo(({history, match, getCategory, categoryName, getE
                 <Typography color="textPrimary">{categoryName}</Typography>
             </Breadcrumbs>
             <Box className={classes.table}>
-                <ExpertTestsTable rowClick={rowClick} showError={showError} category_id={category_id}/>
+                <ExpertTestsTable rowClick={rowClick} showError={showError} category_id={category_id}
+                                  history={history}/>
             </Box>
         </Container>
     );
@@ -77,4 +80,7 @@ const mapStateToProps = (state) => ({
     categoryName: categorySelectors.getName(state),
 });
 
-export default compose(withUnAuthRedirect, withNotExpertRedirect, withRouter, connect(mapStateToProps, {getCategory, getExpertTests}))(ExpertTests);
+export default compose(withUnAuthRedirect, withNotExpertRedirect, withRouter, connect(mapStateToProps, {
+    getCategory,
+    getExpertTests
+}))(ExpertTests);

@@ -31,11 +31,13 @@ const Categories = React.memo(({location, getCategories, categories, pagination}
     const page = +queryString.parse(location.search).page || 1;
 
     useEffect(() => {
+        let mounted = true; // exclude memory leak
         (async () => {
             setShowPreloader(true);
             await getCategories(page);
-            setShowPreloader(false);
+            mounted && setShowPreloader(false);
         })();
+        return () => mounted = false;
     }, [page, getCategories]);
 
     if (showPreloader) {

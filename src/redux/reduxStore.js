@@ -15,6 +15,7 @@ import expertTestsReducer from "./expertTestsReducer";
 import subcategoryReducer from "./subcategoryReducer";
 import expertQuestionsReducer from "./expertQuestionsReducer";
 import expertQuestionEditReducer from "./expertQuestionEditReducer";
+import expertTestStatisticsReducer from "./expertTestStatisticsReducer";
 
 let reducers = combineReducers({
     form: formReducer,
@@ -30,6 +31,7 @@ let reducers = combineReducers({
     adminPanel: adminPanelReducer,
     expertCategories: expertCategoriesReducer,
     expertTests: expertTestsReducer,
+    expertTestStatistics: expertTestStatisticsReducer,
     expertQuestions: expertQuestionsReducer,
     expertQuestionEdit: expertQuestionEditReducer,
 });

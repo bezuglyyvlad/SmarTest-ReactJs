@@ -107,6 +107,9 @@ export const expertTestsAPI = {
     getTests(category_id) {
         return instance.get('experts/subcategories?category_id=' + category_id, authHeader());
     },
+    getTestStatistics(subcategory_id) {
+        return instance.get(`experts/testStatistics?id=${subcategory_id}&expand=user`, authHeader());
+    },
     addTest(data) {
         return instance.post('subcategories', data, authHeader());
     },

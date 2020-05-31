@@ -42,12 +42,14 @@ const Subcategories = React.memo(({
     const category_id = match.params.category_id;
 
     useEffect(() => {
+        let mounted = true; // exclude memory leak
         (async () => {
             setShowPreloader(true);
             await getCategory(category_id);
             await getSubcategories(category_id, page);
-            setShowPreloader(false);
+            mounted && setShowPreloader(false);
         })();
+        return () => mounted = false;
     }, [category_id, page, getSubcategories, getCategory]);
 
     const startTest = async (subcategory_id) => {

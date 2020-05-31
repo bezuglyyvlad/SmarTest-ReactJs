@@ -31,11 +31,13 @@ const Statistics = React.memo(({perPage, getRating, getTests, ratingInfo, tests,
     const [dense, setDense] = React.useState(false);
 
     useEffect(() => {
+        let mounted = true; // exclude memory leak
         (async () => {
             setRatingRequest(true);
             await getRating();
-            setRatingRequest(false);
+            mounted && setRatingRequest(false);
         })();
+        return () => mounted = false;
     }, [getRating]);
 
     useEffect(() => {

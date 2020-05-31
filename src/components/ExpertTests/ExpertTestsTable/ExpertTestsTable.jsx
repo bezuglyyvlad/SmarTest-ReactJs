@@ -8,10 +8,11 @@ import {materialTableLocalization} from "../../../utils/localization";
 import {expertTestsSelectors} from "../../../redux/selectors/expertTestsSelectors";
 import {expertTestsValidate} from "../../../utils/validators";
 import {addTest, deleteTest, updateTest} from "../../../redux/expertTestsReducer";
+import BarChartIcon from '@material-ui/icons/BarChart';
 
 const ExpertTestsTable = React.memo(({
                                          perPage, changePerPage, rowClick,
-                                         tests, showError, category_id, addTest, updateTest, deleteTest
+                                         tests, showError, category_id, addTest, updateTest, deleteTest, history
                                      }) => {
     const columns = [
         {title: '№', field: 'tableData.id', editable: 'never', render: rowData => rowData.tableData.id + 1},
@@ -71,6 +72,16 @@ const ExpertTestsTable = React.memo(({
                         resolve();
                     })
             }}
+            actions={
+                [
+                    {
+                        icon: () => <BarChartIcon/>,
+                        tooltip: 'Статистика',
+                        onClick: (event, rowData) =>
+                            history.push(`/expertPanel/${category_id}/${rowData.subcategory_id}/statistics`)
+                    }
+                ]
+            }
         />
     );
 });

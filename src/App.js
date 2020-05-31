@@ -33,6 +33,7 @@ const ExpertQuestions = React.lazy(() => import("./components/ExpertQuestions/Ex
 const ExpertQuestionAdd = React.lazy(() => import("./components/ExpertQuestionAdd/ExpertQuestionAdd"));
 const ExpertQuestionEdit = React.lazy(() => import("./components/ExpertQuestionEdit/ExpertQuestionEdit"));
 const XmlDocumentation = React.lazy(() => import("./components/XmlDocumentation/XmlDocumentation"));
+const ExpertTestStatistics = React.lazy(() => import("./components/ExpertTestStatistics/ExpertTestStatistics"));
 
 const App = React.memo(({initializeApp, initialized, theme}) => {
     useEffect(() => {
@@ -70,6 +71,8 @@ const App = React.memo(({initializeApp, initialized, theme}) => {
                                        render={withSuspense(ExpertQuestionEdit)}/>
                                 <Route path='/expertPanel/:category_id/:subcategory_id/add'
                                        render={withSuspense(ExpertQuestionAdd)}/>
+                                <Route path='/expertPanel/:category_id/:subcategory_id/statistics'
+                                       render={withSuspense(ExpertTestStatistics)}/>
                                 <Route path='/expertPanel/:category_id/:subcategory_id'
                                        render={withSuspense(ExpertQuestions)}/>
                                 <Route path='/expertPanel/:category_id' render={withSuspense(ExpertTests)}/>

@@ -8,8 +8,8 @@ import {addAnswer, deleteAnswer, updateAnswer} from "../../../redux/expertQuesti
 
 const ExpertAnswersTable = React.memo(({answers, showError, addAnswer, question_id, updateAnswer, deleteAnswer}) => {
     const columns = [
-        {title: 'Текст', field: 'text'},
-        {title: 'Є вірною', field: 'is_right', lookup: {0: 'Ні', 1: 'Так'}, initialEditValue: 0},
+        {title: 'Текст*', field: 'text'},
+        {title: 'Є вірною*', field: 'is_right', lookup: {0: 'Ні', 1: 'Так'}, initialEditValue: 0},
     ];
 
     const validate = (answers) => {

@@ -38,11 +38,13 @@ const Test = React.memo(({testInfo, question, answers, match, getTest, nextQuest
     const test_id = match.params.test_id;
 
     useEffect(() => {
+        let mounted = true; // exclude memory leak
         (async () => {
             setShowPreloader(true);
             await getTest(test_id);
-            setShowPreloader(false);
+            mounted && setShowPreloader(false);
         })();
+        return () => mounted = false;
     }, [getTest, test_id]);
 
     useEffect(() => {
