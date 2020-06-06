@@ -41,7 +41,7 @@ const ExpertQuestionAdd = React.memo(({
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
     const [answers, setAnswers] = React.useState([]);
-    const [image, setImage] = React.useState(null);
+    const [image, setImage] = React.useState('');
     const {enqueueSnackbar} = useSnackbar();
     const [added, setAdded] = React.useState(false);
 

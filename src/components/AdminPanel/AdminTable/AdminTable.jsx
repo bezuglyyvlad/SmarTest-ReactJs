@@ -14,7 +14,13 @@ const AdminTable = React.memo(({
                                    deleteCategory, perPage, changePerPage
                                }) => {
     const columns = [
-        {title: '№', field: 'tableData.id', editable: 'never', render: rowData => rowData.tableData.id + 1},
+        {
+            title: '№',
+            field: 'tableData.id',
+            editable: 'never',
+            emptyValue: null,
+            render: rowData => rowData.tableData.id + 1
+        },
         {title: 'Назва*', field: 'name'},
         {title: 'Електронна пошта (Експерта)', field: 'user.email'},
     ];

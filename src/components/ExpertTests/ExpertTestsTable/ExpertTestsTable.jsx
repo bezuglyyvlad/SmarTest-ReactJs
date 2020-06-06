@@ -15,7 +15,13 @@ const ExpertTestsTable = React.memo(({
                                          tests, showError, category_id, addTest, updateTest, deleteTest, history
                                      }) => {
     const columns = [
-        {title: '№', field: 'tableData.id', editable: 'never', render: rowData => rowData.tableData.id + 1},
+        {
+            title: '№',
+            field: 'tableData.id',
+            editable: 'never',
+            emptyValue: null,
+            render: rowData => rowData.tableData.id + 1
+        },
         {title: 'Назва*', field: 'name'},
         {title: 'Час* (в хвилинах)', field: 'time', type: 'numeric'},
         {title: 'Кількість питань*', field: 'count_of_questions', type: 'numeric'},
