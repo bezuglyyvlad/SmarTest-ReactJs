@@ -91,7 +91,7 @@ const ExpertQuestionAdd = React.memo(({
 
     const onUploadChange = (e) => {
         const files = e.target.files;
-        if (files.length && uploadImageQuestionValidate(files[0], imageAcceptTypes, showError)) {
+        if (files.length && uploadImageQuestionValidate(files[0], showError)) {
             setImage(files[0]);
         }
     }
