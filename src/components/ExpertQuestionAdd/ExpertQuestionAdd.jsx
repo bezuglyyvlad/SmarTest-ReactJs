@@ -20,7 +20,7 @@ import ExpertAnswerAddTable from "./ExpertAnswerAddTable/ExpertAnswerAddTable";
 import {addQuestion} from "../../redux/expertQuestionsReducer";
 import ExpertQuestionForm from "../common/ExpertQuestionForm/ExpertQuestionForm";
 import {uploadImageQuestionValidate} from "../../utils/validators";
-import {getFormData, imageAcceptTypes} from "../../utils/utils";
+import {getFormData} from "../../utils/utils";
 import {UploadBox} from "../common/UIElements";
 import {useSnackbar} from "notistack";
 
