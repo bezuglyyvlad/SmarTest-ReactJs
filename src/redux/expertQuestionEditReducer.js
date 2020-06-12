@@ -1,8 +1,12 @@
 import {expertAnswersAPI, expertQuestionAPI} from "../api/api";
 import {initialize, startSubmit, stopSubmit} from "redux-form";
+import {changeObjectInArray} from "../utils/utils";
 
 const SET_QUESTION = 'expertQuestionEdit/SET_QUESTION';
 const SET_ANSWERS = 'expertQuestionEdit/SET_ANSWERS';
+const ADD_ANSWER = 'expertQuestionEdit/ADD_ANSWER';
+const UPDATE_ANSWER = 'expertQuestionEdit/UPDATE_ANSWER';
+const DELETE_ANSWER = 'expertQuestionEdit/DELETE_ANSWER';
 
 let initialState = {
     question: null,
@@ -21,6 +25,21 @@ const expertQuestionEditReducer = (state = initialState, action) => {
                 ...state,
                 answers: action.answers
             }
+        case ADD_ANSWER:
+            return {
+                ...state,
+                answers: [...state.answers, action.newAnswer]
+            }
+        case UPDATE_ANSWER:
+            return {
+                ...state,
+                answers: changeObjectInArray(state.answers, action.newAnswer.answer_id, 'answer_id', action.newAnswer)
+            }
+        case DELETE_ANSWER:
+            return {
+                ...state,
+                answers: state.answers.filter(item => item.answer_id !== action.answer_id)
+            }
         default:
             return state;
     }
@@ -28,6 +47,9 @@ const expertQuestionEditReducer = (state = initialState, action) => {
 
 const setQuestionAC = (question) => ({type: SET_QUESTION, question});
 const setAnswersAC = (answers) => ({type: SET_ANSWERS, answers});
+const addAnswerAC = (newAnswer) => ({type: ADD_ANSWER, newAnswer});
+const updateAnswerAC = (newAnswer) => ({type: UPDATE_ANSWER, newAnswer});
+const deleteAnswerAC = (answer_id) => ({type: DELETE_ANSWER, answer_id});
 
 export const getExpertQuestion = (question_id) => async (dispatch) => {
     const response = await expertQuestionAPI.getQuestion(question_id);
@@ -36,8 +58,8 @@ export const getExpertQuestion = (question_id) => async (dispatch) => {
 
 export const editQuestion = (data, question_id) => async (dispatch) => {
     dispatch(startSubmit('questionForm'));
-    await expertQuestionAPI.updateQuestion(data, question_id);
-    dispatch(getExpertQuestion(question_id));
+    const response = await expertQuestionAPI.updateQuestion(data, question_id);
+    dispatch(setQuestionAC(response.data));
     dispatch(initialize('questionForm', data));
     dispatch(stopSubmit('questionForm'));
 }
@@ -58,18 +80,18 @@ export const getExpertAnswers = (question_id) => async (dispatch) => {
 }
 
 export const addAnswer = (data) => async (dispatch) => {
-    await expertAnswersAPI.addAnswer(data);
-    dispatch(getExpertAnswers(data.question_id));
+    const response = await expertAnswersAPI.addAnswer(data);
+    dispatch(addAnswerAC(response.data));
 }
 
 export const updateAnswer = (data) => async (dispatch) => {
-    await expertAnswersAPI.updateAnswer(data);
-    dispatch(getExpertAnswers(data.question_id));
+    const response = await expertAnswersAPI.updateAnswer(data);
+    dispatch(updateAnswerAC(response.data));
 }
 
-export const deleteAnswer = (answer_id, question_id) => async (dispatch) => {
+export const deleteAnswer = (answer_id) => async (dispatch) => {
     await expertAnswersAPI.deleteAnswer(answer_id);
-    dispatch(getExpertAnswers(question_id));
+    dispatch(deleteAnswerAC(answer_id));
 }
 
 export default expertQuestionEditReducer;

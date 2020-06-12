@@ -74,7 +74,7 @@ const ExpertTestsTable = React.memo(({
                     }),
                 onRowDelete: oldData =>
                     new Promise(async (resolve, reject) => {
-                        await deleteTest(oldData.subcategory_id, oldData.category_id);
+                        await deleteTest(oldData.subcategory_id);
                         resolve();
                     })
             }}

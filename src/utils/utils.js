@@ -117,3 +117,12 @@ export const downloadFile = (data, fileName) => {
     link.click();
     document.body.removeChild(link);
 }
+
+export const changeObjectInArray = (items, itemId, objPropName, newObj) => {
+    return items.map(u => {
+        if (u[objPropName] === itemId) {
+            return newObj;
+        }
+        return u;
+    })
+}

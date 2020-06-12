@@ -13,12 +13,11 @@ import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 import {NavLink} from "react-router-dom";
 import {Preloader} from "../common/Preloader";
-import {getSubcategories} from "../../redux/subcategoriesReducer";
+import {createTest, getSubcategories} from "../../redux/subcategoriesReducer";
 import queryString from 'query-string'
 import {subcategoriesSelectors} from "../../redux/selectors/subcategoriesSelectors";
 import {getCategory} from "../../redux/categoryReducer";
 import {categorySelectors} from "../../redux/selectors/categorySelectors";
-import {createTest} from "../../redux/testReducer";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -31,12 +30,11 @@ const useStyles = makeStyles(theme => ({
 
 const Subcategories = React.memo(({
                                       getSubcategories, match, location, subcategories,
-                                      pagination, getCategory, categoryName, createTest
+                                      pagination, getCategory, categoryName, createTest, testCreatedId
                                   }) => {
     const classes = useStyles();
     const [dense, setDense] = React.useState(false);
     const [showPreloader, setShowPreloader] = React.useState(true);
-    const [testCreatedId, setTestCreated] = React.useState(false);
 
     const page = +queryString.parse(location.search).page || 1;
     const category_id = match.params.category_id;
@@ -54,13 +52,13 @@ const Subcategories = React.memo(({
 
     const startTest = async (subcategory_id) => {
         setShowPreloader(true);
-        const test_id = await createTest(subcategory_id);
-        setTestCreated(test_id);
+        createTest(subcategory_id);
+        setShowPreloader(false);
     };
 
-    if (testCreatedId) return <Redirect to={`/test/${testCreatedId}`}/>;
-
     if (showPreloader) return <Preloader/>;
+
+    if (testCreatedId) return <Redirect to={`/test/${testCreatedId}`}/>;
 
     return (
         <Container component="main" maxWidth="md" className={classes.root}>
@@ -88,6 +86,7 @@ const Subcategories = React.memo(({
 const mapStateToProps = (state) => ({
     subcategories: subcategoriesSelectors.getSubcategories(state),
     pagination: subcategoriesSelectors.getPagination(state),
+    testCreatedId: subcategoriesSelectors.getTestCreatedId(state),
     categoryName: categorySelectors.getName(state),
 });
 

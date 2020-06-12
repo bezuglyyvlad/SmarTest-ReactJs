@@ -58,7 +58,8 @@ const ExpertQuestionsTable = React.memo(({
             const formData = new FormData();
             getFormData(formData, {'import': files[0], subcategory_id});
             setLoading(true);
-            await importQuestions(formData, subcategory_id);
+            const error = await importQuestions(formData, subcategory_id);
+            Array.isArray(error) && showError(error);
             setLoading(false);
         }
     }
@@ -76,7 +77,7 @@ const ExpertQuestionsTable = React.memo(({
                 editable={{
                     onRowDelete: oldData =>
                         new Promise(async (resolve, reject) => {
-                            await deleteQuestion(oldData.question_id, subcategory_id);
+                            await deleteQuestion(oldData.question_id);
                             resolve();
                         })
                 }}

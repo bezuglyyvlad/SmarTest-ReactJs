@@ -42,8 +42,8 @@ const appReducer = (state = initialState, action) => {
 
 
 export const initializedSuccess = () => ({type: INITIALIZED_SUCCESS});
-const setTheme = (theme) => ({type: SET_THEME, theme: theme});
-const setPerPage = (perPage) => ({type: SET_PER_PAGE, perPage: perPage});
+const setTheme = (theme) => ({type: SET_THEME, theme});
+const setPerPage = (perPage) => ({type: SET_PER_PAGE, perPage});
 
 export const changePerPage = (perPage) => (dispatch) => {
     setPerPageToLS(perPage);

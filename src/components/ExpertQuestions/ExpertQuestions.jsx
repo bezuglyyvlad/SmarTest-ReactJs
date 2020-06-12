@@ -19,6 +19,7 @@ import {exportQuestions, getExpertQuestions} from "../../redux/expertQuestionsRe
 import Box from "@material-ui/core/Box";
 import ExpertQuestionsTable from "./ExpertQuestionsTable/ExpertQuestionsTable";
 import {useSnackbar} from "notistack";
+import {expertQuestionsSelectors} from "../../redux/selectors/expertQuestionsSelectors";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -31,8 +32,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ExpertQuestions = React.memo(({
-                                        match, getCategory, getSubcategory,
-                                        categoryName, subcategoryName, getExpertQuestions, history, exportQuestions
+                                        match, getCategory, getSubcategory, categoryName, subcategoryName,
+                                        getExpertQuestions, history, exportQuestions, serverErrors
                                     }) => {
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
@@ -53,6 +54,10 @@ const ExpertQuestions = React.memo(({
         })();
         return () => mounted = false;
     }, [category_id, getCategory, getExpertQuestions, getSubcategory, subcategory_id]);
+
+    useEffect(() => {
+        serverErrors && showError(serverErrors);
+    })
 
     if (showPreloader) {
         return <Preloader/>
@@ -93,6 +98,7 @@ const ExpertQuestions = React.memo(({
 const mapStateToProps = (state) => ({
     categoryName: categorySelectors.getName(state),
     subcategoryName: subcategorySelectors.getName(state),
+    serverErrors: expertQuestionsSelectors.getServerErrors(state)
 });
 
 export default compose(withUnAuthRedirect, withNotExpertRedirect, withRouter, connect(mapStateToProps, {

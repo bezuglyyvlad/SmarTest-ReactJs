@@ -1,5 +1,5 @@
 import {userAPI} from "../api/api";
-import {stopSubmit, startSubmit, setSubmitSucceeded, clearFields} from "redux-form";
+import {stopSubmit, startSubmit, setSubmitSucceeded, clearFields, initialize} from "redux-form";
 import {getBearerTokenFromLS, removeBearerTokenFromLS, setBearerTokenToLS} from "../utils/utils";
 
 const SET_USER_DATA = 'user/SET_USER_DATA';
@@ -71,10 +71,12 @@ export const signIn = (email, password) => async (dispatch) => {
         dispatch(startSubmit('signin'));
         const response = await userAPI.signIn(email, password);
         setBearerTokenToLS(response.data.access_token);
-        dispatch(getUserData(getBearerTokenFromLS()));
+        await dispatch(getUserData());
+        dispatch(stopSubmit('signin'));
     } catch (e) {
         if (e.response && e.response.status === 400 && e.response.data) {
             const message = e.response.data.message;
+            dispatch(initialize('signin', {email, password}));
             dispatch(stopSubmit('signin', {_error: message}));
         } else {
             await Promise.reject(e);
@@ -86,7 +88,8 @@ export const signUp = (username, email, password) => async (dispatch) => {
     try {
         dispatch(startSubmit('signup'));
         await userAPI.signUp(username, email, password);
-        dispatch(signIn(email, password));
+        await dispatch(signIn(email, password));
+        dispatch(stopSubmit('signup'));
     } catch (e) {
         if (e.response && e.response.status === 422 && e.response.data) {
             showErrorToForm(dispatch, e, 'signup');

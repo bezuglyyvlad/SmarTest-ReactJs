@@ -18,7 +18,7 @@ const expertTestStatisticsReducer = (state = initialState, action) => {
     }
 }
 
-const setTestsAC = (tests) => ({type: SET_TESTS, tests: tests});
+const setTestsAC = (tests) => ({type: SET_TESTS, tests});
 
 export const getExpertTestStatistics = (subcategory_id) => async (dispatch) => {
     const response = await expertTestsAPI.getTestStatistics(subcategory_id);

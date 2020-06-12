@@ -63,7 +63,7 @@ const ExpertAnswersTable = React.memo(({answers, showError, addAnswer, question_
                         if (!validate(resultData)) {
                             reject();
                         } else {
-                            await deleteAnswer(oldData.answer_id, oldData.question_id);
+                            await deleteAnswer(oldData.answer_id);
                             resolve();
                         }
                     }),

@@ -18,7 +18,7 @@ const expertCategoriesReducer = (state = initialState, action) => {
     }
 }
 
-const setCategoriesAC = (categories) => ({type: SET_CATEGORIES, categories: categories});
+const setCategoriesAC = (categories) => ({type: SET_CATEGORIES, categories});
 
 export const getExpertCategories = () => async (dispatch) => {
     const response = await expertCategoriesAPI.getCategories();

@@ -5,4 +5,7 @@ export const subcategoriesSelectors = {
     getPagination(state) {
         return state.subcategories.pagination;
     },
+    getTestCreatedId(state) {
+        return state.subcategories.testCreatedId;
+    }
 }

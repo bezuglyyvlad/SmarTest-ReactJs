@@ -31,13 +31,6 @@ const testReducer = (state = initialState, action) => {
 const setTestDataAC = (testInfo, question, answers) => ({type: SET_TEST_DATA, payload: {testInfo, question, answers}});
 const setNewQuestion = (question, answers) => ({type: GET_NEXT_QUESTION, question, answers});
 
-export const createTest = (subcategory_id) => async (dispatch) => {
-    const response = await testAPI.createTest(subcategory_id);
-    const {test, question, answers} = response.data;
-    dispatch(setTestDataAC(test, question, answers));
-    return test.test_id;
-}
-
 export const getTest = (test_id) => async (dispatch) => {
     const response = await testAPI.getTest(test_id);
     const {test, question, answers} = response.data;
