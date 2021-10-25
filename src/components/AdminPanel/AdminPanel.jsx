@@ -6,10 +6,10 @@ import {withUnAuthRedirect} from "../../hoc/withUnAuthRedirect";
 import Typography from "@material-ui/core/Typography";
 import {connect} from "react-redux";
 import {withNotAdminRedirect} from "../../hoc/withNotAdminRedirect";
-import {getAdminCategories} from "../../redux/adminPanelReducer";
+import {getAdminTestCategories} from "../../redux/adminPanelReducer";
 import {Preloader} from "../common/Preloader";
 import Box from "@material-ui/core/Box";
-import AdminTable from "./AdminTable/AdminTable";
+import AdminTable from "./AdminPanelTable/AdminPanelTable";
 import {useSnackbar} from "notistack";
 
 const useStyles = makeStyles(theme => ({
@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const AdminPanel = React.memo(({getAdminCategories}) => {
+const AdminPanel = React.memo(({getAdminTestCategories}) => {
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = React.useState(true);
     const {enqueueSnackbar} = useSnackbar();
@@ -31,11 +31,11 @@ const AdminPanel = React.memo(({getAdminCategories}) => {
         let mounted = true; // exclude memory leak
         (async () => {
             setShowPreloader(true);
-            await getAdminCategories();
+            await getAdminTestCategories();
             mounted && setShowPreloader(false);
         })();
         return () => mounted = false;
-    }, [getAdminCategories]);
+    }, [getAdminTestCategories]);
 
     if (showPreloader) {
         return <Preloader/>
@@ -60,5 +60,5 @@ const AdminPanel = React.memo(({getAdminCategories}) => {
 });
 
 export default compose(withUnAuthRedirect, withNotAdminRedirect, connect(null, {
-    getAdminCategories,
+    getAdminTestCategories,
 }))(AdminPanel);

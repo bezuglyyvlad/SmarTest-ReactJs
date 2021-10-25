@@ -81,7 +81,7 @@ const Test = React.memo(({testInfo, question, answers, match, getTest, nextQuest
             <Typography component='h1' variant='h5' className={classes.title}>
                 Тест
             </Typography>
-            <TestInfo subcategory_name={testInfo.subcategory_name} category_name={testInfo.category_name}
+            <TestInfo expert_test_name={testInfo.expert_test_name} test_category_name={testInfo.test_category_name}
                       timer={timer}/>
             <TestProgress number_question={question.number_question} count_of_questions={testInfo.count_of_questions}/>
             <Typography className={classes.question} variant='h6'>

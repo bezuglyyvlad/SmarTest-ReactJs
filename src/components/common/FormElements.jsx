@@ -1,6 +1,6 @@
 import TextField from "@material-ui/core/TextField";
 import React from "react";
-import {email, maxLengthCreator, minLengthCreator, required} from "../../utils/validators";
+import {email, fieldMatch, maxLengthCreator, minLengthCreator, required} from "../../utils/validators";
 import {Field} from "redux-form";
 import Button from "@material-ui/core/Button";
 import {makeStyles} from "@material-ui/core/styles";
@@ -12,12 +12,12 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import FormHelperText from "@material-ui/core/FormHelperText";
 
-const renderTextField = ({
-                             label,
-                             input,
-                             meta: {touched, invalid, error},
-                             ...custom
-                         }) => (
+const renderTextField = React.memo(({
+                                        label,
+                                        input,
+                                        meta: {touched, invalid, error},
+                                        ...custom
+                                    }) => (
     <TextField
         label={label}
         placeholder={label}
@@ -26,13 +26,11 @@ const renderTextField = ({
         {...input}
         {...custom}
     />
-)
+))
 
 
 const renderFromHelper = ({touched, error}) => {
-    if (!(touched && error)) {
-        return
-    } else {
+    if (touched && error) {
         return <FormHelperText>{touched && error}</FormHelperText>
     }
 }
@@ -70,8 +68,8 @@ const minLength6 = minLengthCreator(6);
 
 const maxLength255 = maxLengthCreator(255);
 
-export const UsernameField = React.memo(() => (
-    <Field id="username" name='username' component={renderTextField}
+export const NameField = React.memo(() => (
+    <Field id="name" name='name' component={renderTextField}
            validate={[required, minLength2, maxLength255]}
            label='Ім`я користувача'
            variant="outlined"
@@ -89,8 +87,18 @@ export const EmailField = React.memo(() => (
 ))
 
 export const PasswordField = React.memo(({labelText}) => (
-    <Field id="password" name='password' component={renderTextField}
+    <Field id='password' name='password' component={renderTextField}
            validate={[required, minLength6, maxLength255]}
+           label={labelText}
+           variant='outlined'
+           margin='normal'
+           type='password'
+           fullWidth/>
+))
+
+export const PasswordConfirmationField = React.memo(({labelText}) => (
+    <Field id='password_confirmation' name='password_confirmation' component={renderTextField}
+           validate={[required, minLength6, maxLength255, fieldMatch('password')]}
            label={labelText}
            variant='outlined'
            margin='normal'

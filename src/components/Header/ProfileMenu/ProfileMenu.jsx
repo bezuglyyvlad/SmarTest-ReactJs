@@ -4,9 +4,9 @@ import React from "react";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Avatar from "@material-ui/core/Avatar";
-import {getAvatarUsername} from "../../../utils/utils";
+import {getAvatarName} from "../../../utils/utils";
 
-const ProfileMenu = React.memo(({signOut, username}) => {
+const ProfileMenu = React.memo(({signOut, name}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = event => {
@@ -29,7 +29,7 @@ const ProfileMenu = React.memo(({signOut, username}) => {
         <div>
             <IconButton edge="end"
                         color="inherit" aria-controls="profile-menu" aria-haspopup="true"
-                        onClick={handleClick}><Avatar>{getAvatarUsername(username)}</Avatar></IconButton>
+                        onClick={handleClick}><Avatar>{getAvatarName(name)}</Avatar></IconButton>
             <Menu
                 id="profile-menu"
                 anchorEl={anchorEl}

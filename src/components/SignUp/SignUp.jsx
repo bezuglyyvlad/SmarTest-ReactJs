@@ -26,8 +26,8 @@ const useStyles = makeStyles(theme => ({
 const SignUp = React.memo(({signUp}) => {
     const classes = useStyles();
 
-    const onSubmit = ({username, email, password}) => {
-        signUp(username, email, password);
+    const onSubmit = ({name, email, password, password_confirmation}) => {
+        signUp(name, email, password, password_confirmation);
     }
 
     return (

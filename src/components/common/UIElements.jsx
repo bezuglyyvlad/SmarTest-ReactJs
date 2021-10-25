@@ -62,14 +62,14 @@ const useStylesPagination = makeStyles(theme => ({
     }
 }));
 
-const PaginationCreator = React.memo(({pagination, mainPath}) => {
+const PaginationCreator = React.memo(({pagination, mainPath, linkPageName}) => {
     const classes = useStylesPagination();
     return (
-        <Pagination classes={{ul: classes.ul, root: classes.root}} count={pagination.pageCount} color="primary"
-                    page={pagination.currentPage} siblingCount={0} renderItem={item => (
+        <Pagination classes={{ul: classes.ul, root: classes.root}} count={pagination.last_page} color="primary"
+                    page={pagination.current_page} siblingCount={0} renderItem={item => (
             <PaginationItem
                 component={NavLink}
-                to={`${mainPath}${item.page === 1 ? '' : `?page=${item.page}`}`}
+                to={`${mainPath}${item.page === 1 ? '' : `${linkPageName}=${item.page}`}`}
                 {...item}
             />
         )}/>
@@ -86,7 +86,7 @@ const useStylesListCreator = makeStyles(theme => ({
     }
 }));
 
-export const ListCreator = React.memo(({pagination, dense, setDense, children, mainPath}) => {
+export const ListCreator = React.memo(({pagination, dense, setDense, children, mainPath, linkPageName}) => {
     const classes = useStylesListCreator();
 
     return (
@@ -104,8 +104,8 @@ export const ListCreator = React.memo(({pagination, dense, setDense, children, m
             />
             <div className={classes.demo} align='center'>
                 {children}
-                {pagination && pagination.pageCount > 1 &&
-                <PaginationCreator pagination={pagination} mainPath={mainPath}/>}
+                {pagination && pagination.last_page > 1 &&
+                <PaginationCreator pagination={pagination} mainPath={mainPath} linkPageName={linkPageName}/>}
             </div>
         </div>
     )

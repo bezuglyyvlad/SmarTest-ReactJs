@@ -4,12 +4,12 @@ import {connect} from "react-redux";
 import {userSelectors} from "../redux/selectors/userSelectors";
 
 let mapStateToPropsForRedirect = (state) => ({
-    role: userSelectors.getRole(state),
+    roles: userSelectors.getRoles(state),
 });
 
 export const withNotAdminRedirect = (Component) => {
     const RedirectComponent = props => {
-        if (!props.role.includes('admin')) return <Redirect to='/'/>
+        if (!props.roles.includes('admin')) return <Redirect to='/'/>
 
         return <Component {...props}/>
     };

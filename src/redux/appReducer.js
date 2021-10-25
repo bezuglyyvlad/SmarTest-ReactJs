@@ -1,12 +1,11 @@
 import {getUserData} from "./userReducer";
 import {
-    getBearerTokenFromLS,
+    getAccessTokenFromLS,
     getPerPageFromLS,
-    getThemeFromLS,
-    removeThemeFromLS,
+    getThemeFromLS, removeThemeFromLS,
     setPerPageToLS,
     setThemeToLS
-} from "../utils/utils";
+} from "../utils/localStorage";
 
 const INITIALIZED_SUCCESS = 'app/INITIALIZED_SUCCESS';
 const SET_THEME = 'app/SET_THEME';
@@ -65,11 +64,11 @@ export const initializeApp = () => (dispatch) => {
     const perPageFromLS = getPerPageFromLS();
     const perPage = perPageFromLS ? perPageFromLS : 10;
     dispatch(changePerPage(perPage));
-    const token = getBearerTokenFromLS();
-    if (!token) {
-        return dispatch(initializedSuccess())
+    const token = getAccessTokenFromLS();
+    let promise = Promise.resolve();
+    if (token) {
+        promise = dispatch(getUserData(token));
     }
-    let promise = dispatch(getUserData(token));
 
     //dispatch(somethingelse());
     //dispatch(somethingelse());

@@ -1,58 +1,89 @@
 import * as axios from "axios";
-import {getBearerTokenFromLS} from "../utils/utils";
+import {
+    getAccessTokenFromLS,
+    getRefreshTokenFromLS,
+    setAccessTokenToLS,
+    setRefreshTokenToLS
+} from "../utils/localStorage";
+import createAuthRefreshInterceptor from "axios-auth-refresh";
 
-//export const apiURL = 'http://api-test/api/v1/'; //for development
-export const apiURL = 'https://d-test.pp.ua/api/v1/'; //for production
+export const apiURL = 'http://api-smartest-laravel/api/V1/'; //for development
+//export const apiURL = 'https://d-test.pp.ua/api/v1/'; //for production
 
 const instance = axios.create({
     withCredentials: true,
     baseURL: apiURL,
 });
 
+const refreshAuthLogic = failedRequest => instance.post(
+    'oauth/token/refresh', {'refresh_token': getRefreshTokenFromLS()}
+).then(tokenRefreshResponse => {
+    setAccessTokenToLS(tokenRefreshResponse.data.access_token);
+    setRefreshTokenToLS(tokenRefreshResponse.data.refresh_token);
+    failedRequest.response.config.headers['Authorization'] = `Bearer ${tokenRefreshResponse.data.access_token}`;
+    return Promise.resolve();
+})
+
+createAuthRefreshInterceptor(instance, refreshAuthLogic, {pauseInstanceWhileRefreshing: true});
+
+instance.interceptors.response.use(response => {
+    return response;
+}, e => {
+    // if refresh_token is invalid
+    return Promise.reject(e);
+});
+
 const authHeader = () => ({
-    headers: {Authorization: `Bearer ${getBearerTokenFromLS()}`}
+    headers: {Authorization: `Bearer ${getAccessTokenFromLS()}`}
 })
 
 export const userAPI = {
     signIn(email, password) {
-        return instance.post('users/login', {email, password});
+        return instance.post('oauth/token', {'username': email, password});
     },
-    signUp(username, email, password) {
-        return instance.post('users', {username, email, password});
+    signUp(name, email, password, password_confirmation) {
+        return instance.post('users', {name, email, password, password_confirmation});
     },
     signOut() {
-        return instance.delete('users/logout', authHeader())
+        return instance.post('users/logout', authHeader())
     },
     getData() {
         return instance.get('users', authHeader())
     },
-    updateData(userId, username, email, password) {
-        return instance.put(`users/${userId}`, {username, email, password}, authHeader());
+    updateData(userId, name, email, password, password_confirmation) {
+        return instance.post(`users/${userId}`, {
+            '_method': 'PUT',
+            name,
+            email,
+            password,
+            password_confirmation
+        }, authHeader());
     },
     deleteUser(userId) {
         return instance.delete(`users/${userId}`, authHeader());
     }
 }
 
-export const categoriesAPI = {
-    getData(page) {
-        return instance.get(`categories?page=${page}`, authHeader());
+export const testCategoriesAPI = {
+    getData(test_category_id, page) {
+        const test_category_id_part = test_category_id ? `test_category_id=${test_category_id}&` : '';
+        return instance.get(`test-categories?${test_category_id_part}page=${page}`, authHeader());
     },
 }
 
-export const subcategoriesAPI = {
-    getData(category_id, page) {
-        return instance.get(`subcategories?category_id=${category_id}&page=${page}&expand=test`, authHeader());
+export const expertTestsAPI = {
+    getData(test_category_id, page) {
+        return instance.get(`expert-tests?test_category_id=${test_category_id}&page=${page}`, authHeader());
     },
 }
 
-export const categoryAPI = {
-    getData(category_id) {
-        return instance.get('categories/' + category_id, authHeader());
+export const testCategoryAPI = {
+    getData(test_category_id) {
+        return instance.get('categories/' + test_category_id, authHeader());
     },
 }
 
-export const subcategoryAPI = {
+export const expertTestAPI = {
     getData(subcategory_id) {
         return instance.get(`subcategories/${subcategory_id}?fields=subcategory_id,name`, authHeader());
     },
@@ -97,13 +128,13 @@ export const adminPanelAPI = {
     }
 }
 
-export const expertCategoriesAPI = {
-    getCategories() {
+export const expertPanelTestCategoriesAPI = {
+    getTestCategories() {
         return instance.get('experts', authHeader());
     },
 }
 
-export const expertTestsAPI = {
+export const expertPanelTestsAPI = {
     getTests(category_id) {
         return instance.get('experts/subcategories?category_id=' + category_id, authHeader());
     },
@@ -121,7 +152,7 @@ export const expertTestsAPI = {
     }
 }
 
-export const expertQuestionsAPI = {
+export const expertPanelQuestionsAPI = {
     getQuestions(subcategory_id) {
         return instance.get('experts/questions?subcategory_id=' + subcategory_id, authHeader());
     },
@@ -141,7 +172,7 @@ export const expertQuestionsAPI = {
     }
 }
 
-export const expertQuestionAPI = {
+export const expertPanelQuestionAPI = {
     getQuestion(question_id) {
         return instance.get(`questions/${question_id}`, authHeader());
     },
@@ -157,7 +188,7 @@ export const expertQuestionAPI = {
     }
 }
 
-export const expertAnswersAPI = {
+export const expertPanelAnswersAPI = {
     getAnswers(question_id) {
         return instance.get(`answers?question_id=${question_id}`, authHeader());
     },

@@ -9,7 +9,7 @@ import {
     EmailField,
     PasswordField,
     SubmitButton,
-    UsernameField,
+    NameField, PasswordConfirmationField,
 } from "../../common/FormElements";
 
 const useStyles = makeStyles(theme => ({
@@ -25,9 +25,10 @@ const SignUpForm = React.memo(({handleSubmit, pristine, submitting, error}) => {
 
     return (
         <form className={classes.root} onSubmit={handleSubmit}>
-            <UsernameField/>
+            <NameField/>
             <EmailField/>
             <PasswordField labelText='Пароль'/>
+            <PasswordConfirmationField labelText='Підтвердження паролю'/>
             {error && <FormHelperText error={!!error}>{error}</FormHelperText>}
             <SubmitButton textButton='Зареєструватися' disabled={pristine || submitting}/>
             <Grid container justify="flex-end">

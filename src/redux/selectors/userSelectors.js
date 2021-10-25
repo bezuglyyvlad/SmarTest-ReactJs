@@ -2,8 +2,8 @@ export const userSelectors = {
     getIsAuth(state) {
         return state.user.isAuth;
     },
-    getUsername(state) {
-        return state.user.username;
+    getName(state) {
+        return state.user.name;
     },
     getEmail(state) {
         return state.user.email;
@@ -11,7 +11,7 @@ export const userSelectors = {
     getUserId(state) {
         return state.user.userId;
     },
-    getRole(state) {
-        return state.user.role;
+    getRoles(state) {
+        return state.user.roles;
     },
 }

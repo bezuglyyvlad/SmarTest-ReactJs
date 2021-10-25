@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Header = React.memo(({isAuth, signOut, username}) => {
+const Header = React.memo(({isAuth, signOut, name}) => {
     const classes = useStyles();
 
     return (
@@ -49,7 +49,7 @@ const Header = React.memo(({isAuth, signOut, username}) => {
                     </Button>
                 </Typography>
                 {isAuth ?
-                    <ProfileMenu signOut={signOut} username={username}/>
+                    <ProfileMenu signOut={signOut} name={name}/>
                     : < IconButton component={NavLink} to='signin' edge="end"
                                    color="inherit" aria-label="Sign In"><AccountCircleIcon/></IconButton>
                 }
@@ -60,7 +60,7 @@ const Header = React.memo(({isAuth, signOut, username}) => {
 
 const mapStateToProps = (state) => ({
     isAuth: userSelectors.getIsAuth(state),
-    username: userSelectors.getUsername(state),
+    name: userSelectors.getName(state),
 })
 
 export default compose(connect(mapStateToProps, {signOut}))(Header);

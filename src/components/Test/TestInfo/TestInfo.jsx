@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TestInfo = React.memo(({subcategory_name, category_name, timer}) => {
+const TestInfo = React.memo(({expert_test_name, test_category_name, timer}) => {
     const classes = useStyles();
     return (
         <Grid
@@ -20,7 +20,7 @@ const TestInfo = React.memo(({subcategory_name, category_name, timer}) => {
         >
             <Grid item md={10} xs={8}>
                 <Typography className={`${classes.info}`} variant='h6'>
-                    {`${subcategory_name} - ${category_name}`}
+                    {`${expert_test_name} - ${test_category_name}`}
                 </Typography>
             </Grid>
             <Grid item md={2} xs={4}>

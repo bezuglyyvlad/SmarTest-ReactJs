@@ -1,81 +1,48 @@
-import {expertTestsAPI} from "../api/api";
-import {changeObjectInArray, errorInArrayOfString} from "../utils/utils";
+import {expertTestsAPI, testAPI} from "../api/api";
 
-const SET_TESTS = 'expertTests/SET_TESTS';
-const ADD_TEST = 'expertTests/ADD_TEST';
-const UPDATE_TEST = 'expertTests/UPDATE_TEST';
-const DELETE_TEST = 'expertTests/DELETE_TEST';
+const SET_EXPERT_TESTS = 'expertTest/SET_EXPERT_TESTS';
+const SET_TEST_CREATED = 'expertTest/SET_TEST_CREATED';
 
 let initialState = {
-    tests: null,
+    expertTests: [],
+    pagination: {},
+    testCreatedId: null
 };
 
 const expertTestsReducer = (state = initialState, action) => {
     switch (action.type) {
-        case SET_TESTS:
+        case SET_EXPERT_TESTS:
             return {
                 ...state,
-                tests: action.tests
+                ...action.payload
             }
-        case ADD_TEST:
+        case SET_TEST_CREATED:
             return {
                 ...state,
-                tests: [...state.tests, action.newTest]
-            }
-        case UPDATE_TEST:
-            return {
-                ...state,
-                tests: changeObjectInArray(state.tests, action.newTest.subcategory_id, 'subcategory_id', action.newTest)
-            }
-        case DELETE_TEST:
-            return {
-                ...state,
-                tests: state.tests.filter(item => item.subcategory_id !== action.subcategory_id)
+                testCreatedId: action.test_id
             }
         default:
             return state;
     }
 }
 
-const setTestsAC = (tests) => ({type: SET_TESTS, tests});
-const addTestAC = (newTest) => ({type: ADD_TEST, newTest});
-const updateTestAC = (newTest) => ({type: UPDATE_TEST, newTest});
-const deleteTestAC = (subcategory_id) => ({type: DELETE_TEST, subcategory_id});
 
-export const getExpertTests = (category_id) => async (dispatch) => {
-    const response = await expertTestsAPI.getTests(category_id);
-    dispatch(setTestsAC(response.data));
+const setExpertTests = (expertTests, pagination) => ({
+    type: SET_EXPERT_TESTS, payload:
+        {expertTests, pagination}
+});
+const setTestCreated = (test_id) => ({type: SET_TEST_CREATED, test_id});
+
+export const getExpertTests = (test_category_id, page) => async (dispatch) => {
+    const response = await expertTestsAPI.getData(test_category_id, page);
+    //dispatch(setTestCreated(null));
+    dispatch(setExpertTests(response.data.data, response.data.meta));
 }
 
-export const addTest = (data) => async (dispatch) => {
-    try {
-        const response = await expertTestsAPI.addTest(data);
-        dispatch(addTestAC(response.data));
-    } catch (e) {
-        if (e.response && e.response.status === 422 && e.response.data) {
-            return errorInArrayOfString(e.response.data);
-        } else {
-            await Promise.reject(e);
-        }
-    }
-}
-
-export const updateTest = (data) => async (dispatch) => {
-    try {
-        const response = await expertTestsAPI.updateTest(data);
-        dispatch(updateTestAC(response.data));
-    } catch (e) {
-        if (e.response && e.response.status === 422 && e.response.data) {
-            return errorInArrayOfString(e.response.data);
-        } else {
-            await Promise.reject(e);
-        }
-    }
-}
-
-export const deleteTest = (subcategory_id) => async (dispatch) => {
-    await expertTestsAPI.deleteTest(subcategory_id);
-    dispatch(deleteTestAC(subcategory_id));
+export const createTest = (expert_test_id) => async (dispatch) => {
+    const response = await testAPI.createTest(expert_test_id);
+    const {test} = response.data;
+    dispatch(setTestCreated(test.test_id));
 }
 
 export default expertTestsReducer;

@@ -20,6 +20,6 @@ const darkTheme = createMuiTheme({
     },
 });
 
-export const getTheme = (theme) => {
+export const getMuiTheme = (theme) => {
     return theme === 'dark' ? darkTheme : lightTheme;
 }

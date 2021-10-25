@@ -32,6 +32,10 @@ export const maxNumberCreator = (maxNumber) => (value) => {
     return undefined;
 }
 
+export const fieldMatch = matchName => (value, allValues, props) => {
+    return value !== allValues[matchName] ? `Поле не співпадає з ${matchName}` : undefined;
+}
+
 export function expertTestsValidate(data, showError) {
     let errors = [];
     required(data.name) && errors.push('Назва є обов`язковим для заповнення');

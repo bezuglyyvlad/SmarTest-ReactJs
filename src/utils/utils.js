@@ -1,37 +1,8 @@
-export const setBearerTokenToLS = (token) => {
-    localStorage.setItem('bearerToken', token);
-}
+import {kickUser} from "../redux/userReducer";
+import queryString from "query-string";
 
-export const getBearerTokenFromLS = () => {
-    return localStorage.getItem('bearerToken');
-}
-
-export const removeBearerTokenFromLS = () => {
-    localStorage.removeItem('bearerToken');
-}
-
-export const getAvatarUsername = (username) => {
-    return username.substr(0, 2);
-}
-
-export const getThemeFromLS = () => {
-    return localStorage.getItem('theme');
-}
-
-export const setThemeToLS = (name) => {
-    return localStorage.setItem('theme', name);
-}
-
-export const removeThemeFromLS = () => {
-    localStorage.removeItem('theme');
-}
-
-export const getPerPageFromLS = () => {
-    return localStorage.getItem('perPage');
-}
-
-export const setPerPageToLS = (perPage) => {
-    return localStorage.setItem('perPage', perPage);
+export const getAvatarName = (name) => {
+    return name.substr(0, 2);
 }
 
 export const getTimer = (dataFinish) => {
@@ -109,7 +80,7 @@ export const imageAcceptTypes = ["image/png", "image/jpg", "image/jpeg", "image/
 export const importAcceptTypes = ["text/xml"];
 
 export const downloadFile = (data, fileName) => {
-    const blob = new Blob([data], { type: 'text/xml' });
+    const blob = new Blob([data], {type: 'text/xml'});
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
     link.download = fileName;
@@ -125,4 +96,30 @@ export const changeObjectInArray = (items, itemId, objPropName, newObj) => {
         }
         return u;
     })
+}
+
+export const defaultThunkReject = (e, dispatch) => {
+    if (e?.response?.status === 401 && e.response?.config?.url === 'oauth/token/refresh') {
+        console.log('refresh_token is invalid');
+        kickUser(dispatch);
+        return true;
+    }
+    return Promise.reject(e);
+}
+
+export const getDoublePaginationsUrlParams = (
+    linkPageName,
+    another_page,
+    another_page_name,
+    locationPathname,
+    locationSearch
+) => {
+    let mainPath = locationPathname;
+    if (another_page === 1) {
+        linkPageName = '?' + linkPageName;
+    } else {
+        mainPath += `?${another_page_name}=${+queryString.parse(locationSearch)[another_page_name]}`;
+        linkPageName = '&' + linkPageName;
+    }
+    return {mainPath, linkPageName};
 }

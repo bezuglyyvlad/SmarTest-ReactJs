@@ -10,6 +10,7 @@ const useStyles = makeStyles(theme => ({
     root: {
         textAlign: 'center',
         marginTop: theme.spacing(5),
+        marginBottom: theme.spacing(2),
     },
     paper: {
         marginBottom: theme.spacing(2),

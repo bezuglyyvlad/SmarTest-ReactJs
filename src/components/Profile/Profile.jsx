@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import ProfileForm from "./ProfileForm/ProfileForm";
 import {userSelectors} from "../../redux/selectors/userSelectors";
 import {connect} from "react-redux";
-import {getAvatarUsername} from "../../utils/utils";
+import {getAvatarName} from "../../utils/utils";
 import Grid from "@material-ui/core/Grid";
 import {deleteUser, updateUser} from "../../redux/userReducer";
 import DeleteAccount from "./DeleteAccount/DeleteAccount";
@@ -32,24 +32,24 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Profile = React.memo(({userId, username, email, updateUser, deleteUser}) => {
+const Profile = React.memo(({userId, name, email, updateUser, deleteUser}) => {
 
     const classes = useStyles();
 
-    const onSubmit = ({username, email, password}) => {
-        updateUser(userId, username, email, password);
+    const onSubmit = ({name, email, password, password_confirmation}) => {
+        updateUser(userId, name, email, password, password_confirmation);
     }
 
     return (
         <Container component="main" maxWidth="xs">
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
-                    {getAvatarUsername(username)}
+                    {getAvatarName(name)}
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Профіль
                 </Typography>
-                <ProfileForm onSubmit={onSubmit} initialValues={{username: username, email: email}}/>
+                <ProfileForm onSubmit={onSubmit} initialValues={{name, email}}/>
                 <Grid container className={classes.deleteAccount} justify='center'>
                     <Grid item>
                         <DeleteAccount deleteUser={deleteUser} userId={userId}/>
@@ -62,7 +62,7 @@ const Profile = React.memo(({userId, username, email, updateUser, deleteUser}) =
 
 const mapStateToProps = (state) => ({
     userId: userSelectors.getUserId(state),
-    username: userSelectors.getUsername(state),
+    name: userSelectors.getName(state),
     email: userSelectors.getEmail(state),
 })
 

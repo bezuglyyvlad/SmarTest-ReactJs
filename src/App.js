@@ -13,34 +13,30 @@ import {appSelectors} from "./redux/selectors/appSelectors";
 import ErrorBoundary from "./components/Error/ErrorBoundary";
 import {MuiThemeProvider} from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import {getTheme} from "./utils/theme";
 import {SnackbarProvider} from "notistack";
 
 
 const SignIn = React.lazy(() => import("./components/SignIn/SignIn"));
 const SignUp = React.lazy(() => import("./components/SignUp/SignUp"));
 const Profile = React.lazy(() => import("./components/Profile/Profile"));
-const Categories = React.lazy(() => import("./components/Categories/Categories"));
 const Statistics = React.lazy(() => import("./components/Statistics/Statistics"));
 const MainPage = React.lazy(() => import("./components/MainPage/MainPage"));
-const Subcategories = React.lazy(() => import("./components/Subcategories/Subcategories"));
+const TestCatalog = React.lazy(() => import("./components/TestCatalog/TestCatalog"));
 const Test = React.lazy(() => import("./components/Test/Test"));
 const TestResult = React.lazy(() => import("./components/TestResult/TestResult"));
 const AdminPanel = React.lazy(() => import("./components/AdminPanel/AdminPanel"));
-const ExpertCategories = React.lazy(() => import("./components/ExpertCategories/ExpertCategories"));
-const ExpertTests = React.lazy(() => import("./components/ExpertTests/ExpertTests"));
-const ExpertQuestions = React.lazy(() => import("./components/ExpertQuestions/ExpertQuestions"));
-const ExpertQuestionAdd = React.lazy(() => import("./components/ExpertQuestionAdd/ExpertQuestionAdd"));
-const ExpertQuestionEdit = React.lazy(() => import("./components/ExpertQuestionEdit/ExpertQuestionEdit"));
+const ExpertPanelTestCategories = React.lazy(() => import("./components/ExpertPanelTestCategories/ExpertPanelTestCategories"));
+const ExpertPanelTests = React.lazy(() => import("./components/ExpertPanelTests/ExpertPanelTests"));
+const ExpertPanelQuestions = React.lazy(() => import("./components/ExpertPanelQuestions/ExpertPanelQuestions"));
+const ExpertPanelQuestionAdd = React.lazy(() => import("./components/ExpertPanelQuestionAdd/ExpertPanelQuestionAdd"));
+const ExpertPanelQuestionEdit = React.lazy(() => import("./components/ExpertPanelQuestionEdit/ExpertPanelQuestionEdit"));
 const XmlDocumentation = React.lazy(() => import("./components/XmlDocumentation/XmlDocumentation"));
-const ExpertTestStatistics = React.lazy(() => import("./components/ExpertTestStatistics/ExpertTestStatistics"));
+const ExpertPanelTestStatistics = React.lazy(() => import("./components/ExpertPanelTestStatistics/ExpertPanelTestStatistics"));
 
-const App = React.memo(({initializeApp, initialized, theme}) => {
+const App = React.memo(({initializeApp, initialized, muiTheme}) => {
     useEffect(() => {
         initializeApp();
     }, [initializeApp]);
-
-    const muiTheme = getTheme(theme);
 
     if (!initialized) {
         return <MuiThemeProvider theme={muiTheme}><Preloader/></MuiThemeProvider>;
@@ -61,22 +57,21 @@ const App = React.memo(({initializeApp, initialized, theme}) => {
                                 <Route path='/signin' render={withSuspense(SignIn)}/>
                                 <Route path='/signup' render={withSuspense(SignUp)}/>
                                 <Route path='/profile' render={withSuspense(Profile)}/>
-                                <Route path='/category/:category_id' render={withSuspense(Subcategories)}/>
-                                <Route path='/category' render={withSuspense(Categories)}/>
+                                <Route path="/testCatalog/:test_category_id?" render={withSuspense(TestCatalog)}/>
                                 <Route path='/test/:test_id/result' render={withSuspense(TestResult)}/>
                                 <Route path='/test/:test_id' render={withSuspense(Test)}/>
                                 <Route path='/statistics' render={withSuspense(Statistics)}/>
                                 <Route path='/documentation/xml' render={withSuspense(XmlDocumentation)}/>
                                 <Route path='/expertPanel/:category_id/:subcategory_id/edit/:question_id'
-                                       render={withSuspense(ExpertQuestionEdit)}/>
+                                       render={withSuspense(ExpertPanelQuestionEdit)}/>
                                 <Route path='/expertPanel/:category_id/:subcategory_id/add'
-                                       render={withSuspense(ExpertQuestionAdd)}/>
+                                       render={withSuspense(ExpertPanelQuestionAdd)}/>
                                 <Route path='/expertPanel/:category_id/:subcategory_id/statistics'
-                                       render={withSuspense(ExpertTestStatistics)}/>
+                                       render={withSuspense(ExpertPanelTestStatistics)}/>
                                 <Route path='/expertPanel/:category_id/:subcategory_id'
-                                       render={withSuspense(ExpertQuestions)}/>
-                                <Route path='/expertPanel/:category_id' render={withSuspense(ExpertTests)}/>
-                                <Route path='/expertPanel' render={withSuspense(ExpertCategories)}/>
+                                       render={withSuspense(ExpertPanelQuestions)}/>
+                                <Route path='/expertPanel/:category_id' render={withSuspense(ExpertPanelTests)}/>
+                                <Route path='/expertPanel' render={withSuspense(ExpertPanelTestCategories)}/>
                                 <Route path='/adminPanel' render={withSuspense(AdminPanel)}/>
                                 <Route path='/' render={withSuspense(MainPage)}/>
                             </Switch>
@@ -90,7 +85,7 @@ const App = React.memo(({initializeApp, initialized, theme}) => {
 
 const mapStateToProps = (state) => ({
     initialized: appSelectors.getInitialized(state),
-    theme: appSelectors.getTheme(state),
+    muiTheme: appSelectors.getMuiTheme(state),
 });
 
 export default compose(

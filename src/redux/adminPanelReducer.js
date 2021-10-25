@@ -28,15 +28,15 @@ const adminPanelReducer = (state = initialState, action) => {
 const setCategoriesAC = (categories) => ({type: SET_CATEGORIES, categories});
 const deleteCategoryAC = (category_id) => ({type: DELETE_CATEGORY, category_id});
 
-export const getAdminCategories = () => async (dispatch) => {
+export const getAdminTestCategories = () => async (dispatch) => {
     const response = await adminPanelAPI.getCategories();
     dispatch(setCategoriesAC(response.data));
 }
 
-export const updateCategory = (category_id, name, userEmail) => async (dispatch) => {
+export const updateTestCategory = (category_id, name, userEmail) => async (dispatch) => {
     try {
         await adminPanelAPI.updateCategory(category_id, name, userEmail);
-        await dispatch(getAdminCategories());
+        await dispatch(getAdminTestCategories());
     } catch (e) {
         if (e.response && e.response.status === 422 && e.response.data) {
             return errorInArrayOfString(e.response.data);
@@ -46,10 +46,10 @@ export const updateCategory = (category_id, name, userEmail) => async (dispatch)
     }
 }
 
-export const addCategory = (name, userEmail) => async (dispatch) => {
+export const addTestCategory = (name, userEmail) => async (dispatch) => {
     try {
         await adminPanelAPI.addCategory(name, userEmail);
-        await dispatch(getAdminCategories());
+        await dispatch(getAdminTestCategories());
     } catch (e) {
         if (e.response && e.response.status === 422 && e.response.data) {
             return errorInArrayOfString(e.response.data);
@@ -59,7 +59,7 @@ export const addCategory = (name, userEmail) => async (dispatch) => {
     }
 }
 
-export const deleteCategory = (category_id) => async (dispatch) => {
+export const deleteTestCategory = (category_id) => async (dispatch) => {
     await adminPanelAPI.deleteCategory(category_id);
     await dispatch(deleteCategoryAC(category_id));
 }

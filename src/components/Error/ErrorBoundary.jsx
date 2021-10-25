@@ -2,7 +2,7 @@ import * as React from "react";
 import Error from "./Error";
 import {withRouter} from "react-router";
 
-class ErrorBoundary extends React.Component {
+class ErrorBoundary extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {hasError: {}};
