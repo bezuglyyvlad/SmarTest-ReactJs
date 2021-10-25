@@ -1,7 +1,7 @@
-import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
+import { memo } from 'react';
+import {makeStyles} from '@mui/styles';
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
 
 const useStyles = makeStyles(theme => ({
     info: {
@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TestInfo = React.memo(({expert_test_name, test_category_name, timer}) => {
+const TestInfo = memo(({expert_test_name, test_category_name, timer}) => {
     const classes = useStyles();
     return (
         <Grid

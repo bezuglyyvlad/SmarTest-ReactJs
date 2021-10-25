@@ -1,13 +1,13 @@
 import {NavLink} from "react-router-dom";
-import IconButton from "@material-ui/core/IconButton";
-import React from "react";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import Avatar from "@material-ui/core/Avatar";
+import IconButton from "@mui/material/IconButton";
+import { memo, useState } from "react";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Avatar from "@mui/material/Avatar";
 import {getAvatarName} from "../../../utils/utils";
 
-const ProfileMenu = React.memo(({signOut, name}) => {
-    const [anchorEl, setAnchorEl] = React.useState(null);
+const ProfileMenu = memo(({signOut, name}) => {
+    const [anchorEl, setAnchorEl] = useState(null);
 
     const handleClick = event => {
         setAnchorEl(event.currentTarget);
@@ -17,7 +17,7 @@ const ProfileMenu = React.memo(({signOut, name}) => {
         setAnchorEl(null);
     };
 
-    const [disableSignOut, setDisableSignOut] = React.useState(false);
+    const [disableSignOut, setDisableSignOut] = useState(false);
 
     const handleCloseSignOut = () => {
         handleClose();

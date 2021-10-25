@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { memo, useState, useEffect } from 'react';
+import {makeStyles} from '@mui/styles';
+import Container from '@mui/material/Container';
 import {compose} from "redux";
 import {withUnAuthRedirect} from "../../hoc/withUnAuthRedirect";
 import {connect} from "react-redux";
@@ -8,7 +8,7 @@ import {testSelectors} from "../../redux/selectors/testSelectors";
 import {Redirect, withRouter} from "react-router";
 import {Preloader} from "../common/Preloader";
 import {getTest, nextQuestion} from "../../redux/testReducer";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import TestForm from "./TestForm/TestForm";
 import TestProgress from "./TestProgress/TestProgress";
 import TestInfo from "./TestInfo/TestInfo";
@@ -29,11 +29,11 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Test = React.memo(({testInfo, question, answers, match, getTest, nextQuestion}) => {
+const Test = memo(({testInfo, question, answers, match, getTest, nextQuestion}) => {
     const classes = useStyles();
-    const [showPreloader, setShowPreloader] = React.useState(true);
-    const [testFinished, setTestFinished] = React.useState(false);
-    const [timer, setTimer] = React.useState('0');
+    const [showPreloader, setShowPreloader] = useState(true);
+    const [testFinished, setTestFinished] = useState(false);
+    const [timer, setTimer] = useState('0');
 
     const test_id = match.params.test_id;
 

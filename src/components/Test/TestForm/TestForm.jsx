@@ -1,5 +1,5 @@
-import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import { memo } from 'react';
+import {makeStyles} from '@mui/styles';
 import {reduxForm} from "redux-form";
 import {compose} from "redux";
 import {SubmitButton} from "../../common/FormElements";
@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const TestForm = React.memo(({handleSubmit, pristine, submitting, data, type}) => {
+const TestForm = memo(({handleSubmit, pristine, submitting, data, type}) => {
     const classes = useStyles();
     return (
         <form className={classes.root} onSubmit={handleSubmit}>

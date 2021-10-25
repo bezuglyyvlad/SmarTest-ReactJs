@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo, useState } from 'react';
 import MaterialTable, {MTableAction} from 'material-table';
 import {compose} from "redux";
 import {connect} from "react-redux";
@@ -7,14 +7,14 @@ import {appSelectors} from "../../../redux/selectors/appSelectors";
 import {materialTableLocalization} from "../../../utils/localization";
 import {expertPanelQuestionsSelectors} from "../../../redux/selectors/expertPanelQuestionsSelectors";
 import {deleteQuestion, importQuestions} from "../../../redux/expertPanelQuestionsReducer";
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import {Box, Tooltip} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import {Box, Tooltip} from "@mui/material";
+import {makeStyles} from "@mui/styles";
+import IconButton from "@mui/material/IconButton";
 import {getFormData, importAcceptTypes} from "../../../utils/utils";
 import {importQuestionsValidate} from "../../../utils/validators";
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
-import InfoIcon from '@material-ui/icons/Info';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import InfoIcon from '@mui/icons-material/Info';
 
 const useStyles = makeStyles(theme => ({
     input: {
@@ -25,14 +25,14 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ExpertPanelQuestionsTable = React.memo(({
+const ExpertPanelQuestionsTable = memo(({
                                              perPage, changePerPage,
                                              questions, history, test_category_id, expert_test_id,
                                              deleteQuestion, showError, importQuestions,
                                              exportQuestionsAction, disableExport
                                          }) => {
     const classes = useStyles();
-    const [loading, setLoading] = React.useState(false);
+    const [loading, setLoading] = useState(false);
 
     const columns = [
         {

@@ -1,22 +1,22 @@
-import React, {useEffect} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { memo, useState, useEffect } from 'react';
+import {makeStyles} from '@mui/styles';
+import Container from '@mui/material/Container';
 import {compose} from "redux";
 import {withUnAuthRedirect} from "../../hoc/withUnAuthRedirect";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import {connect} from "react-redux";
 import {Preloader} from "../common/Preloader";
 import {withNotExpertRedirect} from "../../hoc/withNotExpertRedirect";
-import Link from "@material-ui/core/Link";
+import Link from "@mui/material/Link";
 import {NavLink} from "react-router-dom";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
 import {withRouter} from "react-router";
 import {getTestCategory} from "../../redux/testCategoryReducer";
 import {testCategorySelectors} from "../../redux/selectors/testCategorySelectors";
 import {getExpertTest} from "../../redux/expertTestReducer";
 import {expertTestSelectors} from "../../redux/selectors/expertTestSelectors";
 import {exportQuestions, getExpertQuestions} from "../../redux/expertPanelQuestionsReducer";
-import Box from "@material-ui/core/Box";
+import Box from "@mui/material/Box";
 import ExpertQuestionsTable from "./ExpertPanelQuestionsTable/ExpertPanelQuestionsTable";
 import {useSnackbar} from "notistack";
 import {expertPanelQuestionsSelectors} from "../../redux/selectors/expertPanelQuestionsSelectors";
@@ -31,13 +31,13 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ExpertPanelQuestions = React.memo(({
+const ExpertPanelQuestions = memo(({
                                         match, getCategory, getSubcategory, categoryName, subcategoryName,
                                         getExpertQuestions, history, exportQuestions, serverErrors
                                     }) => {
     const classes = useStyles();
-    const [showPreloader, setShowPreloader] = React.useState(true);
-    const [disableExport, setDisableExport] = React.useState(false);
+    const [showPreloader, setShowPreloader] = useState(true);
+    const [disableExport, setDisableExport] = useState(false);
     const {enqueueSnackbar} = useSnackbar();
 
     const category_id = match.params.category_id;

@@ -1,13 +1,13 @@
-import React, {useEffect} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { memo, useState, useEffect } from 'react';
+import {makeStyles} from '@mui/styles';
+import Container from '@mui/material/Container';
 import {compose} from "redux";
 import {withUnAuthRedirect} from "../../hoc/withUnAuthRedirect";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import {Preloader} from "../common/Preloader";
 import {connect} from "react-redux";
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@mui/material/Switch";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import {TablePaginationCreatorWithConnect} from "../common/UIElements";
 import {appSelectors} from "../../redux/selectors/appSelectors";
 import TestsTable from "./TestsTable/TestsTable";
@@ -23,12 +23,12 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Statistics = React.memo(({perPage, getRating, getTests, ratingInfo, tests, pagination}) => {
+const Statistics = memo(({perPage, getRating, getTests, ratingInfo, tests, pagination}) => {
     const classes = useStyles();
-    const [ratingRequest, setRatingRequest] = React.useState(true);
-    const [testsRequest, setTestsRequest] = React.useState(true);
-    const [page, setPage] = React.useState(1);
-    const [dense, setDense] = React.useState(false);
+    const [ratingRequest, setRatingRequest] = useState(true);
+    const [testsRequest, setTestsRequest] = useState(true);
+    const [page, setPage] = useState(1);
+    const [dense, setDense] = useState(false);
 
     useEffect(() => {
         let mounted = true; // exclude memory leak
@@ -73,7 +73,7 @@ const Statistics = React.memo(({perPage, getRating, getTests, ratingInfo, tests,
                 pagination={pagination}
                 changePage={changePage}/>
             <FormControlLabel
-                control={<Switch checked={dense} onChange={handleChangeDense} color='primary'/>}
+                control={<Switch checked={dense} onChange={handleChangeDense}/>}
                 label='Зробити компактніше'
             />
         </Container>

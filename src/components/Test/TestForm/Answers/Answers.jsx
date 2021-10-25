@@ -1,16 +1,16 @@
-import React from 'react';
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Radio from "@material-ui/core/Radio";
+import { memo } from 'react';
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
 import {Field} from "redux-form";
 import {radioButtons, renderCheckbox} from "../../../common/FormElements";
 
-const Answers = React.memo(({type, data}) => {
+const Answers = memo(({type, data}) => {
     let answers = undefined;
     switch (type) {
         case 1:
             answers = <Field name="answer" component={radioButtons}>
                 {data.map((value, key) => (
-                    <FormControlLabel key={key} value={String(value.test_answer_id)} control={<Radio color='primary'/>}
+                    <FormControlLabel key={key} value={String(value.test_answer_id)} control={<Radio/>}
                                       label={value.text}/>))}
             </Field>
             break;

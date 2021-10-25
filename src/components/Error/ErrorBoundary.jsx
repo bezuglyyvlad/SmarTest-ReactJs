@@ -1,8 +1,8 @@
-import * as React from "react";
+import { PureComponent } from "react";
 import Error from "./Error";
 import {withRouter} from "react-router";
 
-class ErrorBoundary extends React.PureComponent {
+class ErrorBoundary extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {hasError: {}};

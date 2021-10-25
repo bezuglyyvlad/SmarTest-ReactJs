@@ -1,8 +1,8 @@
-import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Typography from "@material-ui/core/Typography"
-import overallSructureXml from "../../images/overallSructureXml.png"
+import { memo } from 'react';
+import {makeStyles} from '@mui/styles';
+import Container from '@mui/material/Container';
+import Typography from "@mui/material/Typography"
+import overallStructureXml from "../../images/overallStructureXml.png"
 import questionXml from "../../images/questionXml.png"
 import answersXml from "../../images/answersXml.png"
 import ImageBox from "../common/UIElements";
@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const XmlDocumentation = React.memo(() => {
+const XmlDocumentation = memo(() => {
     const classes = useStyles();
 
     return (
@@ -39,7 +39,7 @@ const XmlDocumentation = React.memo(() => {
             <Typography variant="body1" className={classes.bodyText}>
                 Файл обгорнутий в теги наступним чином.
             </Typography>
-            <ImageBox imageSrc={overallSructureXml} imageW={266} imageH={125}/>
+            <ImageBox imageSrc={overallStructureXml} imageW={266} imageH={125}/>
             <Typography variant="body1" className={classes.bodyText}>
                 Файл повинен бути закодований в UTF-8 та вказаний в файлі, як це показано вище.
             </Typography>

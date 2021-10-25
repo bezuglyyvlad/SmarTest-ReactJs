@@ -1,10 +1,10 @@
-import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import GradeIcon from '@material-ui/icons/Grade';
-import Badge from "@material-ui/core/Badge";
-import Popover from "@material-ui/core/Popover";
+import { memo, useState } from 'react';
+import {makeStyles} from '@mui/styles';
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import GradeIcon from '@mui/icons-material/Grade';
+import Badge from "@mui/material/Badge";
+import Popover from "@mui/material/Popover";
 
 const useStyles = makeStyles(theme => ({
     rating: {
@@ -18,9 +18,9 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const MyRating = React.memo(({rating, ratingByCategory}) => {
+const MyRating = memo(({rating, ratingByCategory}) => {
     const classes = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
 
     const handlePopoverOpen = event => {
         setAnchorEl(event.currentTarget);

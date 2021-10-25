@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import MaterialTable from 'material-table';
 import {compose} from "redux";
 import {connect} from "react-redux";
@@ -7,7 +7,7 @@ import {appSelectors} from "../../../redux/selectors/appSelectors";
 import {materialTableLocalization} from "../../../utils/localization";
 import {expertPanelTestStatisticsSelectors} from "../../../redux/selectors/expertPanelTestStatisticsSelectors";
 
-const ExpertPanelTestStatisticsTable = React.memo(({
+const ExpertPanelTestStatisticsTable = memo(({
                                                   perPage, changePerPage, tests,
                                               }) => {
     const columns = [

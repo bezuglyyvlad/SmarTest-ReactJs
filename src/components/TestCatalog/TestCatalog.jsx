@@ -1,16 +1,16 @@
-import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { memo } from 'react';
+import {makeStyles} from '@mui/styles';
+import Container from '@mui/material/Container';
 import {compose} from "redux";
 import {withRouter} from "react-router";
 import queryString from 'query-string'
 import {withUnAuthRedirect} from "../../hoc/withUnAuthRedirect";
 import TestCategories from "./TestCategories/TestCategories";
 import ExpertTests from "./ExpertTests/ExpertTests";
-import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
 import {NavLink} from "react-router-dom";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
 import {testCategoriesSelectors} from "../../redux/selectors/testCategoriesSelectors";
 import {connect} from "react-redux";
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TestCatalog = React.memo(({location, match, breadcrumbs}) => {
+const TestCatalog = memo(({location, match, breadcrumbs}) => {
     const classes = useStyles();
 
     const test_category_page = +queryString.parse(location.search).test_category_page || 1;

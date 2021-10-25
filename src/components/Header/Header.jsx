@@ -1,15 +1,15 @@
-import React from "react";
+import { memo } from "react";
 
-import {makeStyles} from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import AppBar from "@material-ui/core/AppBar";
+import {makeStyles} from "@mui/styles";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import AppBar from "@mui/material/AppBar";
 import {NavLink} from "react-router-dom";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import SideMenu from "./SideMenu/SideMenu";
 import ProfileMenu from "./ProfileMenu/ProfileMenu";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import IconButton from "@material-ui/core/IconButton";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import IconButton from "@mui/material/IconButton";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBrain} from "@fortawesome/free-solid-svg-icons";
 import {connect} from "react-redux";
@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Header = React.memo(({isAuth, signOut, name}) => {
+const Header = memo(({isAuth, signOut, name}) => {
     const classes = useStyles();
 
     return (

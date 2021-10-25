@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import MaterialTable from 'material-table';
 import {materialTableLocalization} from "../../../utils/localization";
 import {compose} from "redux";
@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 import {expertPanelQuestionEditSelectors} from "../../../redux/selectors/expertPanelQuestionEditSelectors";
 import {addAnswer, deleteAnswer, updateAnswer} from "../../../redux/expertPanelQuestionEditReducer";
 
-const ExpertPanelAnswersTable = React.memo(({answers, showError, addAnswer, question_id, updateAnswer, deleteAnswer}) => {
+const ExpertPanelAnswersTable = memo(({answers, showError, addAnswer, question_id, updateAnswer, deleteAnswer}) => {
     const columns = [
         {title: 'Текст*', field: 'text'},
         {title: 'Є вірною*', field: 'is_right', lookup: {0: 'Ні', 1: 'Так'}, initialEditValue: 0},

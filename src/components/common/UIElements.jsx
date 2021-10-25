@@ -1,33 +1,32 @@
 import {NavLink} from "react-router-dom";
-import React from "react";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import {makeStyles, useTheme} from "@material-ui/core/styles";
-import Pagination from "@material-ui/lab/Pagination";
-import PaginationItem from "@material-ui/lab/PaginationItem";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import Slide from "@material-ui/core/Slide";
+import {memo, forwardRef, useState} from "react";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import {makeStyles, useTheme} from "@mui/styles";
+import Pagination from "@mui/material/Pagination";
+import PaginationItem from "@mui/material/PaginationItem";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import Slide from "@mui/material/Slide";
 import {connect} from "react-redux";
 import {changePerPage} from "../../redux/appReducer";
-import TablePagination from "@material-ui/core/TablePagination";
-import MuiAlert from "@material-ui/lab/Alert";
-import IconButton from "@material-ui/core/IconButton";
-import {PhotoCamera, Delete as DeleteIcon} from "@material-ui/icons";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import ClearIcon from "@material-ui/icons/Clear";
-import {imageAcceptTypes} from "../../utils/utils";
+import TablePagination from "@mui/material/TablePagination";
+import MuiAlert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import {PhotoCamera, Delete as DeleteIcon} from "@mui/icons-material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import ClearIcon from "@mui/icons-material/Clear";
+import {imageAcceptTypes, useWidth} from "../../utils/utils";
 import Image from "material-ui-image";
-import Skeleton from "@material-ui/lab/Skeleton";
-import {withWidth} from "@material-ui/core";
+import Skeleton from "@mui/material/Skeleton";
 import queryString from "query-string";
 
-const TablePaginationCreator = React.memo(({pagination, changePerPage, changePage}) => {
+const TablePaginationCreator = memo(({pagination, changePerPage, changePage}) => {
     function setPerPage(event) {
         changePerPage(event.target.value);
     }
@@ -35,15 +34,15 @@ const TablePaginationCreator = React.memo(({pagination, changePerPage, changePag
     return (
         <TablePagination
             labelRowsPerPage='На сторінку'
-            backIconButtonText='Попередня сторінка'
-            nextIconButtonText='Наступна сторінка'
+            // backIconButtonText='Попередня сторінка'
+            // nextIconButtonText='Наступна сторінка'
             rowsPerPageOptions={[5, 10, 20]}
             component='div'
             count={pagination.totalCount}
             rowsPerPage={pagination.perPage}
             page={pagination.currentPage - 1}
-            onChangePage={changePage}
-            onChangeRowsPerPage={setPerPage}
+            onPageChange={changePage}
+            onRowsPerPageChange={setPerPage}
         />
     )
 })
@@ -54,15 +53,14 @@ export const TablePaginationCreatorWithConnect = connect(null, {changePerPage})(
 const useStylesPagination = makeStyles(theme => ({
     root: {
         marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-        paddingBottom: theme.spacing(2)
+        marginBottom: theme.spacing(1)
     },
     ul: {
         justifyContent: 'center'
     }
 }));
 
-const PaginationCreator = React.memo(({pagination, mainPath, linkPageName}) => {
+const PaginationCreator = memo(({pagination, mainPath, linkPageName}) => {
     const classes = useStylesPagination();
     return (
         <Pagination classes={{ul: classes.ul, root: classes.root}} count={pagination.last_page} color="primary"
@@ -78,19 +76,16 @@ const PaginationCreator = React.memo(({pagination, mainPath, linkPageName}) => {
 
 
 const useStylesListCreator = makeStyles(theme => ({
-    demo: {
-        backgroundColor: theme.palette.background.paper,
-    },
     pagination: {
         marginTop: theme.spacing(2),
     }
 }));
 
-export const ListCreator = React.memo(({pagination, dense, setDense, children, mainPath, linkPageName}) => {
+export const ListCreator = memo(({pagination, dense, setDense, children, mainPath, linkPageName}) => {
     const classes = useStylesListCreator();
 
     return (
-        <div>
+        <>
             <FormControlLabel
                 control={
                     <Checkbox
@@ -102,20 +97,20 @@ export const ListCreator = React.memo(({pagination, dense, setDense, children, m
                 }
                 label='Зробити компактніше'
             />
-            <div className={classes.demo} align='center'>
+            <Box className={classes.demo} align='center'>
                 {children}
                 {pagination && pagination.last_page > 1 &&
                 <PaginationCreator pagination={pagination} mainPath={mainPath} linkPageName={linkPageName}/>}
-            </div>
-        </div>
+            </Box>
+        </>
     )
 })
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export const DialogCreator = React.memo(({open, handleClose, title, text, confirmButton}) => {
+export const DialogCreator = memo(({open, handleClose, title, text, confirmButton}) => {
     return (
         <Dialog
             open={open}
@@ -132,7 +127,7 @@ export const DialogCreator = React.memo(({open, handleClose, title, text, confir
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={handleClose}>
                     Ні
                 </Button>
                 {confirmButton}
@@ -165,9 +160,9 @@ const useStylesUpload = makeStyles(theme => ({
     }
 }));
 
-export const UploadBox = React.memo(({onUploadChange, image, setImage, visibleDelete, deleteAction}) => {
+export const UploadBox = memo(({onUploadChange, image, setImage, visibleDelete, deleteAction}) => {
     const classes = useStylesUpload();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -199,7 +194,7 @@ export const UploadBox = React.memo(({onUploadChange, image, setImage, visibleDe
                     </IconButton>
                     <DialogCreator open={open} handleClose={handleClose} title='Видалення зображення'
                                    text='Ви дійсно хочете видалити зображення?' confirmButton={
-                        <Button onClick={deleteImage} color="primary">
+                        <Button onClick={deleteImage}>
                             Так
                         </Button>}/>
                 </>
@@ -228,9 +223,10 @@ const useStylesImageBox = makeStyles(theme => ({
     }
 }));
 
-const ImageBox = React.memo(({imageSrc, width, imageW, imageH}) => {
+const ImageBox = memo(({imageSrc, imageW, imageH}) => {
     const classes = useStylesImageBox();
     const theme = useTheme();
+    const width = useWidth();
 
     if (!(imageW && imageH)) {
         const imageSize = queryString.parseUrl(imageSrc).query;
@@ -243,7 +239,7 @@ const ImageBox = React.memo(({imageSrc, width, imageW, imageH}) => {
             <Box style={{width: imageW > (theme.breakpoints.values[width] || 320) ? '100%' : imageW}}>
                 <Image color={theme.palette.background.default} animationDuration={2000}
                        src={imageSrc}
-                       loading={<Skeleton animation='pulse' variant='rect' width={'inherit'}
+                       loading={<Skeleton animation='pulse' variant='rectangular' width={'inherit'}
                                           height={'inherit'}/>}
                        style={{width: '100%'}} aspectRatio={imageW / imageH}/>
             </Box>
@@ -251,4 +247,4 @@ const ImageBox = React.memo(({imageSrc, width, imageW, imageH}) => {
     );
 });
 
-export default withWidth()(ImageBox);
+export default ImageBox;

@@ -1,10 +1,10 @@
-import React from "react";
-import Link from "@material-ui/core/Link";
+import { memo, useState } from "react";
+import Link from "@mui/material/Link";
 import {DialogCreator} from "../../common/UIElements";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 
-const DeleteAccount = React.memo(({deleteUser, userId}) => {
-    const [open, setOpen] = React.useState(false);
+const DeleteAccount = memo(({deleteUser, userId}) => {
+    const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -21,12 +21,12 @@ const DeleteAccount = React.memo(({deleteUser, userId}) => {
 
     return (
         <>
-            <Link component="button" variant="body2" color={'secondary'} onClick={handleClickOpen}>
+            <Link component="button" variant="body2" color='secondary' onClick={handleClickOpen}>
                 Видалити акаунт
             </Link>
             <DialogCreator open={open} handleClose={handleClose} title='Видалення акаунта'
                            text='Ви дійсно хочете видалити акаунт?' confirmButton={
-                <Button onClick={deleteAccount} color="primary">
+                <Button onClick={deleteAccount}>
                     Так
                 </Button>}/>
         </>

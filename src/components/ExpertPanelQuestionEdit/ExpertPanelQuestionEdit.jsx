@@ -1,22 +1,22 @@
-import React, {useEffect} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { memo, useState, useEffect } from 'react';
+import {makeStyles} from '@mui/styles';
+import Container from '@mui/material/Container';
 import {compose} from "redux";
 import {withUnAuthRedirect} from "../../hoc/withUnAuthRedirect";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import {connect} from "react-redux";
 import {Preloader} from "../common/Preloader";
 import {withNotExpertRedirect} from "../../hoc/withNotExpertRedirect";
-import Link from "@material-ui/core/Link";
+import Link from "@mui/material/Link";
 import {NavLink} from "react-router-dom";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
 import {withRouter} from "react-router";
 import {testCategorySelectors} from "../../redux/selectors/testCategorySelectors";
 import {expertTestSelectors} from "../../redux/selectors/expertTestSelectors";
 import {getTestCategory} from "../../redux/testCategoryReducer";
 import {getExpertTest} from "../../redux/expertTestReducer";
 import ExpertQuestionForm from "../common/ExpertQuestionForm/ExpertQuestionForm";
-import Box from "@material-ui/core/Box";
+import Box from "@mui/material/Box";
 import {
     deleteQuestionImage,
     editQuestion,
@@ -41,13 +41,13 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ExpertPanelQuestionEdit = React.memo(({
+const ExpertPanelQuestionEdit = memo(({
                                            match, getTestCategory, getExpertTest,
                                            testCategoryName, expertTestName, getExpertQuestion, question, editQuestion,
                                            getExpertAnswers, uploadQuestionImage, deleteQuestionImage
                                        }) => {
     const classes = useStyles();
-    const [showPreloader, setShowPreloader] = React.useState(true);
+    const [showPreloader, setShowPreloader] = useState(true);
     const {enqueueSnackbar} = useSnackbar();
 
     const test_category_id = match.params.test_category_id;

@@ -1,10 +1,10 @@
-import React from 'react';
-import CancelIcon from "@material-ui/icons/Cancel";
-import Grid from "@material-ui/core/Grid";
-import {makeStyles} from "@material-ui/core/styles";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
+import { memo } from 'react';
+import CancelIcon from "@mui/icons-material/Cancel";
+import Grid from "@mui/material/Grid";
+import {makeStyles} from "@mui/styles";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
 import Answers from "./Answers/Answers";
 import ImageBox from "../../common/UIElements";
 
@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Question = React.memo(({q, answers, points}) => {
+const Question = memo(({q, answers, points}) => {
     const classes = useStyles();
     return (
         <Paper className={classes.paper}>

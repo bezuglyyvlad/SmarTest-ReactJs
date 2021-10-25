@@ -1,8 +1,8 @@
-import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import { memo } from 'react';
+import {makeStyles} from '@mui/styles';
 import {Line} from "react-chartjs-2";
-import {useTheme} from "@material-ui/styles";
-import Box from "@material-ui/core/Box";
+import {useTheme} from "@mui/styles";
+import Box from "@mui/material/Box";
 
 const useStyles = makeStyles(theme => ({
     chart: {
@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Chart = React.memo(({data}) => {
+const Chart = memo(({data}) => {
     const theme = useTheme();
     const classes = useStyles();
 

@@ -1,5 +1,7 @@
 import {kickUser} from "../redux/userReducer";
 import queryString from "query-string";
+import {useTheme} from "@mui/material/styles";
+import {useMediaQuery} from "@mui/material";
 
 export const getAvatarName = (name) => {
     return name.substr(0, 2);
@@ -122,4 +124,16 @@ export const getDoublePaginationsUrlParams = (
         linkPageName = '&' + linkPageName;
     }
     return {mainPath, linkPageName};
+}
+
+export const useWidth = () => {
+    const theme = useTheme();
+    const keys = [...theme.breakpoints.keys].reverse();
+    return (
+        keys.reduce((output, key) => {
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const matches = useMediaQuery(theme.breakpoints.up(key));
+            return !output && matches ? key : output;
+        }, null) || 'xs'
+    );
 }

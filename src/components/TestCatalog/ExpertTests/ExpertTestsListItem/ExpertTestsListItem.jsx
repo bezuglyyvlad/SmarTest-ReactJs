@@ -1,15 +1,15 @@
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItem from "@material-ui/core/ListItem";
-import React from "react";
-import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
-import Avatar from "@material-ui/core/Avatar";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemText from "@mui/material/ListItemText";
+import ListItem from "@mui/material/ListItem";
+import { useState } from "react";
+import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
+import Avatar from "@mui/material/Avatar";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
 import {DialogCreator} from "../../../common/UIElements";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import {NavLink} from "react-router-dom";
 
 const ExpertTestsListItem = ({value, startTest}) => {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -34,7 +34,7 @@ const ExpertTestsListItem = ({value, startTest}) => {
                     <DialogCreator open={open} handleClose={handleClose} title='Старт тесту'
                                    text={`Ви дійсно хочете розпочати тест "${value.title}"?`}
                                    confirmButton={
-                                       <Button onClick={() => startTest(value.id)} color="primary">
+                                       <Button onClick={() => startTest(value.id)}>
                                            Так
                                        </Button>}/>
                     : <DialogCreator open={open} handleClose={handleClose} title='Продовження тесту'
@@ -44,7 +44,7 @@ const ExpertTestsListItem = ({value, startTest}) => {
                                              .toLocaleString()}). Продовжити?`
                                      }
                                      confirmButton={
-                                         <Button component={NavLink} to={`/test/${value.test.id}`} color="primary">
+                                         <Button component={NavLink} to={`/test/${value.test.id}`}>
                                              Так
                                          </Button>}/>
             }

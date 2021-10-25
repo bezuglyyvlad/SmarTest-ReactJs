@@ -1,14 +1,14 @@
-import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import { memo } from 'react';
+import {makeStyles} from '@mui/styles';
 import {compose} from "redux";
-import Typography from "@material-ui/core/Typography";
-import Table from "@material-ui/core/Table";
-import {Paper, TableRow} from "@material-ui/core";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
+import Typography from "@mui/material/Typography";
+import Table from "@mui/material/Table";
+import {Paper, TableRow} from "@mui/material";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
 import {withRouter} from "react-router";
-import TableHead from "@material-ui/core/TableHead";
-import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableContainer from "@mui/material/TableContainer";
 
 const useStyles = makeStyles(theme => ({
     tableRow: {
@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TestsTable = React.memo(({dense, history, data, indexFirstItem}) => {
+const TestsTable = memo(({dense, history, data, indexFirstItem}) => {
     const classes = useStyles();
     return (
         <TableContainer component={Paper}>

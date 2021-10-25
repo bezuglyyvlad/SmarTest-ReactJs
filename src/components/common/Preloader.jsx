@@ -1,6 +1,6 @@
-import React from 'react';
-import LinearProgress from "@material-ui/core/LinearProgress";
+import { memo } from 'react';
+import LinearProgress from "@mui/material/LinearProgress";
 
-export const Preloader = React.memo(() => {
+export const Preloader = memo(() => {
     return <LinearProgress />
 })

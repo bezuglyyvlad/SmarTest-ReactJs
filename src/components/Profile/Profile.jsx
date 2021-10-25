@@ -1,17 +1,18 @@
-import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { memo } from 'react';
+import {makeStyles} from '@mui/styles';
+import Container from '@mui/material/Container';
 import {compose} from "redux";
 import {withUnAuthRedirect} from "../../hoc/withUnAuthRedirect";
-import Avatar from "@material-ui/core/Avatar";
-import Typography from "@material-ui/core/Typography";
+import Avatar from "@mui/material/Avatar";
+import Typography from "@mui/material/Typography";
 import ProfileForm from "./ProfileForm/ProfileForm";
 import {userSelectors} from "../../redux/selectors/userSelectors";
 import {connect} from "react-redux";
 import {getAvatarName} from "../../utils/utils";
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
 import {deleteUser, updateUser} from "../../redux/userReducer";
 import DeleteAccount from "./DeleteAccount/DeleteAccount";
+import Box from "@mui/material/Box";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -32,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Profile = React.memo(({userId, name, email, updateUser, deleteUser}) => {
+const Profile = memo(({userId, name, email, updateUser, deleteUser}) => {
 
     const classes = useStyles();
 
@@ -42,7 +43,7 @@ const Profile = React.memo(({userId, name, email, updateUser, deleteUser}) => {
 
     return (
         <Container component="main" maxWidth="xs">
-            <div className={classes.paper}>
+            <Box className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     {getAvatarName(name)}
                 </Avatar>
@@ -50,12 +51,12 @@ const Profile = React.memo(({userId, name, email, updateUser, deleteUser}) => {
                     Профіль
                 </Typography>
                 <ProfileForm onSubmit={onSubmit} initialValues={{name, email}}/>
-                <Grid container className={classes.deleteAccount} justify='center'>
+                <Grid container className={classes.deleteAccount} justifyContent='center'>
                     <Grid item>
                         <DeleteAccount deleteUser={deleteUser} userId={userId}/>
                     </Grid>
                 </Grid>
-            </div>
+            </Box>
         </Container>
     );
 });

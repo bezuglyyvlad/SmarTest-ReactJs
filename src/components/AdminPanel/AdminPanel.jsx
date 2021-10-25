@@ -1,14 +1,14 @@
-import React, {useEffect} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { memo, useState, useEffect } from 'react';
+import {makeStyles} from '@mui/styles';
+import Container from '@mui/material/Container';
 import {compose} from "redux";
 import {withUnAuthRedirect} from "../../hoc/withUnAuthRedirect";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import {connect} from "react-redux";
 import {withNotAdminRedirect} from "../../hoc/withNotAdminRedirect";
 import {getAdminTestCategories} from "../../redux/adminPanelReducer";
 import {Preloader} from "../common/Preloader";
-import Box from "@material-ui/core/Box";
+import Box from "@mui/material/Box";
 import AdminTable from "./AdminPanelTable/AdminPanelTable";
 import {useSnackbar} from "notistack";
 
@@ -22,9 +22,9 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const AdminPanel = React.memo(({getAdminTestCategories}) => {
+const AdminPanel = memo(({getAdminTestCategories}) => {
     const classes = useStyles();
-    const [showPreloader, setShowPreloader] = React.useState(true);
+    const [showPreloader, setShowPreloader] = useState(true);
     const {enqueueSnackbar} = useSnackbar();
 
     useEffect(() => {

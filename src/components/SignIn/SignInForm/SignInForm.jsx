@@ -1,10 +1,10 @@
-import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
+import Grid from "@mui/material/Grid";
+import Link from "@mui/material/Link";
 import {NavLink} from "react-router-dom";
-import React from "react";
-import {makeStyles} from "@material-ui/core/styles";
+import { memo } from "react";
+import {makeStyles} from "@mui/styles";
 import {reduxForm} from "redux-form";
-import {FormHelperText} from "@material-ui/core";
+import {FormHelperText} from "@mui/material";
 import {
     EmailField,
     PasswordField,
@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const SignInForm = React.memo(({handleSubmit, pristine, submitting, error}) => {
+const SignInForm = memo(({handleSubmit, pristine, submitting, error}) => {
     const classes = useStyles();
 
     return (
@@ -28,7 +28,7 @@ const SignInForm = React.memo(({handleSubmit, pristine, submitting, error}) => {
             <PasswordField labelText='Пароль'/>
             {error && <FormHelperText error={!!error}>{error}</FormHelperText>}
             <SubmitButton textButton='Увійти' disabled={pristine || submitting}/>
-            <Grid container justify="flex-end">
+            <Grid container justifyContent="flex-end">
                 <Grid item>
                     <Link component={NavLink} to='/signup' variant="body2">
                         У вас немає облікового запису? Зареєструватися

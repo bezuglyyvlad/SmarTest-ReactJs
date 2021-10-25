@@ -1,12 +1,12 @@
-import React from 'react';
-import ErrorIcon from '@material-ui/icons/Error';
-import Typography from "@material-ui/core/Typography";
-import {makeStyles} from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import { memo } from 'react';
+import ErrorIcon from '@mui/icons-material/Error';
+import Typography from "@mui/material/Typography";
+import {makeStyles} from "@mui/styles";
+import Grid from "@mui/material/Grid";
+import CssBaseline from "@mui/material/CssBaseline";
 import {NavLink} from "react-router-dom";
-import IconButton from "@material-ui/core/IconButton";
-import HomeIcon from '@material-ui/icons/Home';
+import IconButton from "@mui/material/IconButton";
+import HomeIcon from '@mui/icons-material/Home';
 
 const useStyles = makeStyles(theme => ({
     icon: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Error = React.memo(({error}) => {
+const Error = memo(({error}) => {
     const classes = useStyles();
 
     return (

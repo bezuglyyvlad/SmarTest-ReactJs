@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import MaterialTable from 'material-table';
 import {adminPanelValidate} from "../../../utils/validators";
 import {compose} from "redux";
@@ -9,7 +9,7 @@ import {adminPanelSelectors} from "../../../redux/selectors/adminPanelSelectors"
 import {appSelectors} from "../../../redux/selectors/appSelectors";
 import {materialTableLocalization} from "../../../utils/localization";
 
-const AdminPanelTable = React.memo(({
+const AdminPanelTable = memo(({
                                    showError, testCategories, addTestCategory, updateTestCategory,
                                    deleteTestCategory, perPage, changePerPage
                                }) => {

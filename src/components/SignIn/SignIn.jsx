@@ -1,9 +1,9 @@
-import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import {makeStyles} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { memo } from 'react';
+import Avatar from '@mui/material/Avatar';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import {makeStyles} from '@mui/styles';
+import Container from '@mui/material/Container';
 import SignInForm from "./SignInForm/SignInForm";
 import {connect} from "react-redux";
 import {signIn} from "../../redux/userReducer";
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const SignIn = React.memo(({signIn}) => {
+const SignIn = memo(({signIn}) => {
 
     const classes = useStyles();
 

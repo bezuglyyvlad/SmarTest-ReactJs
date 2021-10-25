@@ -1,23 +1,23 @@
-import React, {useEffect} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { memo, useState, useEffect } from 'react';
+import {makeStyles} from '@mui/styles';
+import Container from '@mui/material/Container';
 import {compose} from "redux";
 import {withUnAuthRedirect} from "../../hoc/withUnAuthRedirect";
 import {connect} from "react-redux";
 import {withRouter} from "react-router";
 import {Preloader} from "../common/Preloader";
-import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
 import {NavLink} from "react-router-dom";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Table from "@material-ui/core/Table";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+import Table from "@mui/material/Table";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
 import {getTestResult} from "../../redux/testResultReducer";
 import {testResultSelectors} from "../../redux/selectors/testResultSelectors";
 import Question from "./Question/Question";
-import {TableContainer} from "@material-ui/core";
+import {TableContainer} from "@mui/material";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -31,9 +31,9 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TestResult = React.memo(({match, getTestResult, test, questions, answers, complexity}) => {
+const TestResult = memo(({match, getTestResult, test, questions, answers, complexity}) => {
     const classes = useStyles();
-    const [showPreloader, setShowPreloader] = React.useState(true);
+    const [showPreloader, setShowPreloader] = useState(true);
 
     const test_id = match.params.test_id;
 

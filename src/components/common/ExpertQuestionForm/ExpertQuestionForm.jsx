@@ -1,12 +1,12 @@
-import React from "react";
-import {makeStyles} from "@material-ui/core/styles";
+import { memo } from "react";
+import {makeStyles} from "@mui/styles";
 import {reduxForm} from "redux-form";
-import {FormHelperText} from "@material-ui/core";
+import {FormHelperText} from "@mui/material";
 import {
     SelectField,
     SubmitButton, TextareaField,
-} from "../../common/FormElements";
-import MenuItem from "@material-ui/core/MenuItem";
+} from "../FormElements";
+import MenuItem from "@mui/material/MenuItem";
 import {required} from "../../../utils/validators";
 
 const useStyles = makeStyles(theme => ({
@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ExpertQuestionForm = React.memo(({handleSubmit, pristine, submitting, error}) => {
+const ExpertQuestionForm = memo(({handleSubmit, pristine, submitting, error}) => {
     const classes = useStyles();
 
     return (

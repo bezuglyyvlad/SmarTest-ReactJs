@@ -1,14 +1,14 @@
-import React from 'react';
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControl from "@material-ui/core/FormControl";
-import {FormGroup} from "@material-ui/core";
-import Checkbox from "@material-ui/core/Checkbox";
-import CancelIcon from "@material-ui/icons/Cancel";
-import Grid from "@material-ui/core/Grid";
-import {makeStyles} from "@material-ui/core/styles";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import { memo } from 'react';
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControl from "@mui/material/FormControl";
+import {FormGroup} from "@mui/material";
+import Checkbox from "@mui/material/Checkbox";
+import CancelIcon from "@mui/icons-material/Cancel";
+import Grid from "@mui/material/Grid";
+import {makeStyles} from "@mui/styles";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const useStyles = makeStyles(theme => ({
     checkIcon: {
@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Answers = React.memo(({type, data}) => {
+const Answers = memo(({type, data}) => {
     const classes = useStyles();
     let answers = undefined;
     switch (type) {

@@ -1,9 +1,9 @@
-import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Container from "@material-ui/core/Container";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import { memo } from 'react';
+import {makeStyles} from '@mui/styles';
+import Container from "@mui/material/Container";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import {NavLink} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const MainPage = React.memo(() => {
+const MainPage = memo(() => {
     const classes = useStyles();
     return (
         <Container component="main" maxWidth="lg" className={classes.root}>
@@ -35,7 +35,7 @@ const MainPage = React.memo(() => {
                 <Typography variant='h5'>
                     Тест буде підлаштовуватися під ваш рівень знань. Перевір свої знання прямо зараз.
                 </Typography>
-                <Button component={NavLink} to='/category' variant="contained" color="primary"
+                <Button component={NavLink} to='/category' variant="contained"
                         className={classes.button}>
                     Почати
                 </Button>

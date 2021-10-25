@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
+import { lazy, memo, useEffect } from 'react';
 import './App.css';
 import {BrowserRouter, Route} from "react-router-dom";
 import {Switch} from "react-router";
-import Box from "@material-ui/core/Box";
+import Box from "@mui/material/Box";
 import {connect} from "react-redux";
 import {compose} from "redux";
 import {initializeApp} from "./redux/appReducer";
@@ -11,40 +11,40 @@ import {withSuspense} from "./hoc/withSuspense";
 import Header from "./components/Header/Header";
 import {appSelectors} from "./redux/selectors/appSelectors";
 import ErrorBoundary from "./components/Error/ErrorBoundary";
-import {MuiThemeProvider} from "@material-ui/core";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import {ThemeProvider} from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 import {SnackbarProvider} from "notistack";
 
 
-const SignIn = React.lazy(() => import("./components/SignIn/SignIn"));
-const SignUp = React.lazy(() => import("./components/SignUp/SignUp"));
-const Profile = React.lazy(() => import("./components/Profile/Profile"));
-const Statistics = React.lazy(() => import("./components/Statistics/Statistics"));
-const MainPage = React.lazy(() => import("./components/MainPage/MainPage"));
-const TestCatalog = React.lazy(() => import("./components/TestCatalog/TestCatalog"));
-const Test = React.lazy(() => import("./components/Test/Test"));
-const TestResult = React.lazy(() => import("./components/TestResult/TestResult"));
-const AdminPanel = React.lazy(() => import("./components/AdminPanel/AdminPanel"));
-const ExpertPanelTestCategories = React.lazy(() => import("./components/ExpertPanelTestCategories/ExpertPanelTestCategories"));
-const ExpertPanelTests = React.lazy(() => import("./components/ExpertPanelTests/ExpertPanelTests"));
-const ExpertPanelQuestions = React.lazy(() => import("./components/ExpertPanelQuestions/ExpertPanelQuestions"));
-const ExpertPanelQuestionAdd = React.lazy(() => import("./components/ExpertPanelQuestionAdd/ExpertPanelQuestionAdd"));
-const ExpertPanelQuestionEdit = React.lazy(() => import("./components/ExpertPanelQuestionEdit/ExpertPanelQuestionEdit"));
-const XmlDocumentation = React.lazy(() => import("./components/XmlDocumentation/XmlDocumentation"));
-const ExpertPanelTestStatistics = React.lazy(() => import("./components/ExpertPanelTestStatistics/ExpertPanelTestStatistics"));
+const SignIn = lazy(() => import("./components/SignIn/SignIn"));
+const SignUp = lazy(() => import("./components/SignUp/SignUp"));
+const Profile = lazy(() => import("./components/Profile/Profile"));
+const Statistics = lazy(() => import("./components/Statistics/Statistics"));
+const MainPage = lazy(() => import("./components/MainPage/MainPage"));
+const TestCatalog = lazy(() => import("./components/TestCatalog/TestCatalog"));
+const Test = lazy(() => import("./components/Test/Test"));
+const TestResult = lazy(() => import("./components/TestResult/TestResult"));
+const AdminPanel = lazy(() => import("./components/AdminPanel/AdminPanel"));
+const ExpertPanelTestCategories = lazy(() => import("./components/ExpertPanelTestCategories/ExpertPanelTestCategories"));
+const ExpertPanelTests = lazy(() => import("./components/ExpertPanelTests/ExpertPanelTests"));
+const ExpertPanelQuestions = lazy(() => import("./components/ExpertPanelQuestions/ExpertPanelQuestions"));
+const ExpertPanelQuestionAdd = lazy(() => import("./components/ExpertPanelQuestionAdd/ExpertPanelQuestionAdd"));
+const ExpertPanelQuestionEdit = lazy(() => import("./components/ExpertPanelQuestionEdit/ExpertPanelQuestionEdit"));
+const XmlDocumentation = lazy(() => import("./components/XmlDocumentation/XmlDocumentation"));
+const ExpertPanelTestStatistics = lazy(() => import("./components/ExpertPanelTestStatistics/ExpertPanelTestStatistics"));
 
-const App = React.memo(({initializeApp, initialized, muiTheme}) => {
+const App = memo(({initializeApp, initialized, muiTheme}) => {
     useEffect(() => {
         initializeApp();
     }, [initializeApp]);
 
     if (!initialized) {
-        return <MuiThemeProvider theme={muiTheme}><Preloader/></MuiThemeProvider>;
+        return <ThemeProvider theme={muiTheme}><Preloader/></ThemeProvider>;
     }
 
     return (
         <BrowserRouter>
-            <MuiThemeProvider theme={muiTheme}>
+            <ThemeProvider theme={muiTheme}>
                 <ErrorBoundary>
                     <SnackbarProvider maxSnack={3} preventDuplicate anchorOrigin={{
                         vertical: 'bottom',
@@ -78,7 +78,7 @@ const App = React.memo(({initializeApp, initialized, muiTheme}) => {
                         </Box>
                     </SnackbarProvider>
                 </ErrorBoundary>
-            </MuiThemeProvider>
+            </ThemeProvider>
         </BrowserRouter>
     );
 })

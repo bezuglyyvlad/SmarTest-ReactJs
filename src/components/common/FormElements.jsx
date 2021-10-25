@@ -1,18 +1,18 @@
-import TextField from "@material-ui/core/TextField";
-import React from "react";
+import TextField from "@mui/material/TextField";
+import { memo } from "react";
 import {email, fieldMatch, maxLengthCreator, minLengthCreator, required} from "../../utils/validators";
 import {Field} from "redux-form";
-import Button from "@material-ui/core/Button";
-import {makeStyles} from "@material-ui/core/styles";
-import FormControl from "@material-ui/core/FormControl";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import FormHelperText from "@material-ui/core/FormHelperText";
+import Button from "@mui/material/Button";
+import {makeStyles} from "@mui/styles";
+import FormControl from "@mui/material/FormControl";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import FormHelperText from "@mui/material/FormHelperText";
 
-const renderTextField = React.memo(({
+const renderTextField = memo(({
                                         label,
                                         input,
                                         meta: {touched, invalid, error},
@@ -41,7 +41,7 @@ const useStylesSelect = makeStyles((theme) => ({
     },
 }));
 
-const renderSelectField = React.memo(({
+const renderSelectField = memo(({
                                           input,
                                           label,
                                           meta: {touched, error},
@@ -68,39 +68,35 @@ const minLength6 = minLengthCreator(6);
 
 const maxLength255 = maxLengthCreator(255);
 
-export const NameField = React.memo(() => (
+export const NameField = memo(() => (
     <Field id="name" name='name' component={renderTextField}
            validate={[required, minLength2, maxLength255]}
            label='Ім`я користувача'
-           variant="outlined"
            margin="normal"
            fullWidth/>
 ))
 
-export const EmailField = React.memo(() => (
+export const EmailField = memo(() => (
     <Field id="email" name='email' component={renderTextField}
            validate={[required, email]}
            label='Електронна пошта'
-           variant="outlined"
            margin="normal"
            fullWidth/>
 ))
 
-export const PasswordField = React.memo(({labelText}) => (
+export const PasswordField = memo(({labelText}) => (
     <Field id='password' name='password' component={renderTextField}
            validate={[required, minLength6, maxLength255]}
            label={labelText}
-           variant='outlined'
            margin='normal'
            type='password'
            fullWidth/>
 ))
 
-export const PasswordConfirmationField = React.memo(({labelText}) => (
+export const PasswordConfirmationField = memo(({labelText}) => (
     <Field id='password_confirmation' name='password_confirmation' component={renderTextField}
            validate={[required, minLength6, maxLength255, fieldMatch('password')]}
            label={labelText}
-           variant='outlined'
            margin='normal'
            type='password'
            fullWidth/>
@@ -112,7 +108,7 @@ const useStylesSubmitButton = makeStyles(theme => ({
     },
 }));
 
-export const SubmitButton = React.memo(({textButton, disabled}) => {
+export const SubmitButton = memo(({textButton, disabled}) => {
     const classes = useStylesSubmitButton();
 
     return (
@@ -120,7 +116,6 @@ export const SubmitButton = React.memo(({textButton, disabled}) => {
             type="submit"
             fullWidth
             variant="contained"
-            color="primary"
             className={classes.submit}
             disabled={disabled}
         >
@@ -128,20 +123,20 @@ export const SubmitButton = React.memo(({textButton, disabled}) => {
         </Button>)
 })
 
-export const TextareaField = React.memo(({label, name, validators}) => (
+export const TextareaField = memo(({label, name, validators}) => (
     <Field
         name={name}
         component={renderTextField}
         validate={validators}
         label={label}
         multiline
-        rowsMax="10"
+        maxRows="10"
         margin="normal"
         fullWidth
     />
 ))
 
-export const SelectField = React.memo(({children, name, label}) => (
+export const SelectField = memo(({children, name, label}) => (
     <Field
         name={name}
         component={renderSelectField}
@@ -164,7 +159,7 @@ export const renderCheckbox = ({input, label}) => (
         <FormControlLabel
             control={
                 <Checkbox color='primary'
-                          checked={input.value ? true : false}
+                          checked={!!input.value}
                           onChange={input.onChange}/>
             }
             label={label}

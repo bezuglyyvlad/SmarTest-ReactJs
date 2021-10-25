@@ -1,8 +1,8 @@
-import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Typography from "@material-ui/core/Typography";
-import {MobileStepper} from "@material-ui/core";
-import Box from "@material-ui/core/Box";
+import { memo } from 'react';
+import {makeStyles} from '@mui/styles';
+import Typography from "@mui/material/Typography";
+import {MobileStepper} from "@mui/material";
+import Box from "@mui/material/Box";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TestProgress = React.memo(({number_question, count_of_questions}) => {
+const TestProgress = memo(({number_question, count_of_questions}) => {
     const classes = useStyles();
     return (
         <Box className={classes.root}>

@@ -1,11 +1,11 @@
-import React, {useEffect} from "react";
-import {makeStyles} from "@material-ui/core/styles";
+import { memo, useState, useEffect } from "react";
+import {makeStyles} from "@mui/styles";
 import {reduxForm} from "redux-form";
-import {FormHelperText} from "@material-ui/core";
+import {FormHelperText} from "@mui/material";
 import {
     EmailField, NameField, PasswordConfirmationField, PasswordField, SubmitButton
 } from "../../common/FormElements";
-import Snackbar from "@material-ui/core/Snackbar";
+import Snackbar from "@mui/material/Snackbar";
 import {Alert} from "../../common/UIElements";
 
 const useStyles = makeStyles(theme => ({
@@ -15,10 +15,10 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ProfileForm = React.memo(({handleSubmit, pristine, submitting, error, ...props}) => {
+const ProfileForm = memo(({handleSubmit, pristine, submitting, error, ...props}) => {
     const classes = useStyles();
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         setOpen(!submitting && !props.submitFailed && props.submitSucceeded);

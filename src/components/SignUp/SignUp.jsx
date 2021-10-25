@@ -1,11 +1,11 @@
-import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { memo } from 'react';
+import {makeStyles} from '@mui/styles';
+import Container from '@mui/material/Container';
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
-import Avatar from "@material-ui/core/Avatar";
-import Typography from "@material-ui/core/Typography";
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Avatar from "@mui/material/Avatar";
+import Typography from "@mui/material/Typography";
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {connect} from "react-redux";
 import SignUpForm from "./SignUpForm/SignUpForm";
 import {signUp} from "../../redux/userReducer";
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const SignUp = React.memo(({signUp}) => {
+const SignUp = memo(({signUp}) => {
     const classes = useStyles();
 
     const onSubmit = ({name, email, password, password_confirmation}) => {

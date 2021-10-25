@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import MaterialTable from 'material-table';
 import {compose} from "redux";
 import {connect} from "react-redux";
@@ -8,9 +8,9 @@ import {materialTableLocalization} from "../../../utils/localization";
 import {expertPanelTestsSelectors} from "../../../redux/selectors/expertPanelTestsSelectors";
 import {expertTestsValidate} from "../../../utils/validators";
 import {addTest, deleteTest, updateTest} from "../../../redux/expertPanelTestsReducer";
-import BarChartIcon from '@material-ui/icons/BarChart';
+import BarChartIcon from '@mui/icons-material/BarChart';
 
-const ExpertPanelTestsTable = React.memo(({
+const ExpertPanelTestsTable = memo(({
                                          perPage, changePerPage, rowClick,
                                          tests, showError, category_id, addTest, updateTest, deleteTest, history
                                      }) => {

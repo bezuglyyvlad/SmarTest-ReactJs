@@ -1,30 +1,32 @@
-import React, {useEffect} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import { memo, useState, useEffect } from 'react';
+import {makeStyles} from '@mui/styles';
 import {compose} from "redux";
 import {Redirect} from "react-router";
 import {connect} from "react-redux";
 import {ListCreator} from "../../common/UIElements";
-import List from "@material-ui/core/List";
+import List from "@mui/material/List";
 import ExpertTestsListItem from "./ExpertTestsListItem/ExpertTestsListItem";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import {Preloader} from "../../common/Preloader";
 import {createTest, getExpertTests} from "../../../redux/expertTestsReducer";
 import {expertTestsSelectors} from "../../../redux/selectors/expertTestsSelectors";
 import {getDoublePaginationsUrlParams} from "../../../utils/utils";
+import Paper from "@mui/material/Paper";
 
 const useStyles = makeStyles(theme => ({
-    title: {
-        margin: theme.spacing(2, 0),
-    },
+    paper: {
+        padding: theme.spacing(1),
+        marginTop: theme.spacing(2)
+    }
 }));
 
-const ExpertTests = React.memo(({
+const ExpertTests = memo(({
                                     getExpertTests, expert_test_page, test_category_page, test_category_id, expertTests,
                                     pagination, createTest, testCreatedId, locationPathname, locationSearch
                                 }) => {
     const classes = useStyles();
-    const [dense, setDense] = React.useState(false);
-    const [showPreloader, setShowPreloader] = React.useState(true);
+    const [dense, setDense] = useState(false);
+    const [showPreloader, setShowPreloader] = useState(true);
 
     useEffect(() => {
         let mounted = true; // exclude memory leak
@@ -55,8 +57,8 @@ const ExpertTests = React.memo(({
     );
 
     return (
-        <>
-            <Typography variant="h5" align='left' className={classes.title} component='h2'>
+        <Paper className={classes.paper}>
+            <Typography variant="h5" align='left' component='h2'>
                 {'Тести'} {
                 expertTests.length === 0 &&
                 <p>(на жаль в даній категорії немає тестів)</p>
@@ -75,7 +77,7 @@ const ExpertTests = React.memo(({
                     </List>
                 </ListCreator>
             }
-        </>
+        </Paper>
     );
 });
 

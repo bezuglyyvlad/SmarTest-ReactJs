@@ -1,13 +1,13 @@
-import React, {useEffect} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { memo, useState, useEffect } from 'react';
+import {makeStyles} from '@mui/styles';
+import Container from '@mui/material/Container';
 import {compose} from "redux";
 import {withUnAuthRedirect} from "../../hoc/withUnAuthRedirect";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import {connect} from "react-redux";
 import {Preloader} from "../common/Preloader";
 import {withNotExpertRedirect} from "../../hoc/withNotExpertRedirect";
-import List from "@material-ui/core/List";
+import List from "@mui/material/List";
 import {ListCreator} from "../common/UIElements";
 import ExpertCategoriesListItem from "./ExpertPanelTestCategoriesListItem/ExpertPanelTestCategoriesListItem";
 import {getExpertTestCategories} from "../../redux/expertPanelTestCategoriesReducer";
@@ -23,10 +23,10 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ExpertPanelTestCategories = React.memo(({categories, getExpertCategories}) => {
+const ExpertPanelTestCategories = memo(({categories, getExpertCategories}) => {
     const classes = useStyles();
-    const [showPreloader, setShowPreloader] = React.useState(true);
-    const [dense, setDense] = React.useState(false);
+    const [showPreloader, setShowPreloader] = useState(true);
+    const [dense, setDense] = useState(false);
 
     useEffect(() => {
         let mounted = true; // exclude memory leak

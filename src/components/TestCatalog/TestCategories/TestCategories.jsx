@@ -1,23 +1,25 @@
-import React, {useEffect} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import { memo, useState, useEffect } from 'react';
+import {makeStyles} from '@mui/styles';
 import {compose} from "redux";
-import List from "@material-ui/core/List";
+import List from "@mui/material/List";
 import TestCategoriesListItem from "./TestCategoriesListItem/TestCategoriesListItem";
 import {getTestCategories} from "../../../redux/testCategoriesReducer";
 import {connect} from "react-redux";
 import {testCategoriesSelectors} from "../../../redux/selectors/testCategoriesSelectors";
 import {ListCreator} from "../../common/UIElements";
 import {Preloader} from "../../common/Preloader";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import {getDoublePaginationsUrlParams} from "../../../utils/utils";
+import Paper from "@mui/material/Paper";
 
 const useStyles = makeStyles(theme => ({
-    title: {
-        margin: theme.spacing(2, 0),
-    },
+    paper: {
+        padding: theme.spacing(1),
+        marginTop: theme.spacing(2)
+    }
 }));
 
-const TestCategories = React.memo(({
+const TestCategories = memo(({
                                        getTestCategories,
                                        testCategories,
                                        pagination,
@@ -28,8 +30,8 @@ const TestCategories = React.memo(({
                                        locationSearch
                                    }) => {
     const classes = useStyles();
-    const [dense, setDense] = React.useState(false);
-    const [showPreloader, setShowPreloader] = React.useState(true);
+    const [dense, setDense] = useState(false);
+    const [showPreloader, setShowPreloader] = useState(true);
 
     useEffect(() => {
         let mounted = true; // exclude memory leak
@@ -54,11 +56,11 @@ const TestCategories = React.memo(({
     );
 
     return (
-        <>
+        <Paper className={classes.paper}>
             {
                 testCategories.length !== 0 &&
                 <>
-                    <Typography variant="h5" align='left' className={classes.title} component='h2'>
+                    <Typography variant="h5" align='left' component='h2'>
                         {test_category_id ? 'Підкатегорії' : 'Категорії'}
                     </Typography>
                     <ListCreator pagination={pagination} dense={dense} setDense={setDense} mainPath={mainPath}
@@ -72,7 +74,7 @@ const TestCategories = React.memo(({
                     </ListCreator>
                 </>
             }
-        </>
+        </Paper>
     );
 });
 
