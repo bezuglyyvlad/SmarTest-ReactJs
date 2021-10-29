@@ -32,10 +32,7 @@ const TestCatalog = memo(({location, match, breadcrumbs}) => {
     const test_category_id = match.params.test_category_id;
 
     return (
-        <Container component="main" maxWidth="md" className={classes.root}>
-            <Typography variant="h5" align='center' className={classes.title} component='h1'>
-                Каталог тестів
-            </Typography>
+        <Container component="main" maxWidth="lg" className={classes.root}>
             {
                 breadcrumbs.length !== 0 &&
                 <Breadcrumbs aria-label="breadcrumb">
@@ -53,6 +50,9 @@ const TestCatalog = memo(({location, match, breadcrumbs}) => {
                     <Typography color="textPrimary">{breadcrumbs[breadcrumbs.length - 1].title}</Typography>
                 </Breadcrumbs>
             }
+            <Typography variant="h5" align='center' className={classes.title} component='h1'>
+                Каталог тестів
+            </Typography>
             <TestCategories test_category_page={test_category_page} expert_test_page={expert_test_page}
                             test_category_id={test_category_id} locationPathname={location.pathname}
                             locationSearch={location.search}/>

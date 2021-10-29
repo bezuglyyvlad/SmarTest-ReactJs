@@ -92,8 +92,12 @@ export const signUp = (name, email, password, password_confirmation) => async (d
 }
 
 export const signOut = () => async (dispatch) => {
-    await userAPI.signOut();
-    kickUser(dispatch);
+    try {
+        await userAPI.signOut();
+        kickUser(dispatch);
+    } catch (e) {
+        await defaultThunkReject(e, dispatch);
+    }
 }
 
 export const updateUser = (userId, name, email, password, password_confirmation) => async (dispatch) => {
@@ -114,8 +118,12 @@ export const updateUser = (userId, name, email, password, password_confirmation)
 }
 
 export const deleteUser = (userId) => async (dispatch) => {
-    await userAPI.deleteUser(userId);
-    kickUser(dispatch);
+    try {
+        await userAPI.deleteUser(userId);
+        kickUser(dispatch);
+    } catch (e) {
+        await defaultThunkReject(e, dispatch);
+    }
 }
 
 export const kickUser = (dispatch) => {

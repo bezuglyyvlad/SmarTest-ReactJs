@@ -1,5 +1,5 @@
 import {adminPanelAPI} from "../api/api";
-import {errorInArrayOfString} from "../utils/utils";
+import {defaultThunkReject, errorInArrayOfString} from "../utils/utils";
 
 const SET_CATEGORIES = 'adminPanel/SET_CATEGORIES';
 const DELETE_CATEGORY = 'adminPanel/DELETE_CATEGORY';
@@ -29,8 +29,12 @@ const setCategoriesAC = (categories) => ({type: SET_CATEGORIES, categories});
 const deleteCategoryAC = (category_id) => ({type: DELETE_CATEGORY, category_id});
 
 export const getAdminTestCategories = () => async (dispatch) => {
-    const response = await adminPanelAPI.getCategories();
-    dispatch(setCategoriesAC(response.data));
+    try {
+        const response = await adminPanelAPI.getCategories();
+        dispatch(setCategoriesAC(response.data.data));
+    } catch (e) {
+        await defaultThunkReject(e, dispatch);
+    }
 }
 
 export const updateTestCategory = (category_id, name, userEmail) => async (dispatch) => {

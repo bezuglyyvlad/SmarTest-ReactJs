@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from 'react';
+import {memo, useState, useEffect} from 'react';
 import {makeStyles} from '@mui/styles';
 import Container from '@mui/material/Container';
 import {compose} from "redux";
@@ -7,13 +7,13 @@ import {connect} from "react-redux";
 import {testSelectors} from "../../redux/selectors/testSelectors";
 import {Redirect, withRouter} from "react-router";
 import {Preloader} from "../common/Preloader";
-import {getTest, nextQuestion} from "../../redux/testReducer";
+import {getTest, nextQuestion, setTestIsFinished} from "../../redux/testReducer";
 import Typography from "@mui/material/Typography";
 import TestForm from "./TestForm/TestForm";
-import TestProgress from "./TestProgress/TestProgress";
 import TestInfo from "./TestInfo/TestInfo";
 import {getTimer} from "../../utils/utils";
 import ImageBox from "../common/UIElements";
+import Paper from "@mui/material/Paper";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -26,13 +26,15 @@ const useStyles = makeStyles(theme => ({
     title: {
         textAlign: 'center',
         marginBottom: theme.spacing(3),
+    },
+    paper: {
+        padding: theme.spacing(1, 1, 0),
     }
 }));
 
-const Test = memo(({testInfo, question, answers, match, getTest, nextQuestion}) => {
+const Test = memo(({testInfo, question, answers, match, getTest, nextQuestion, setTestIsFinished, testIsFinished}) => {
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = useState(true);
-    const [testFinished, setTestFinished] = useState(false);
     const [timer, setTimer] = useState('0');
 
     const test_id = match.params.test_id;
@@ -52,43 +54,50 @@ const Test = memo(({testInfo, question, answers, match, getTest, nextQuestion}) 
         const delay = timer === '0' ? null : 1000; //for delete begin delay
         if (testInfo) {
             interval = setInterval(() => {
-                setTimer(getTimer(testInfo.date_finish));
+                setTimer(getTimer(testInfo.finish_date));
             }, delay);
-            if ((new Date()) >= (new Date(testInfo.date_finish))) {
-                setTestFinished(true);
+            if ((new Date()) >= (new Date(testInfo.finish_date))) {
+                setTestIsFinished(true);
             }
         }
         return () => clearInterval(interval);
-    }, [timer, testInfo]);
+    }, [timer, testInfo, setTestIsFinished]);
 
     const onSubmit = async ({answer}) => {
-        //swap array [0: '', ..., 85 - 'answer_id': true]; to object {85: true}
+        //swap array [0: '', ..., 85(answer_id): true]; to array [85]
         if (Array.isArray(answer)) {
-            answer = {...answer};
+            const answerObject = {...answer};
+            answer = Object.keys(
+                Object.fromEntries(Object.entries(answerObject).filter(([key, val]) => val === true))
+            ).map(key => parseInt(key))
+        } else {
+            answer = [parseInt(answer)];
         }
-        const isLastQuestion = question.number_question === testInfo.count_of_questions;
-        await nextQuestion(testInfo.test_id, answer);
-        setTestFinished(isLastQuestion);
+        setShowPreloader(true);
+        await nextQuestion(testInfo.id, answer);
+        setShowPreloader(false);
     }
 
-    if (testFinished) return <Redirect
-        to={`/test/${testInfo.test_id}/result`}/>;
+    if (testIsFinished) return <Redirect
+        to={`/test/${testInfo.id}/result`}/>;
 
-    if (showPreloader || !question) return <Preloader/>;
+    if (showPreloader) return <Preloader/>;
 
     return (
-        <Container component="main" maxWidth="md" className={classes.root}>
+        <Container component="main" maxWidth="lg" className={classes.root}>
             <Typography component='h1' variant='h5' className={classes.title}>
                 Тест
             </Typography>
-            <TestInfo expert_test_name={testInfo.expert_test_name} test_category_name={testInfo.test_category_name}
-                      timer={timer}/>
-            <TestProgress number_question={question.number_question} count_of_questions={testInfo.count_of_questions}/>
-            <Typography className={classes.question} variant='h6'>
-                {question.text}
-            </Typography>
-            {question.image && <ImageBox imageSrc={question.image}/>}
-            <TestForm onSubmit={onSubmit} data={answers} type={question.type}/>
+            <Paper className={classes.paper}>
+                <TestInfo expert_test_name={testInfo.expert_test.title}
+                          test_category_name={testInfo.expert_test.test_category.title}
+                          timer={timer}/>
+                <Typography component='h2' className={classes.question} variant='h6'>
+                    {`${question.serial_number}. ${question.question.text}`}
+                </Typography>
+                {question.image && <ImageBox imageSrc={question.question.image}/>}
+                <TestForm onSubmit={onSubmit} answers={answers} type={question.question.type}/>
+            </Paper>
         </Container>
     );
 });
@@ -97,6 +106,11 @@ const mapStateToProps = (state) => ({
     testInfo: testSelectors.getTestInfo(state),
     question: testSelectors.getQuestion(state),
     answers: testSelectors.getAnswers(state),
+    testIsFinished: testSelectors.getTestIsFinished(state),
 })
 
-export default compose(withUnAuthRedirect, withRouter, connect(mapStateToProps, {getTest, nextQuestion}))(Test);
+export default compose(
+    withUnAuthRedirect,
+    withRouter,
+    connect(mapStateToProps, {getTest, nextQuestion, setTestIsFinished})
+)(Test);

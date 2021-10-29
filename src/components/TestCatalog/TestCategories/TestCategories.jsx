@@ -3,6 +3,7 @@ import {makeStyles} from '@mui/styles';
 import {compose} from "redux";
 import List from "@mui/material/List";
 import TestCategoriesListItem from "./TestCategoriesListItem/TestCategoriesListItem";
+import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
 import {getTestCategories} from "../../../redux/testCategoriesReducer";
 import {connect} from "react-redux";
 import {testCategoriesSelectors} from "../../../redux/selectors/testCategoriesSelectors";
@@ -11,6 +12,7 @@ import {Preloader} from "../../common/Preloader";
 import Typography from "@mui/material/Typography";
 import {getDoublePaginationsUrlParams} from "../../../utils/utils";
 import Paper from "@mui/material/Paper";
+import FolderIcon from "@mui/icons-material/Folder";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -55,11 +57,13 @@ const TestCategories = memo(({
         locationSearch
     );
 
+    const icon = test_category_id ? <SubdirectoryArrowRightIcon/> : <FolderIcon/>;
+
     return (
-        <Paper className={classes.paper}>
+        <>
             {
                 testCategories.length !== 0 &&
-                <>
+                <Paper className={classes.paper}>
                     <Typography variant="h5" align='left' component='h2'>
                         {test_category_id ? 'Підкатегорії' : 'Категорії'}
                     </Typography>
@@ -68,13 +72,13 @@ const TestCategories = memo(({
                         <List dense={dense}>
                             {
                                 testCategories.map(value => (
-                                    <TestCategoriesListItem key={value.id} value={value}/>))
+                                    <TestCategoriesListItem key={value.id} value={value} icon={icon}/>))
                             }
                         </List>
                     </ListCreator>
-                </>
+                </Paper>
             }
-        </Paper>
+        </>
     );
 });
 

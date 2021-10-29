@@ -1,7 +1,7 @@
 import ListItemText from "@mui/material/ListItemText";
 import ListItem from "@mui/material/ListItem";
 import { useState } from "react";
-import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
+import QuizIcon from '@mui/icons-material/Quiz';
 import Avatar from "@mui/material/Avatar";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import {DialogCreator} from "../../../common/UIElements";
@@ -24,7 +24,7 @@ const ExpertTestsListItem = ({value, startTest}) => {
             <ListItem button onClick={handleClickOpen}>
                 <ListItemAvatar>
                     <Avatar>
-                        <SubdirectoryArrowRightIcon/>
+                        <QuizIcon/>
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={value.title}/>

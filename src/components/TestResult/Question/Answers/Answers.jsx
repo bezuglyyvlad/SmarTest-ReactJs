@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import {memo} from 'react';
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Answers = memo(({type, data}) => {
+const Answers = memo(({type, data, user_answer}) => {
     const classes = useStyles();
     let answers = undefined;
     switch (type) {
@@ -27,20 +27,20 @@ const Answers = memo(({type, data}) => {
             answers = <FormControl>
                 <RadioGroup name='answers'>
                     {data.map(a => {
-                        const radio = a.is_user_answer === 1 ?
+                        const radio = user_answer.includes(a.id) ?
                             <Radio checked/> : <Radio/>;
-                        return a.is_right === a.is_user_answer ?
-                            <FormControlLabel key={a.test_answer_id} value={a.test_answer_id} disabled
-                                              control={radio}
-                                              label={a.text}/> :
-                            <Grid container alignItems='center' wrap='nowrap' key={a.test_answer_id}>
-                                {a.is_right === 1 ? <CheckCircleIcon className={classes.checkIcon}/> :
-                                    <CancelIcon className={classes.cancelIcon}/>}<FormControlLabel
-                                value={a.test_answer_id}
-                                disabled
-                                control={radio}
-                                label={a.text}/>
+                        return (
+                            <Grid container alignItems='center' wrap='nowrap' key={a.id}>
+                                {
+                                    !!a.is_correct !== user_answer.includes(a.id) && (a.is_correct === 1 ?
+                                        <CheckCircleIcon className={classes.checkIcon}/> :
+                                        <CancelIcon className={classes.cancelIcon}/>)
+                                }
+                                <FormControlLabel key={a.id} value={a.id} disabled
+                                                  control={radio}
+                                                  label={a.text}/>
                             </Grid>
+                        )
                     })}
                 </RadioGroup>
             </FormControl>
@@ -48,16 +48,20 @@ const Answers = memo(({type, data}) => {
         case 2:
             answers = <FormGroup>
                 {data.map(a => {
-                    const ckeckbox = a.is_user_answer === 1 ?
+                    const ckeckbox = user_answer.includes(a.id) ?
                         <Checkbox checked name="answers"/> : <Checkbox name="answers"/>;
-                    return a.is_right === a.is_user_answer ?
-                        <FormControlLabel key={a.test_answer_id} disabled control={ckeckbox} label={a.text}/> :
-                        <Grid container alignItems='center' wrap='nowrap' key={a.test_answer_id}>
-                            {a.is_right === 1 ? <CheckCircleIcon className={classes.checkIcon}/> :
-                                <CancelIcon className={classes.cancelIcon}/>}<FormControlLabel disabled
-                                                                                               control={ckeckbox}
-                                                                                               label={a.text}/>
+                    return (
+                        <Grid container alignItems='center' wrap='nowrap' key={a.id}>
+                            {
+                                !!a.is_correct !== user_answer.includes(a.id) && (a.is_correct === 1 ?
+                                    <CheckCircleIcon className={classes.checkIcon}/> :
+                                    <CancelIcon className={classes.cancelIcon}/>)
+                            }
+                            <FormControlLabel disabled
+                                              control={ckeckbox}
+                                              label={a.text}/>
                         </Grid>
+                    )
                 })}
             </FormGroup>
             break;

@@ -40,7 +40,7 @@ const Chart = memo(({data}) => {
                         display: false,
                     }
                 }}
-                height={200}
+                type='line'
             />
         </Box>
     );

@@ -36,11 +36,11 @@ const TablePaginationCreator = memo(({pagination, changePerPage, changePage}) =>
             labelRowsPerPage='На сторінку'
             // backIconButtonText='Попередня сторінка'
             // nextIconButtonText='Наступна сторінка'
-            rowsPerPageOptions={[5, 10, 20]}
+            rowsPerPageOptions={[5, 10, 15, 20]}
             component='div'
-            count={pagination.totalCount}
-            rowsPerPage={pagination.perPage}
-            page={pagination.currentPage - 1}
+            count={pagination.total}
+            rowsPerPage={pagination.per_page}
+            page={pagination.current_page - 1}
             onPageChange={changePage}
             onRowsPerPageChange={setPerPage}
         />

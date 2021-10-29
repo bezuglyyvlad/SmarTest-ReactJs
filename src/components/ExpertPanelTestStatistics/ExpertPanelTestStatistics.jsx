@@ -54,7 +54,7 @@ const ExpertPanelTestStatistics = memo(({match, getCategory, getSubcategory,
     }
 
     return (
-        <Container component="main" maxWidth="md" className={classes.root}>
+        <Container component="main" maxWidth="lg" className={classes.root}>
             <Breadcrumbs aria-label="breadcrumb">
                 <Link color="inherit" component={NavLink} to='/expertPanel'>
                     Expert панель

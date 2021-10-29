@@ -1,16 +1,15 @@
 import {NavLink} from "react-router-dom";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
-import FolderIcon from "@mui/icons-material/Folder";
 import ListItemText from "@mui/material/ListItemText";
 import ListItem from "@mui/material/ListItem";
 
-const TestCategoriesListItem = ({value}) => {
+const TestCategoriesListItem = ({value, icon}) => {
     return (
         <ListItem button component={NavLink} to={'/testCatalog/' + value.id}>
             <ListItemAvatar>
                 <Avatar>
-                    <FolderIcon/>
+                    {icon}
                 </Avatar>
             </ListItemAvatar>
             <ListItemText

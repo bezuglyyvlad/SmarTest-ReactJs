@@ -48,7 +48,7 @@ const AdminPanel = memo(({getAdminTestCategories}) => {
     }
 
     return (
-        <Container component="main" maxWidth="md" className={classes.root}>
+        <Container component="main" maxWidth="lg" className={classes.root}>
             <Typography component="h1" variant="h5" align='center'>
                 Admin панель
             </Typography>

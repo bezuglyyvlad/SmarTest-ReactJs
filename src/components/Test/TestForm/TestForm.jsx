@@ -12,11 +12,11 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const TestForm = memo(({handleSubmit, pristine, submitting, data, type}) => {
+const TestForm = memo(({handleSubmit, pristine, submitting, answers, type}) => {
     const classes = useStyles();
     return (
         <form className={classes.root} onSubmit={handleSubmit}>
-            <Answers type={type} data={data}/>
+            <Answers type={type} data={answers}/>
             <SubmitButton textButton='Відповісти' disabled={pristine || submitting}/>
         </form>
     );

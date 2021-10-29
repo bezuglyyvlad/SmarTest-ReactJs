@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import MaterialTable from 'material-table';
 import {adminPanelValidate} from "../../../utils/validators";
 import {compose} from "redux";
 import {connect} from "react-redux";
@@ -8,6 +7,7 @@ import {changePerPage} from "../../../redux/appReducer";
 import {adminPanelSelectors} from "../../../redux/selectors/adminPanelSelectors";
 import {appSelectors} from "../../../redux/selectors/appSelectors";
 import {materialTableLocalization} from "../../../utils/localization";
+import MaterialTable from "material-table";
 
 const AdminPanelTable = memo(({
                                    showError, testCategories, addTestCategory, updateTestCategory,
@@ -21,7 +21,7 @@ const AdminPanelTable = memo(({
             emptyValue: null,
             render: rowData => rowData.tableData.id + 1
         },
-        {title: 'Назва*', field: 'name'},
+        {title: 'Назва*', field: 'title'},
         {title: 'Електронна пошта (Експерта)', field: 'user.email'},
     ];
 

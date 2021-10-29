@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from 'react';
+import {memo, useState, useEffect} from 'react';
 import {makeStyles} from '@mui/styles';
 import Container from '@mui/material/Container';
 import {compose} from "redux";
@@ -31,7 +31,16 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TestResult = memo(({match, getTestResult, test, questions, answers, complexity}) => {
+const TestResult = memo(({
+                             match,
+                             getTestResult,
+                             test,
+                             questions,
+                             answers,
+                             count_of_right_answers,
+                             basicPoints,
+                             correctionCoef
+                         }) => {
     const classes = useStyles();
     const [showPreloader, setShowPreloader] = useState(true);
 
@@ -49,28 +58,26 @@ const TestResult = memo(({match, getTestResult, test, questions, answers, comple
 
     if (showPreloader) return <Preloader/>;
 
-    const points = Math.round((100 / test.count_of_questions) * 100) / 100;
-
     const rows = [
-        {title: 'Назва', value: test.subcategory_name},
-        {title: 'Категорія', value: test.category_name},
-        {title: 'Початок тесту', value: (new Date(test.date_start)).toLocaleString()},
-        {title: 'Завершення тесту', value: (new Date(test.date_finish)).toLocaleString()},
-        {title: 'Співвідношення складності питань (легкі/середні/складні)', value: complexity},
-        {title: 'Правильних відповідей', value: `${test.count_of_right_answers} з ${test.count_of_questions}`},
+        {title: 'Назва', value: test.expert_test.title},
+        {title: 'Категорія', value: test.expert_test.test_category.title},
+        {title: 'Початок тесту', value: (new Date(test.start_date)).toLocaleString()},
+        {title: 'Завершення тесту', value: (new Date(test.finish_date)).toLocaleString()},
+        // {title: 'Співвідношення складності питань (легкі/середні/складні)', value: complexity},
+        {title: 'Правильних відповідей', value: count_of_right_answers},
         {title: 'Балів', value: test.score},
     ];
 
     return (
-        <Container component="main" maxWidth="md" className={classes.root}>
+        <Container component="main" maxWidth="lg" className={classes.root}>
             <Breadcrumbs aria-label="breadcrumb">
                 <Link color="inherit" component={NavLink} to='/statistics'>
                     Статистика
                 </Link>
-                <Typography color="textPrimary">{test.subcategory_name}</Typography>
+                <Typography color="textPrimary">{test.expert_test.title}</Typography>
             </Breadcrumbs>
             <Typography component="h1" variant="h5" align='center' className={classes.title}>
-                Результат тесту {!test.subcategory_id && '(тест був видалений)'}
+                Результат тесту {test.expert_test.active_record === 0 && '(тест був видалений)'}
             </Typography>
             <TableContainer>
                 <Table aria-label="simple table" className={classes.table}>
@@ -85,7 +92,11 @@ const TestResult = memo(({match, getTestResult, test, questions, answers, comple
                 </Table>
             </TableContainer>
             {questions.map(q => (
-                <Question key={q.test_question_id} q={q} answers={answers[q.test_question_id]} points={points}/>
+                <Question key={q.id}
+                          q={q}
+                          answers={answers[q.question.id]}
+                          points={basicPoints}
+                          correctionCoef={correctionCoef}/>
             ))}
         </Container>
     );
@@ -95,7 +106,9 @@ const mapStateToProps = (state) => ({
     test: testResultSelectors.getTest(state),
     questions: testResultSelectors.getQuestions(state),
     answers: testResultSelectors.getAnswers(state),
-    complexity: testResultSelectors.getComplexity(state),
+    basicPoints: testResultSelectors.getBasicPoints(state),
+    correctionCoef: testResultSelectors.getCorrectionCoef(state),
+    count_of_right_answers: testResultSelectors.getCountOfCorrectAnswers(state)
 })
 
 export default compose(withUnAuthRedirect, withRouter, connect(mapStateToProps, {getTestResult}))(TestResult);

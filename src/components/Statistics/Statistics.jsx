@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from 'react';
+import {memo, useState, useEffect} from 'react';
 import {makeStyles} from '@mui/styles';
 import Container from '@mui/material/Container';
 import {compose} from "redux";
@@ -59,10 +59,10 @@ const Statistics = memo(({perPage, getRating, getTests, ratingInfo, tests, pagin
 
     if (ratingRequest || testsRequest) return <Preloader/>;
 
-    const indexFirstItem = pagination.totalCount - ((pagination.currentPage-1)*pagination.perPage);
+    const indexFirstItem = pagination.total - ((pagination.current_page - 1) * pagination.per_page);
 
     return (
-        <Container component="main" maxWidth="md" className={classes.root}>
+        <Container component="main" maxWidth="lg" className={classes.root}>
             <Typography component="h1" variant="h5" align='center'>
                 Статистика
             </Typography>

@@ -9,23 +9,25 @@ export const testResultSelectors = {
     },
     getAnswers(state) {
         return state.testResult.answers;
+    },
+    getBasicPoints(state) {
+        return state.testResult.basicPoints;
+    },
+    getCorrectionCoef(state) {
+        return state.testResult.correctionCoef;
     }
 }
 
-const questionReselect = createSelector(testResultSelectors.getQuestions, questions => {
+const countOfCorrectAnswersReselect = createSelector(testResultSelectors.getQuestions, questions => {
     if (questions) {
-        let complexity = [0, 0, 0];
-        questions.forEach(item => {
-            if (item.lvl === 1) {
-                complexity[0] += 1;
-            } else if (item.lvl === 2) {
-                complexity[1] += 1;
-            } else if (item.lvl === 3) {
-                complexity[2] += 1;
+        let count_of_correct_answers = 0;
+        for (let i = 0; i < questions.length; i++) {
+            if (questions[i].is_correct_answer === 1) {
+                count_of_correct_answers++;
             }
-        })
-        return complexity.join('/');
+        }
+        return count_of_correct_answers;
     }
 })
 
-testResultSelectors.getComplexity = questionReselect;
+testResultSelectors.getCountOfCorrectAnswers = countOfCorrectAnswersReselect;

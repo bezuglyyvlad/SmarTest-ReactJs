@@ -8,4 +8,7 @@ export const testSelectors = {
     getAnswers(state) {
         return state.test.answers;
     },
+    getTestIsFinished(state) {
+        return state.test.testIsFinished;
+    }
 }

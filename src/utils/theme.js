@@ -1,6 +1,13 @@
 import {createTheme} from "@mui/material";
 
 const lightTheme = createTheme({
+    components: {
+        MuiLink: {
+            defaultProps: {
+                underline: 'hover',
+            },
+        },
+    },
     palette: {
         mode: 'light',
         primary: {main: '#115293'},
@@ -11,6 +18,13 @@ const lightTheme = createTheme({
 });
 
 const darkTheme = createTheme({
+    components: {
+        MuiLink: {
+            defaultProps: {
+                underline: 'hover',
+            },
+        },
+    },
     palette: {
         mode: 'dark',
         primary: {main: '#648dae'},

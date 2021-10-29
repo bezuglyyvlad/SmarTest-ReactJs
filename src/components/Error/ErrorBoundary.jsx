@@ -24,7 +24,7 @@ class ErrorBoundary extends PureComponent {
 
     catchAllUnhandleErrors = (e) => {
         e.promise.catch(e => {
-            e.response && e.response.data ? this.setState({hasError: e.response.data}) : this.setState({
+            e?.response && e.response?.data ? this.setState({hasError: e.response.data}) : this.setState({
                 hasError: {
                     status: 'Ууууупс',
                     name: 'Щось пішло не так'

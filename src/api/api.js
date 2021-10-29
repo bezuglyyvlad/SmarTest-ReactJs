@@ -90,8 +90,8 @@ export const expertTestAPI = {
 }
 
 export const testAPI = {
-    createTest(subcategory_id) {
-        return instance.post('tests', {subcategory_id}, authHeader());
+    createTest(expert_test_id) {
+        return instance.post('tests', {expert_test_id}, authHeader());
     },
     getTest(test_id) {
         return instance.get(`tests/${test_id}`, authHeader());
@@ -109,13 +109,13 @@ export const statisticsAPI = {
         return instance.get('tests/rating', authHeader());
     },
     getTests(page, perPage) {
-        return instance.get(`tests?page=${page}&per-page=${perPage}`, authHeader());
+        return instance.get(`tests?page=${page}&perPage=${perPage}`, authHeader());
     }
 }
 
 export const adminPanelAPI = {
     getCategories() {
-        return instance.get('admins?expand=user', authHeader());
+        return instance.get('admin-panels', authHeader());
     },
     updateCategory(category_id, name, userEmail) {
         return instance.put(`categories/${category_id}`, {name, userEmail}, authHeader());

@@ -39,11 +39,11 @@ const TestsTable = memo(({dense, history, data, indexFirstItem}) => {
                 </TableHead>
                 <TableBody>
                     {data.map((t, index) => (
-                        <TableRow key={t.test_id} hover onClick={() => history.push(`/test/${t.test_id}/result`)}
+                        <TableRow key={t.id} hover onClick={() => history.push(`/test/${t.id}/result`)}
                                   className={classes.tableRow}>
                             <TableCell>{indexFirstItem-index}</TableCell>
-                            <TableCell>{t.subcategory_name}</TableCell>
-                            <TableCell>{t.category_name}</TableCell>
+                            <TableCell>{t.expert_test.title}</TableCell>
+                            <TableCell>{t.expert_test.test_category.title}</TableCell>
                             <TableCell>{t.score}</TableCell>
                         </TableRow>
                     ))}

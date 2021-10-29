@@ -43,7 +43,7 @@ const ExpertPanelTestCategories = memo(({categories, getExpertCategories}) => {
     }
 
     return (
-        <Container component="main" maxWidth="md" className={classes.root}>
+        <Container component="main" maxWidth="lg" className={classes.root}>
             <Typography component="h1" variant="h5" align='center' className={classes.title}>
                 Expert панель {categories.length === 0 && '(на жаль категорій немає)'}
             </Typography>

@@ -10,13 +10,13 @@ const Answers = memo(({type, data}) => {
         case 1:
             answers = <Field name="answer" component={radioButtons}>
                 {data.map((value, key) => (
-                    <FormControlLabel key={key} value={String(value.test_answer_id)} control={<Radio/>}
+                    <FormControlLabel key={key} value={value.id} control={<Radio/>}
                                       label={value.text}/>))}
             </Field>
             break;
         case 2:
             answers = data.map((value, key) => (
-                <Field key={key} name={`answer.${value.test_answer_id}`} component={renderCheckbox}
+                <Field key={key} name={`answer.${value.id}`} component={renderCheckbox}
                        label={value.text}/>))
             break;
         default:

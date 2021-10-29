@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from 'react';
+import {memo, useState, useEffect} from 'react';
 import {makeStyles} from '@mui/styles';
 import {compose} from "redux";
 import {Redirect} from "react-router";
@@ -21,9 +21,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ExpertTests = memo(({
-                                    getExpertTests, expert_test_page, test_category_page, test_category_id, expertTests,
-                                    pagination, createTest, testCreatedId, locationPathname, locationSearch
-                                }) => {
+                              getExpertTests, expert_test_page, test_category_page, test_category_id, expertTests,
+                              pagination, createTest, testCreatedId, locationPathname, locationSearch
+                          }) => {
     const classes = useStyles();
     const [dense, setDense] = useState(false);
     const [showPreloader, setShowPreloader] = useState(true);
@@ -39,14 +39,13 @@ const ExpertTests = memo(({
     }, [expert_test_page, getExpertTests, test_category_id]);
 
     const startTest = (expert_test_id) => {
-        console.log('start test ' + expert_test_id)
-        // setShowPreloader(true);
-        // createTest(expert_test_id);
+        setShowPreloader(true);
+        createTest(expert_test_id);
     };
 
-    if (showPreloader) return <Preloader/>;
-
     if (testCreatedId) return <Redirect to={`/test/${testCreatedId}`}/>;
+
+    if (showPreloader) return <Preloader/>;
 
     const {mainPath, linkPageName} = getDoublePaginationsUrlParams(
         'expert_test_page',
@@ -59,10 +58,7 @@ const ExpertTests = memo(({
     return (
         <Paper className={classes.paper}>
             <Typography variant="h5" align='left' component='h2'>
-                {'Тести'} {
-                expertTests.length === 0 &&
-                <p>(на жаль в даній категорії немає тестів)</p>
-            }
+                {'Тести'}
             </Typography>
             {
                 expertTests.length !== 0 &&

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import {memo} from 'react';
 import CancelIcon from "@mui/icons-material/Cancel";
 import Grid from "@mui/material/Grid";
 import {makeStyles} from "@mui/styles";
@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Answers from "./Answers/Answers";
 import ImageBox from "../../common/UIElements";
+import {roundToTwo} from "../../../utils/utils";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -21,32 +22,38 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Question = memo(({q, answers, points}) => {
+const Question = memo(({q, answers, points, correctionCoef}) => {
     const classes = useStyles();
+
+    const maxQuestionPoints = roundToTwo(points * q.question.quality_coef * correctionCoef);
+    const score = roundToTwo(q.score * correctionCoef);
+
     return (
         <Paper className={classes.paper}>
             <Grid
                 container
-                justify="space-between"
+                justifyContent="space-between"
             >
                 <Grid item>
                     <Typography variant='subtitle2'>
-                        Бали - {`${q.score} из ${points}`}
+                        Бали - {`${score > maxQuestionPoints ? maxQuestionPoints : score} из ${maxQuestionPoints}`}
                     </Typography>
                 </Grid>
                 <Grid item>
-                    {q.right_answer === 1 ?
+                    {q.is_correct_answer === 1 ?
                         <CheckCircleIcon className={classes.checkIcon}/> :
                         <CancelIcon className={classes.cancelIcon}/>}
                 </Grid>
             </Grid>
             <Typography variant='h6'>
-                {`${q.number_question}. ${q.text}`}
+                {`${q.serial_number}. ${q.question.text}`}
             </Typography>
-            {q.image && <ImageBox imageSrc={q.image}/>}
-            <Answers type={q.type} data={answers}/>
-            {q.description && <Typography variant='subtitle1'>
-                <strong>Пояснення: </strong> {q.description}
+            {q.question.image && <ImageBox imageSrc={q.question.image}/>}
+            <Answers type={q.question.type}
+                     data={answers}
+                     user_answer={q.user_answer}/>
+            {q.question.description && <Typography variant='subtitle1'>
+                <strong>Пояснення: </strong> {q.question.description}
             </Typography>}
         </Paper>
     );

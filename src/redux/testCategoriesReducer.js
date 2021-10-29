@@ -1,4 +1,5 @@
 import {testCategoriesAPI} from "../api/api";
+import {defaultThunkReject} from "../utils/utils";
 
 const SET_TEST_CATEGORIES = 'testCategories/SET_TEST_CATEGORIES';
 
@@ -27,8 +28,12 @@ const setTestCategories = (testCategories, breadcrumbs, pagination) => ({
 });
 
 export const getTestCategories = (test_category_id, page) => async (dispatch) => {
-    const response = await testCategoriesAPI.getData(test_category_id, page);
-    dispatch(setTestCategories(response.data.data, response.data.breadcrumbs, response.data.meta));
+    try {
+        const response = await testCategoriesAPI.getData(test_category_id, page);
+        dispatch(setTestCategories(response.data.data, response.data.breadcrumbs, response.data.meta));
+    } catch (e) {
+        await defaultThunkReject(e, dispatch);
+    }
 }
 
 export default testCategoriesReducer;

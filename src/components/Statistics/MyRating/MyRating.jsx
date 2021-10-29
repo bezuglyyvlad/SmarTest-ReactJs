@@ -35,7 +35,7 @@ const MyRating = memo(({rating, ratingByCategory}) => {
     return (
         <Grid
             container
-            justify="space-between"
+            justifyContent="space-between"
             className={classes.rating}
         >
             <Grid item>
@@ -81,7 +81,7 @@ const MyRating = memo(({rating, ratingByCategory}) => {
                             disableRestoreFocus
                         >
                             {ratingByCategory.map(i => (
-                                <Typography key={i.category_id}>{i.name} - {i.score}</Typography>
+                                <Typography key={i.id}>{i.title} - {i.score}</Typography>
                             ))}
                         </Popover>
                     </>}
