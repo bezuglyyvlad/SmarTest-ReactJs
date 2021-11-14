@@ -1,204 +1,280 @@
-import * as axios from "axios";
+import * as axios from 'axios'
 import {
-    getAccessTokenFromLS,
-    getRefreshTokenFromLS,
-    setAccessTokenToLS,
-    setRefreshTokenToLS
-} from "../utils/localStorage";
-import createAuthRefreshInterceptor from "axios-auth-refresh";
+  getAccessTokenFromLS,
+  getRefreshTokenFromLS,
+  setAccessTokenToLS,
+  setRefreshTokenToLS
+} from '../utils/localStorage'
 
-export const apiURL = 'http://api-smartest-laravel/api/V1/'; //for development
-//export const apiURL = 'https://d-test.pp.ua/api/v1/'; //for production
+export const apiURL = 'http://api-smartest-laravel/api/V1/' // for development
+// export const apiURL = 'https://d-test.pp.ua/api/v1/' // for production
 
 const instance = axios.create({
-    withCredentials: true,
-    baseURL: apiURL,
-});
-
-const refreshAuthLogic = failedRequest => instance.post(
-    'oauth/token/refresh', {'refresh_token': getRefreshTokenFromLS()}
-).then(tokenRefreshResponse => {
-    setAccessTokenToLS(tokenRefreshResponse.data.access_token);
-    setRefreshTokenToLS(tokenRefreshResponse.data.refresh_token);
-    failedRequest.response.config.headers['Authorization'] = `Bearer ${tokenRefreshResponse.data.access_token}`;
-    return Promise.resolve();
+  withCredentials: true,
+  baseURL: apiURL
 })
 
-createAuthRefreshInterceptor(instance, refreshAuthLogic, {pauseInstanceWhileRefreshing: true});
+instance.interceptors.request.use(
+  (config) => {
+    const accessToken = getAccessTokenFromLS()
+    if (accessToken) {
+      config.headers.Authorization = 'Bearer ' + accessToken
+    }
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
 
-instance.interceptors.response.use(response => {
-    return response;
-}, e => {
-    // if refresh_token is invalid
-    return Promise.reject(e);
-});
+// for multiple requests
+let isRefreshing = false
+let failedQueue = []
 
-const authHeader = () => ({
-    headers: {Authorization: `Bearer ${getAccessTokenFromLS()}`}
-})
+const processQueue = (error, token = null) => {
+  failedQueue.forEach(prom => {
+    if (error) {
+      prom.reject(error)
+    } else {
+      prom.resolve(token)
+    }
+  })
+
+  failedQueue = []
+}
+
+instance.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  async (error) => {
+    const originalRequest = error.config
+
+    if (originalRequest.url !== 'oauth/token' && error.response) {
+      // Access Token was expired
+      if (error.response.status === 401 && !originalRequest._retry) {
+        if (originalRequest.url === 'oauth/token/refresh') {
+          return Promise.reject(error)
+        }
+
+        if (isRefreshing) {
+          return new Promise(function (resolve, reject) {
+            failedQueue.push({ resolve, reject })
+          }).then(accessToken => {
+            return instance(originalRequest)
+          }).catch(err => {
+            return Promise.reject(err)
+          })
+        }
+
+        originalRequest._retry = true
+        isRefreshing = true
+
+        return new Promise(function (resolve, reject) {
+          instance.post('oauth/token/refresh', { refresh_token: getRefreshTokenFromLS() })
+            .then(response => {
+              const { access_token: accessToken, refresh_token: refreshToken } = response.data
+              setAccessTokenToLS(accessToken)
+              setRefreshTokenToLS(refreshToken)
+              processQueue(null, accessToken)
+              resolve(instance(originalRequest))
+            })
+            .catch((err) => {
+              processQueue(err, null)
+              reject(err)
+            })
+            .finally(() => {
+              isRefreshing = false
+            })
+        })
+      }
+    }
+
+    return Promise.reject(error)
+  }
+)
 
 export const userAPI = {
-    signIn(email, password) {
-        return instance.post('oauth/token', {'username': email, password});
-    },
-    signUp(name, email, password, password_confirmation) {
-        return instance.post('users', {name, email, password, password_confirmation});
-    },
-    signOut() {
-        return instance.post('users/logout', authHeader())
-    },
-    getData() {
-        return instance.get('users', authHeader())
-    },
-    updateData(userId, name, email, password, password_confirmation) {
-        return instance.post(`users/${userId}`, {
-            '_method': 'PUT',
-            name,
-            email,
-            password,
-            password_confirmation
-        }, authHeader());
-    },
-    deleteUser(userId) {
-        return instance.delete(`users/${userId}`, authHeader());
-    }
+  signIn (email, password) {
+    return instance.post('oauth/token', { username: email, password })
+  },
+  signUp (name, email, password, passwordConfirmation) {
+    return instance.post('users', { name, email, password, password_confirmation: passwordConfirmation })
+  },
+  signOut () {
+    return instance.post('users/logout')
+  },
+  getData () {
+    return instance.get('users')
+  },
+  updateData (userId, name, email, password, passwordConfirmation) {
+    return instance.put(`users/${userId}`, {
+      name,
+      email,
+      password,
+      password_confirmation: passwordConfirmation
+    })
+  },
+  deleteUser (userId) {
+    return instance.delete(`users/${userId}`)
+  }
 }
 
 export const testCategoriesAPI = {
-    getData(test_category_id, page) {
-        const test_category_id_part = test_category_id ? `test_category_id=${test_category_id}&` : '';
-        return instance.get(`test-categories?${test_category_id_part}page=${page}`, authHeader());
-    },
+  getData (testCategoryId, page) {
+    const testCategoryIdQueryString = testCategoryId ? `test_category_id=${testCategoryId}&` : ''
+    return instance.get(`test-categories?${testCategoryIdQueryString}page=${page}`)
+  }
 }
 
 export const expertTestsAPI = {
-    getData(test_category_id, page) {
-        return instance.get(`expert-tests?test_category_id=${test_category_id}&page=${page}`, authHeader());
-    },
+  getData (testCategoryId, page) {
+    return instance.get(`expert-tests?test_category_id=${testCategoryId}&page=${page}`)
+  }
 }
 
 export const testCategoryAPI = {
-    getData(test_category_id) {
-        return instance.get('categories/' + test_category_id, authHeader());
-    },
+  getData (testCategoryId) {
+    return instance.get('categories/' + testCategoryId)
+  },
+  updateCategory (id, title, parentId, userEmail) {
+    return instance.put(
+      `test-categories/${id}`,
+      {
+        title,
+        ...(parentId) && { parent_id: parentId },
+        ...(userEmail) && { user_email: userEmail }
+      }
+    )
+  },
+  addCategory (title, parentId, userEmail) {
+    return instance.post(
+      'test-categories',
+      {
+        title,
+        ...(parentId) && { parent_id: parentId },
+        ...(userEmail) && { user_email: userEmail }
+      }
+    )
+  },
+  deleteCategory (id) {
+    return instance.delete(`test-categories/${id}`)
+  }
 }
 
 export const expertTestAPI = {
-    getData(subcategory_id) {
-        return instance.get(`subcategories/${subcategory_id}?fields=subcategory_id,name`, authHeader());
-    },
+  getData (subcategoryId) {
+    return instance.get(`subcategories/${subcategoryId}?fields=subcategory_id,name`)
+  }
 }
 
 export const testAPI = {
-    createTest(expert_test_id) {
-        return instance.post('tests', {expert_test_id}, authHeader());
-    },
-    getTest(test_id) {
-        return instance.get(`tests/${test_id}`, authHeader());
-    },
-    nextQuestion(test_id, answer) {
-        return instance.post('tests/nextQuestion', {test_id, answer}, authHeader());
-    },
-    getResult(test_id) {
-        return instance.get(`tests/result?test_id=${test_id}`, authHeader());
-    }
+  createTest (expertTestId) {
+    return instance.post('tests', { expert_test_id: expertTestId })
+  },
+  getTest (testId) {
+    return instance.get(`tests/${testId}`)
+  },
+  nextQuestion (testId, answer) {
+    return instance.post('tests/nextQuestion', { test_id: testId, answer })
+  },
+  getResult (testId) {
+    return instance.get(`tests/result?test_id=${testId}`)
+  }
 }
 
 export const statisticsAPI = {
-    getRating() {
-        return instance.get('tests/rating', authHeader());
-    },
-    getTests(page, perPage) {
-        return instance.get(`tests?page=${page}&perPage=${perPage}`, authHeader());
-    }
+  getRating () {
+    return instance.get('tests/rating')
+  },
+  getTests (page, perPage) {
+    return instance.get(`tests?page=${page}&perPage=${perPage}`)
+  }
 }
 
 export const adminPanelAPI = {
-    getCategories() {
-        return instance.get('admin-panels', authHeader());
-    },
-    updateCategory(category_id, name, userEmail) {
-        return instance.put(`categories/${category_id}`, {name, userEmail}, authHeader());
-    },
-    addCategory(name, userEmail) {
-        return instance.post('categories', {name, userEmail}, authHeader());
-    },
-    deleteCategory(category_id) {
-        return instance.delete(`categories/${category_id}`, authHeader());
-    }
+  getCategories () {
+    return instance.get('admin-panels')
+  }
 }
 
 export const expertPanelTestCategoriesAPI = {
-    getTestCategories() {
-        return instance.get('experts', authHeader());
-    },
+  getTestCategories () {
+    return instance.get('expert-panels')
+  }
 }
 
-export const expertPanelTestsAPI = {
-    getTests(category_id) {
-        return instance.get('experts/subcategories?category_id=' + category_id, authHeader());
-    },
-    getTestStatistics(subcategory_id) {
-        return instance.get(`experts/testStatistics?id=${subcategory_id}&expand=user`, authHeader());
-    },
-    addTest(data) {
-        return instance.post('subcategories', data, authHeader());
-    },
-    updateTest(data) {
-        return instance.put(`subcategories/${data.subcategory_id}`, data, authHeader());
-    },
-    deleteTest(subcategory_id) {
-        return instance.delete(`subcategories/${subcategory_id}`, authHeader());
-    }
+export const expertPanelTestCatalogAPI = {
+  getExpertTests (testCategoryId) {
+    return instance.get(`expert-panels/expertTests/${testCategoryId}`)
+  },
+  getTestCategories (testCategoryId) {
+    return instance.get(`expert-panels/${testCategoryId}`)
+  },
+  getTestStatistics (expertTestId) {
+    return instance.get(`expert-panels/testStatistics/${expertTestId}`)
+  },
+  getDataMining (expertTestId) {
+    return instance.get(`expert-panels/dataMining/${expertTestId}`)
+  },
+  addTest (data) {
+    return instance.post('expert-tests', data)
+  },
+  updateTest (id, title, isPublished) {
+    return instance.put(`expert-tests/${id}`, { title, is_published: isPublished })
+  },
+  deleteTest (expertTestId) {
+    return instance.delete(`expert-tests/${expertTestId}`)
+  }
 }
 
 export const expertPanelQuestionsAPI = {
-    getQuestions(subcategory_id) {
-        return instance.get('experts/questions?subcategory_id=' + subcategory_id, authHeader());
-    },
-    deleteQuestion(question_id) {
-        return instance.delete(`questions/${question_id}`, authHeader());
-    },
-    addQuestion(data) {
-        return instance.post('experts/question', data,
-            {headers: Object.assign(authHeader().headers, {'Content-Type': 'multipart/form-data'})});
-    },
-    importQuestions(data) {
-        return instance.post('experts/import', data,
-            {headers: Object.assign(authHeader().headers, {'Content-Type': 'multipart/form-data'})});
-    },
-    exportQuestions(subcategory_id) {
-        return instance.get(`experts/export?id=${subcategory_id}&expand=answers`, authHeader());
-    }
+  getQuestions (subcategoryId) {
+    return instance.get('experts/questions?subcategory_id=' + subcategoryId)
+  },
+  deleteQuestion (questionId) {
+    return instance.delete(`questions/${questionId}`)
+  },
+  addQuestion (data) {
+    return instance.post('experts/question', data,
+      { headers: { 'Content-Type': 'multipart/form-data' } })
+  },
+  importQuestions (data) {
+    return instance.post('experts/import', data,
+      { headers: { 'Content-Type': 'multipart/form-data' } })
+  },
+  exportQuestions (subcategoryId) {
+    return instance.get(`experts/export?id=${subcategoryId}&expand=answers`)
+  }
 }
 
 export const expertPanelQuestionAPI = {
-    getQuestion(question_id) {
-        return instance.get(`questions/${question_id}`, authHeader());
-    },
-    updateQuestion(data, question_id) {
-        return instance.put(`questions/${question_id}`, data, authHeader());
-    },
-    uploadImage(data, question_id) {
-        return instance.post(`experts/upload?id=${question_id}`, data,
-            {headers: Object.assign(authHeader().headers, {'Content-Type': 'multipart/form-data'})});
-    },
-    deleteImage(question_id) {
-        return instance.delete(`experts/deleteImage?id=${question_id}`, authHeader());
-    }
+  getQuestion (questionId) {
+    return instance.get(`questions/${questionId}`)
+  },
+  updateQuestion (data, questionId) {
+    return instance.put(`questions/${questionId}`, data)
+  },
+  uploadImage (data, questionId) {
+    return instance.post(`experts/upload?id=${questionId}`, data,
+      { headers: { 'Content-Type': 'multipart/form-data' } })
+  },
+  deleteImage (questionId) {
+    return instance.delete(`experts/deleteImage?id=${questionId}`)
+  }
 }
 
 export const expertPanelAnswersAPI = {
-    getAnswers(question_id) {
-        return instance.get(`answers?question_id=${question_id}`, authHeader());
-    },
-    addAnswer(data) {
-        return instance.post('answers', data, authHeader());
-    },
-    updateAnswer(data) {
-        return instance.put(`answers/${data.answer_id}`, data, authHeader());
-    },
-    deleteAnswer(answer_id) {
-        return instance.delete(`answers/${answer_id}`, authHeader());
-    },
+  getAnswers (questionId) {
+    return instance.get(`answers?question_id=${questionId}`)
+  },
+  addAnswer (data) {
+    return instance.post('answers', data)
+  },
+  updateAnswer (data) {
+    return instance.put(`answers/${data.answer_id}`, data)
+  },
+  deleteAnswer (answerId) {
+    return instance.delete(`answers/${answerId}`)
+  }
 }

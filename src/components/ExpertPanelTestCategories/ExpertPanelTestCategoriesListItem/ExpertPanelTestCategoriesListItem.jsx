@@ -1,23 +1,20 @@
-import {NavLink} from "react-router-dom";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
-import FolderIcon from "@mui/icons-material/Folder";
-import ListItemText from "@mui/material/ListItemText";
-import ListItem from "@mui/material/ListItem";
+import { NavLink } from 'react-router-dom'
+import { Avatar, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core'
+import FolderIcon from '@material-ui/icons/Folder'
 
-const ExpertPanelTestCategoriesListItem = ({value}) => {
-    return (
-        <ListItem button component={NavLink} to={'/expertPanel/' + value.test_category_id}>
-            <ListItemAvatar>
-                <Avatar>
-                    <FolderIcon/>
-                </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-                primary={value.name}
-            />
-        </ListItem>
-    )
+const ExpertPanelTestCategoriesListItem = ({ value }) => {
+  return (
+    <ListItem button component={NavLink} to={'/expertPanel/' + value.id}>
+      <ListItemAvatar>
+        <Avatar>
+          <FolderIcon />
+        </Avatar>
+      </ListItemAvatar>
+      <ListItemText
+        primary={value.title}
+      />
+    </ListItem>
+  )
 }
 
-export default ExpertPanelTestCategoriesListItem;
+export default ExpertPanelTestCategoriesListItem

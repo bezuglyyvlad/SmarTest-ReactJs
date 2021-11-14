@@ -1,109 +1,104 @@
-import { memo, useState, useEffect } from 'react';
-import {makeStyles} from '@mui/styles';
-import Container from '@mui/material/Container';
-import {compose} from "redux";
-import {withUnAuthRedirect} from "../../hoc/withUnAuthRedirect";
-import Typography from "@mui/material/Typography";
-import {connect} from "react-redux";
-import {Preloader} from "../common/Preloader";
-import {withNotExpertRedirect} from "../../hoc/withNotExpertRedirect";
-import Link from "@mui/material/Link";
-import {NavLink} from "react-router-dom";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import {withRouter} from "react-router";
-import {getTestCategory} from "../../redux/testCategoryReducer";
-import {testCategorySelectors} from "../../redux/selectors/testCategorySelectors";
-import {getExpertTest} from "../../redux/expertTestReducer";
-import {expertTestSelectors} from "../../redux/selectors/expertTestSelectors";
-import {exportQuestions, getExpertQuestions} from "../../redux/expertPanelQuestionsReducer";
-import Box from "@mui/material/Box";
-import ExpertQuestionsTable from "./ExpertPanelQuestionsTable/ExpertPanelQuestionsTable";
-import {useSnackbar} from "notistack";
-import {expertPanelQuestionsSelectors} from "../../redux/selectors/expertPanelQuestionsSelectors";
+import { memo, useState, useEffect } from 'react'
+import { Box, Breadcrumbs, Container, Link, makeStyles, Typography } from '@material-ui/core'
+import { compose } from 'redux'
+import { withUnAuthRedirect } from '../../hoc/withUnAuthRedirect'
+import { connect } from 'react-redux'
+import { Preloader } from '../common/Preloader'
+import { withNotExpertRedirect } from '../../hoc/withNotExpertRedirect'
+import { NavLink } from 'react-router-dom'
+import { withRouter } from 'react-router'
+import { getTestCategory } from '../../redux/testCategoryReducer'
+import { testCategorySelectors } from '../../redux/selectors/testCategorySelectors'
+import { getExpertTest } from '../../redux/expertTestReducer'
+import { expertTestSelectors } from '../../redux/selectors/expertTestSelectors'
+import { exportQuestions, getExpertQuestions } from '../../redux/expertPanelQuestionsReducer'
+import ExpertQuestionsTable from './ExpertPanelQuestionsTable/ExpertPanelQuestionsTable'
+import { useSnackbar } from 'notistack'
+import { expertPanelQuestionsSelectors } from '../../redux/selectors/expertPanelQuestionsSelectors'
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        marginTop: theme.spacing(5),
-        marginBottom: theme.spacing(2),
-    },
-    table: {
-        marginTop: theme.spacing(2),
-    },
-}));
+  root: {
+    marginTop: theme.spacing(5),
+    marginBottom: theme.spacing(2),
+  },
+  table: {
+    marginTop: theme.spacing(2),
+  },
+}))
 
 const ExpertPanelQuestions = memo(({
-                                        match, getCategory, getSubcategory, categoryName, subcategoryName,
-                                        getExpertQuestions, history, exportQuestions, serverErrors
-                                    }) => {
-    const classes = useStyles();
-    const [showPreloader, setShowPreloader] = useState(true);
-    const [disableExport, setDisableExport] = useState(false);
-    const {enqueueSnackbar} = useSnackbar();
+                                     match, getCategory, getSubcategory, categoryName, subcategoryName,
+                                     getExpertQuestions, history, exportQuestions, serverErrors
+                                   }) => {
+  const classes = useStyles()
+  const [showPreloader, setShowPreloader] = useState(true)
+  const [disableExport, setDisableExport] = useState(false)
+  const { enqueueSnackbar } = useSnackbar()
 
-    const category_id = match.params.category_id;
-    const subcategory_id = match.params.subcategory_id;
+  const category_id = match.params.category_id
+  const subcategory_id = match.params.subcategory_id
 
-    useEffect(() => {
-        let mounted = true; // exclude memory leak
-        (async () => {
-            setShowPreloader(true);
-            await getCategory(category_id);
-            await getSubcategory(subcategory_id);
-            await getExpertQuestions(subcategory_id);
-            mounted && setShowPreloader(false);
-        })();
-        return () => mounted = false;
-    }, [category_id, getCategory, getExpertQuestions, getSubcategory, subcategory_id]);
+  useEffect(() => {
+    let mounted = true; // exclude memory leak
+    (async () => {
+      setShowPreloader(true)
+      await getCategory(category_id)
+      await getSubcategory(subcategory_id)
+      await getExpertQuestions(subcategory_id)
+      mounted && setShowPreloader(false)
+    })()
+    return () => mounted = false
+  }, [category_id, getCategory, getExpertQuestions, getSubcategory, subcategory_id])
 
-    useEffect(() => {
-        serverErrors && showError(serverErrors);
+  useEffect(() => {
+    serverErrors && showError(serverErrors)
+  })
+
+  if (showPreloader) {
+    return <Preloader />
+  }
+
+  function showError (array) {
+    array.forEach(item => {
+      enqueueSnackbar(item, { variant: 'error' })
     })
+  }
 
-    if (showPreloader) {
-        return <Preloader/>
-    }
+  async function exportQuestionsAction () {
+    setDisableExport(true)
+    await exportQuestions(subcategory_id, categoryName, subcategoryName)
+    setDisableExport(false)
+  }
 
-    function showError(array) {
-        array.forEach(item => {
-            enqueueSnackbar(item, {variant: "error"})
-        });
-    }
-
-    async function exportQuestionsAction() {
-        setDisableExport(true);
-        await exportQuestions(subcategory_id, categoryName, subcategoryName);
-        setDisableExport(false);
-    }
-
-    return (
-        <Container component="main" maxWidth="lg" className={classes.root}>
-            <Breadcrumbs aria-label="breadcrumb">
-                <Link color="inherit" component={NavLink} to='/expertPanel'>
-                    Expert панель
-                </Link>
-                <Link color="inherit" component={NavLink} to={`/expertPanel/${category_id}`}>
-                    {categoryName}
-                </Link>
-                <Typography color="textPrimary">{subcategoryName}</Typography>
-            </Breadcrumbs>
-            <Box className={classes.table}>
-                <ExpertQuestionsTable history={history} category_id={category_id} subcategory_id={subcategory_id}
-                                      showError={showError} exportQuestionsAction={exportQuestionsAction}
-                                      disableExport={disableExport}/>
-            </Box>
-        </Container>
-    );
-});
+  return (
+    <Container component='main' maxWidth='lg' className={classes.root}>
+      <Breadcrumbs aria-label='breadcrumb'>
+        <Link color='inherit' component={NavLink} to='/expertPanel'>
+          Expert панель
+        </Link>
+        <Link color='inherit' component={NavLink} to={`/expertPanel/${category_id}`}>
+          {categoryName}
+        </Link>
+        <Typography color='textPrimary'>{subcategoryName}</Typography>
+      </Breadcrumbs>
+      <Box className={classes.table}>
+        <ExpertQuestionsTable history={history} category_id={category_id} subcategory_id={subcategory_id}
+                              showError={showError} exportQuestionsAction={exportQuestionsAction}
+                              disableExport={disableExport} />
+      </Box>
+    </Container>
+  )
+})
 
 const mapStateToProps = (state) => ({
-    categoryName: testCategorySelectors.getName(state),
-    subcategoryName: expertTestSelectors.getName(state),
-    serverErrors: expertPanelQuestionsSelectors.getServerErrors(state)
-});
+  categoryName: testCategorySelectors.getName(state),
+  subcategoryName: expertTestSelectors.getName(state),
+  serverErrors: expertPanelQuestionsSelectors.getServerErrors(state)
+})
 
 export default compose(withUnAuthRedirect, withNotExpertRedirect, withRouter, connect(mapStateToProps, {
-    getTestCategory,
-    getExpertTest,
-    getExpertQuestions,
-    exportQuestions
-}))(ExpertPanelQuestions);
+  getTestCategory,
+  getExpertTest,
+  getExpertQuestions,
+  exportQuestions
+}))(ExpertPanelQuestions)

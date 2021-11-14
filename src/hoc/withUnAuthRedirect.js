@@ -1,19 +1,17 @@
-import {Redirect} from "react-router-dom";
-import {connect} from "react-redux";
-import {userSelectors} from "../redux/selectors/userSelectors";
+import { Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { userSelectors } from '../redux/selectors/userSelectors'
 
-let mapStateToPropsForRedirect = (state) => ({
-    isAuth: userSelectors.getIsAuth(state),
-});
+const mapStateToPropsForRedirect = (state) => ({
+  isAuth: userSelectors.getIsAuth(state)
+})
 
 export const withUnAuthRedirect = (Component) => {
+  const RedirectComponent = props => {
+    if (!props.isAuth) return <Redirect to='/signin' />
 
-    const RedirectComponent = props => {
-        if (!props.isAuth) return <Redirect to='/signin'/>
+    return <Component {...props} />
+  }
 
-        return <Component {...props}/>
-    };
-
-    return connect(mapStateToPropsForRedirect)(RedirectComponent);
-
+  return connect(mapStateToPropsForRedirect)(RedirectComponent)
 }

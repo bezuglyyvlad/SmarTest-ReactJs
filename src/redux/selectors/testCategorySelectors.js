@@ -1,5 +1,5 @@
 export const testCategorySelectors = {
-    getName(state) {
-        return state.category.name;
-    },
+  getName (state) {
+    return state.category.name
+  }
 }

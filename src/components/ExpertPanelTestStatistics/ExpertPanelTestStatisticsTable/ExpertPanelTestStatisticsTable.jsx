@@ -1,57 +1,80 @@
-import { memo } from 'react';
-import MaterialTable from 'material-table';
-import {compose} from "redux";
-import {connect} from "react-redux";
-import {changePerPage} from "../../../redux/appReducer";
-import {appSelectors} from "../../../redux/selectors/appSelectors";
-import {materialTableLocalization} from "../../../utils/localization";
-import {expertPanelTestStatisticsSelectors} from "../../../redux/selectors/expertPanelTestStatisticsSelectors";
+import { memo, useEffect, useState } from 'react'
+import MaterialTable from 'material-table'
+import { compose } from "redux"
+import { connect } from "react-redux"
+import { changePerPage } from "../../../redux/appReducer"
+import { appSelectors } from "../../../redux/selectors/appSelectors"
+import { materialTableLocalization } from "../../../utils/localization"
+import { expertPanelTestStatisticsSelectors } from "../../../redux/selectors/expertPanelTestStatisticsSelectors"
+import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty'
+import { Preloader } from "../../common/Preloader"
+import { getExpertTestStatistics } from "../../../redux/expertPanelTestStatisticsReducer"
 
 const ExpertPanelTestStatisticsTable = memo(({
-                                                  perPage, changePerPage, tests,
-                                              }) => {
-    const columns = [
-        {
-            title: '№',
-            field: 'tableData.id',
-            editable: 'never',
-            emptyValue: null,
-            render: rowData => rowData.tableData.id + 1
-        },
-        {title: "Ім'я користувача", field: 'user.name'},
-        {title: 'Електронна пошта', field: 'user.email'},
-        {
-            title: 'Початок тесту',
-            field: 'date_start',
-            render: rowData => (new Date(rowData.date_start)).toLocaleString()
-        },
-        {
-            title: 'Завершення тесту',
-            field: 'date_finish',
-            render: rowData => (new Date(rowData.date_finish)).toLocaleString()
-        },
-        {title: 'Бали', field: 'score'}
-    ];
+                                               perPage, changePerPage, tests, expert_test_id, getExpertTestStatistics
+                                             }) => {
+  const [showPreloader, setShowPreloader] = useState(true)
 
-    function setPerPage(perPage) {
-        changePerPage(perPage);
-    }
+  useEffect(() => {
+    let mounted = true; // exclude memory leak
+    (async () => {
+      setShowPreloader(true)
+      await getExpertTestStatistics(expert_test_id)
+      mounted && setShowPreloader(false)
+    })()
+    return () => mounted = false
+  }, [getExpertTestStatistics, expert_test_id])
 
-    return (
-        <MaterialTable
-            title="Результати"
-            columns={columns}
-            data={tests}
-            options={{sorting: true, pageSize: +perPage}}
-            localization={materialTableLocalization}
-            onChangeRowsPerPage={setPerPage}
-        />
-    );
-});
+  if (showPreloader) {
+    return <Preloader />
+  }
 
-const mapStateToProps = (state) => ({
-    tests: expertPanelTestStatisticsSelectors.getTests(state),
-    perPage: appSelectors.getPerPage(state),
+  const columns = [
+    {
+      title: '№',
+      field: 'tableData.id',
+      editable: 'never',
+      emptyValue: null,
+      render: rowData => rowData.tableData.id + 1
+    },
+    { title: "Ім'я користувача", field: 'user.name' },
+    { title: 'Електронна пошта', field: 'user.email' },
+    {
+      title: 'Початок тесту',
+      field: 'start_date',
+      render: rowData => (new Date(rowData.start_date)).toLocaleString()
+    },
+    {
+      title: 'Завершення тесту',
+      field: 'finish_date',
+      render: rowData => (new Date(rowData.finish_date)).toLocaleString()
+    },
+    { title: 'Бали', field: 'score' },
+    { title: 'Проходить', field: 'is_finished', render: rowData => !rowData.is_finished && <HourglassEmptyIcon /> }
+  ]
+
+  function setPerPage (perPage) {
+    changePerPage(perPage)
+  }
+
+  return (
+    <MaterialTable
+      title="Результати"
+      columns={columns}
+      data={tests}
+      options={{ sorting: true, pageSize: +perPage }}
+      localization={materialTableLocalization}
+      onRowsPerPageChange={setPerPage}
+    />
+  )
 })
 
-export default compose(connect(mapStateToProps, {changePerPage}))(ExpertPanelTestStatisticsTable);
+const mapStateToProps = (state) => ({
+  tests: expertPanelTestStatisticsSelectors.getTests(state),
+  perPage: appSelectors.getPerPage(state),
+})
+
+export default compose(connect(mapStateToProps, {
+  changePerPage,
+  getExpertTestStatistics
+}))(ExpertPanelTestStatisticsTable)
