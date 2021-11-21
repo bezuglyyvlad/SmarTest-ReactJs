@@ -41,7 +41,7 @@ const ExpertPanelTestCatalog = memo(({ history, match, breadcrumbs }) => {
           </Link>
           {
             breadcrumbs.length > 1 &&
-            [...breadcrumbs].slice(0, -1).map(value =>
+            breadcrumbs.slice(0, -1).map(value =>
               <Link key={value.id} color='inherit' component={NavLink} to={`/expertPanel/${value.id}`}>
                 {value.title}
               </Link>

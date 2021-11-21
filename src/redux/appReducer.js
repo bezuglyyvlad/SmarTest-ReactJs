@@ -2,7 +2,7 @@ import { getUserData } from './userReducer'
 import {
   getAccessTokenFromLS,
   getPerPageFromLS,
-  getThemeFromLS, removeThemeFromLS,
+  getThemeFromLS,
   setPerPageToLS,
   setThemeToLS
 } from '../utils/localStorage'
@@ -53,13 +53,9 @@ export const changeTheme = (theme) => (dispatch) => {
   dispatch(setTheme(theme))
 }
 
-export const clearTheme = () => (dispatch) => {
-  removeThemeFromLS()
-  dispatch(setTheme(null))
-}
-
 export const initializeApp = () => (dispatch) => {
-  dispatch(changeTheme(getThemeFromLS()))
+  const theme = getThemeFromLS() ?? 'light'
+  dispatch(changeTheme(theme))
   const perPageFromLS = getPerPageFromLS()
   const perPage = perPageFromLS ?? 10
   dispatch(changePerPage(perPage))

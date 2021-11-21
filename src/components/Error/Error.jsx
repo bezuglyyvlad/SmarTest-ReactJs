@@ -32,7 +32,7 @@ const Error = memo(({ error }) => {
         {error.status}
       </Typography>
       <Typography variant='h5'>
-        {error.name}
+        {error.statusText}
       </Typography>
       <IconButton component={NavLink} to='/' color='primary' aria-label='Домой' className={classes.button}>
         <HomeIcon fontSize='large' />

@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { appSelectors } from '../../../../redux/selectors/appSelectors'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
-import { changeTheme, clearTheme } from '../../../../redux/appReducer'
+import { changeTheme } from '../../../../redux/appReducer'
 import {
   Divider,
   List,
@@ -21,10 +21,10 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const SettingsList = memo(({ theme, changeTheme, clearTheme, toggleDrawer }) => {
+const SettingsList = memo(({ theme, changeTheme, toggleDrawer }) => {
   const classes = useStyles()
   const changeDarkMode = (e) => {
-    e.target.checked ? changeTheme('dark') : clearTheme()
+    e.target.checked ? changeTheme('dark') : changeTheme('light')
   }
 
   return (
@@ -58,4 +58,4 @@ const mapStateToProps = (state) => ({
   theme: appSelectors.getTheme(state),
 })
 
-export default compose(connect(mapStateToProps, { changeTheme, clearTheme }))(SettingsList)
+export default compose(connect(mapStateToProps, { changeTheme }))(SettingsList)

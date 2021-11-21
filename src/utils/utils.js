@@ -1,5 +1,6 @@
 import { kickUser } from '../redux/userReducer'
 import queryString from 'query-string'
+import { apexChartsLocalization } from './localization'
 
 export const getAvatarName = (name) => {
   return name.substr(0, 2)
@@ -134,3 +135,167 @@ export const errorHandling = (e, dispatch) => {
     defaultThunkReject(e, dispatch)
   }
 }
+
+export const ApexOptions = (
+  theme,
+  id,
+  titleText,
+  xaxis = {},
+  yaxis = {},
+  tooltip = {}
+) => {
+  return {
+    options: {
+      colors: [theme.palette.primary.main, theme.palette.secondary.main, theme.palette.success.main],
+      chart: {
+        id: id,
+        background: theme.palette.background.default,
+        animations: {
+          enabled: false
+        },
+        zoom: {
+          enabled: false
+        },
+        toolbar: {
+          tools: {
+            selection: false,
+            zoom: false,
+            zoomin: false,
+            zoomout: false,
+            pan: false,
+            reset: false
+          }
+        },
+        defaultLocale: 'ua',
+        locales: [apexChartsLocalization]
+      },
+      xaxis: xaxis,
+      yaxis: yaxis,
+      theme: {
+        mode: theme.palette.type,
+        palette: 'palette1'
+      },
+      title: {
+        text: titleText,
+        align: 'center'
+      },
+      tooltip: tooltip,
+      dataLabels: {
+        enabled: false
+      },
+      plotOptions: {
+        boxPlot: {
+          colors: {
+            upper: theme.palette.primary.main,
+            lower: theme.palette.success.main
+          }
+        },
+        heatmap: {
+          shadeIntensity: 1,
+          colorScale: {
+            ranges: [
+              {
+                from: -0.0999999,
+                to: 0,
+                color: theme.palette.primary.main,
+                name: 'Відсутня (негативна)'
+              },
+              {
+                from: 0,
+                to: 0.0999999,
+                color: theme.palette.primary.main,
+                name: 'Відсутня (позитивна)'
+              },
+              {
+                from: -0.299999,
+                to: -0.1,
+                color: theme.palette.primary.main,
+                name: 'Низька (негативна)'
+              },
+              {
+                from: 0.1,
+                to: 0.299999,
+                color: theme.palette.primary.main,
+                name: 'Низька (позитивна)'
+              },
+              {
+                from: -0.499999,
+                to: -0.3,
+                color: theme.palette.secondary.main,
+                name: 'Середня (негативна)'
+              },
+              {
+                from: 0.3,
+                to: 0.499999,
+                color: theme.palette.secondary.main,
+                name: 'Середня (позитивна)'
+              },
+              {
+                from: -1,
+                to: -0.5,
+                color: theme.palette.success.main,
+                name: 'Висока (негативна)'
+              },
+              {
+                from: 0.5,
+                to: 1,
+                color: theme.palette.success.main,
+                name: 'Висока (позитивна)'
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}
+
+export const isObjectEmpty = (obj) => {
+  return obj &&
+    Object.keys(obj).length === 0 &&
+    Object.getPrototypeOf(obj) === Object.prototype
+}
+
+export const getApexChartBarChartSeries = (seriesName, seriesData) => (
+  seriesName.map((i, k) => ({
+    name: i,
+    data: seriesData[k]
+  }))
+)
+
+export const getApexChartHeatmapSeries = (seriesData) => (
+  seriesData.map(x => ({
+    name: x[0],
+    data: Object.entries(x[1]).map(i => ({ x: i[0], y: i[1] }))
+  }))
+)
+
+export const getApexChartBoxplotSeries = (seriesBoxData, seriesOutliersData) => (
+  [
+    {
+      name: 'box',
+      type: 'boxPlot',
+      data: seriesBoxData.map(x => ({
+        x: typeof x[0] === 'string' ? +/\d+/.exec(x[0])[0] : x[0],
+        y: [x[1].min, x[1]['25%'], x[1]['50%'], x[1]['75%'], x[1].max]
+      }))
+    },
+    {
+      name: 'outliers',
+      type: 'scatter',
+      data: seriesOutliersData.map(x => {
+        let i = 0
+        const result = []
+        const outliersLength = x[1].length
+        while (i < outliersLength) {
+          result[i] = {
+            x: typeof x[0] === 'string' ? +/\d+/.exec(x[0])[0] : x[0],
+            y: x[1][i]
+          }
+          i++
+        }
+        return result.length !== 0 ? result : []
+      }).flat()
+    }
+  ]
+)

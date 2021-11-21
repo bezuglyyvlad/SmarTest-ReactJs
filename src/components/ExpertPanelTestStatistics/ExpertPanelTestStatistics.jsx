@@ -48,7 +48,7 @@ const ExpertPanelTestStatistics = memo(({
           </Breadcrumbs> : ''
       }
       <Box className={classes.table}>
-        <ExpertTestStatisticsTable expert_test_id={expert_test_id} />
+        <ExpertTestStatisticsTable expert_test_id={expert_test_id} expertTestName={expertTestName} />
         <ExpertPanelTestStatisticsDataMining expert_test_id={expert_test_id} />
       </Box>
     </Container>

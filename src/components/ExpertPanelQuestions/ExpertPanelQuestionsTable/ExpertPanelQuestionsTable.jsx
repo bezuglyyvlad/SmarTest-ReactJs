@@ -37,7 +37,6 @@ const ExpertPanelQuestionsTable = memo(({
       title: '№',
       field: 'tableData.id',
       editable: 'never',
-      emptyValue: null,
       render: rowData => rowData.tableData.id + 1
     },
     { title: 'Текст', field: 'text' },
@@ -70,7 +69,7 @@ const ExpertPanelQuestionsTable = memo(({
         data={questions}
         options={{ sorting: true, pageSize: +perPage }}
         localization={materialTableLocalization}
-        onRowsPerPageChange={setPerPage}
+        onChangeRowsPerPage={setPerPage}
         isLoading={loading}
         editable={{
           onRowDelete: oldData =>

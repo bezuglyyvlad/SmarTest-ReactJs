@@ -29,7 +29,6 @@ const ExpertPanelTestCategoriesTable = memo(({
       title: '№',
       field: 'tableData.id',
       editable: 'never',
-      emptyValue: null,
       render: rowData => rowData.tableData.id + 1
     },
     {

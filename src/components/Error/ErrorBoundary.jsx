@@ -1,34 +1,35 @@
 import { PureComponent } from 'react'
 import Error from './Error'
 import { withRouter } from 'react-router'
+import { isObjectEmpty } from "../../utils/utils";
 
 class ErrorBoundary extends PureComponent {
+  static defaultError;
+
   constructor (props) {
     super(props)
     this.state = { hasError: {} }
+    this.defaultError = { status: 'Ууууупс', statusText: 'Щось пішло не так' }
   }
 
   errorExists (obj) {
-    return !(Object.entries(obj).length === 0 && obj.constructor === Object)
+    return !isObjectEmpty(obj)
   }
 
   static getDerivedStateFromError (error) {
-    // Обновить состояние с тем, чтобы следующий рендер показал запасной UI.
-    return { hasError: { status: 'Ууууупс', name: 'Щось пішло не так' } }
+    // error for fallback UI
+    return { hasError: this.defaultError }
   }
 
   // componentDidCatch(error, errorInfo) {
-  //     // Можно также сохранить информацию об ошибке в соответствующую службу журнала ошибок
+  //     // save error to log service
   //     logErrorToMyService(error, errorInfo)
   // }
 
   catchAllUnhandleErrors = (e) => {
     e.promise.catch(e => {
-      e?.response && e.response?.data ? this.setState({ hasError: e.response.data }) : this.setState({
-        hasError: {
-          status: 'Ууууупс',
-          name: 'Щось пішло не так'
-        }
+      e?.response ? this.setState({ hasError: e.response }) : this.setState({
+        hasError: this.defaultError
       })
     })
   }
@@ -49,7 +50,7 @@ class ErrorBoundary extends PureComponent {
 
   render () {
     if (this.errorExists(this.state.hasError)) {
-      // Можно отрендерить запасной UI произвольного вида
+      // render fallback UI
       return <Error error={this.state.hasError} />
     }
 

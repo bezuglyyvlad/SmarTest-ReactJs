@@ -11,7 +11,12 @@ import { Preloader } from "../../common/Preloader"
 import { getExpertTestStatistics } from "../../../redux/expertPanelTestStatisticsReducer"
 
 const ExpertPanelTestStatisticsTable = memo(({
-                                               perPage, changePerPage, tests, expert_test_id, getExpertTestStatistics
+                                               perPage,
+                                               changePerPage,
+                                               tests,
+                                               expert_test_id,
+                                               getExpertTestStatistics,
+                                               expertTestName
                                              }) => {
   const [showPreloader, setShowPreloader] = useState(true)
 
@@ -33,8 +38,6 @@ const ExpertPanelTestStatisticsTable = memo(({
     {
       title: '№',
       field: 'tableData.id',
-      editable: 'never',
-      emptyValue: null,
       render: rowData => rowData.tableData.id + 1
     },
     { title: "Ім'я користувача", field: 'user.name' },
@@ -50,7 +53,12 @@ const ExpertPanelTestStatisticsTable = memo(({
       render: rowData => (new Date(rowData.finish_date)).toLocaleString()
     },
     { title: 'Бали', field: 'score' },
-    { title: 'Проходить', field: 'is_finished', render: rowData => !rowData.is_finished && <HourglassEmptyIcon /> }
+    {
+      title: 'Проходить',
+      field: 'is_finished',
+      render: rowData => !rowData.is_finished && <HourglassEmptyIcon />,
+      export: false
+    }
   ]
 
   function setPerPage (perPage) {
@@ -59,12 +67,18 @@ const ExpertPanelTestStatisticsTable = memo(({
 
   return (
     <MaterialTable
-      title="Результати"
+      title='Результати'
       columns={columns}
       data={tests}
-      options={{ sorting: true, pageSize: +perPage }}
+      options={{
+        sorting: true,
+        pageSize: +perPage,
+        exportButton: { csv: true, pdf: false },
+        exportAllData: true,
+        exportFileName: 'Результати_' + expertTestName
+      }}
       localization={materialTableLocalization}
-      onRowsPerPageChange={setPerPage}
+      onChangeRowsPerPage={setPerPage}
     />
   )
 })

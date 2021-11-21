@@ -30,10 +30,6 @@ export const setThemeToLS = (name) => {
   return localStorage.setItem('theme', name)
 }
 
-export const removeThemeFromLS = () => {
-  localStorage.removeItem('theme')
-}
-
 export const getPerPageFromLS = () => {
   return localStorage.getItem('perPage')
 }
