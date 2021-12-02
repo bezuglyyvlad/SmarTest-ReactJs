@@ -11,11 +11,11 @@ import {
   makeStyles,
   Typography
 } from "@material-ui/core"
-import ApexChartBarChart from "./DataMiningCharts/ApexChartBarChart";
-import DataMiningMaterialTable from "./DataMiningTables/DataMiningMaterialTable";
-import ApexChartBoxplot from "./DataMiningCharts/ApexChartBoxplot";
-import ApexChartHeatmap from "./DataMiningCharts/ApexChartHeatmap";
-import { isObjectEmpty } from "../../../utils/utils";
+import ApexChartBarChart from "./DataMiningCharts/ApexChartBarChart"
+import DataMiningMaterialTable from "./DataMiningTables/DataMiningMaterialTable"
+import ApexChartBoxplot from "./DataMiningCharts/ApexChartBoxplot"
+import ApexChartHeatmap from "./DataMiningCharts/ApexChartHeatmap"
+import { isObjectEmpty } from "../../../utils/utils"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -103,12 +103,15 @@ const ExpertPanelTestStatisticsDataMining = memo(({
                            series={dataByNumberOfTestPassesSeries} />
         <ApexChartBoxplot id='numberOfQuestionsBoxplot'
                           titleText='Коробковий графік для кількості питань'
-                          series={numberOfQuestionsBoxplotSeries} />
+                          series={numberOfQuestionsBoxplotSeries}
+                          tooltipFormatter={['Кількість питань']}
+        />
         <Hidden smDown>
           <ApexChartBoxplot id='questionsBoxplot'
                             titleText='Коробковий графік для питань'
                             xaxisTitleText='Ідентифікатор питання'
-                            series={questionsBoxplotSeries} />
+                            series={questionsBoxplotSeries}
+                            tooltipFormatter={Object.keys(dataMining.questions_describe)} />
         </Hidden>
         <Typography component='h6' align='center' className={classes.title}>
           Гістограма для питань

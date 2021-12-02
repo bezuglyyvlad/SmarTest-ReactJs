@@ -1,16 +1,18 @@
-import { memo } from 'react'
-import { Breadcrumbs, Container, Link, makeStyles, Typography } from '@material-ui/core'
+import { memo, useEffect, useState } from 'react'
+import { Container, makeStyles, Typography } from '@material-ui/core'
 import { compose } from 'redux'
 import { withUnAuthRedirect } from '../../hoc/withUnAuthRedirect'
 import { connect } from 'react-redux'
 import { withNotExpertRedirect } from '../../hoc/withNotExpertRedirect'
-import { NavLink } from 'react-router-dom'
 import { withRouter } from 'react-router'
 import { useSnackbar } from 'notistack'
-import { expertPanelTestCatalogSelectors } from '../../redux/selectors/expertPanelTestCatalogSelectors'
 import ExpertPanelTestCatalogExpertTests from './ExpertPanelTestCatalogExpertTests/ExpertPanelTestCatalogExpertTests'
 import ExpertPanelTestCatalogTestCategories
   from './ExpertPanelTestCatalogTestCategories/ExpertPanelTestCatalogTestCategories'
+import { getExpertPanelBreadcrumbs } from "../../redux/expertPanelBreadcrumbsReducer";
+import { expertPanelBreadcrumbsSelectors } from "../../redux/selectors/expertPanelBreadcrumbsSelectors";
+import { Preloader } from "../common/Preloader";
+import ExpertPanelTestCategoryBreadcrumbs from "../common/ExpertPanel/ExpertPanelTestCategoryBreadcrumbs";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,11 +21,26 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const ExpertPanelTestCatalog = memo(({ history, match, breadcrumbs }) => {
+const ExpertPanelTestCatalog = memo(({ history, match, breadcrumbs, getExpertPanelBreadcrumbs }) => {
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
+  const [showPreloader, setShowPreloader] = useState(true)
 
   const test_category_id = match.params.test_category_id
+
+  useEffect(() => {
+    let mounted = true; // exclude memory leak
+    (async () => {
+      setShowPreloader(true)
+      await getExpertPanelBreadcrumbs(test_category_id)
+      mounted && setShowPreloader(false)
+    })()
+    return () => mounted = false
+  }, [getExpertPanelBreadcrumbs, test_category_id])
+
+  if (showPreloader) {
+    return <Preloader />
+  }
 
   function showError (array) {
     array.forEach(item => {
@@ -34,21 +51,10 @@ const ExpertPanelTestCatalog = memo(({ history, match, breadcrumbs }) => {
   return (
     <Container component='main' maxWidth='lg' className={classes.root}>
       {
-        Array.isArray(breadcrumbs) && breadcrumbs.length &&
-        <Breadcrumbs aria-label='breadcrumb'>
-          <Link color='inherit' component={NavLink} to='/expertPanel'>
-            Expert панель
-          </Link>
-          {
-            breadcrumbs.length > 1 &&
-            breadcrumbs.slice(0, -1).map(value =>
-              <Link key={value.id} color='inherit' component={NavLink} to={`/expertPanel/${value.id}`}>
-                {value.title}
-              </Link>
-            )
-          }
+        breadcrumbs &&
+        <ExpertPanelTestCategoryBreadcrumbs breadcrumbs={breadcrumbs.slice(0, -1)}>
           <Typography color='textPrimary'>{breadcrumbs[breadcrumbs.length - 1].title}</Typography>
-        </Breadcrumbs>
+        </ExpertPanelTestCategoryBreadcrumbs>
       }
       <ExpertPanelTestCatalogTestCategories test_category_id={test_category_id} history={history}
                                             showError={showError} />
@@ -59,12 +65,12 @@ const ExpertPanelTestCatalog = memo(({ history, match, breadcrumbs }) => {
 })
 
 const mapStateToProps = (state) => ({
-  breadcrumbs: expertPanelTestCatalogSelectors.getBreadcrumbs(state),
+  breadcrumbs: expertPanelBreadcrumbsSelectors.getBreadcrumbs(state),
 })
 
 export default compose(
   withUnAuthRedirect,
   withNotExpertRedirect,
   withRouter,
-  connect(mapStateToProps, null)
+  connect(mapStateToProps, { getExpertPanelBreadcrumbs })
 )(ExpertPanelTestCatalog)

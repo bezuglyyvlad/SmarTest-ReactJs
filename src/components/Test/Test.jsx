@@ -56,17 +56,21 @@ const Test = memo(({
   }, [getTest, test_id])
 
   useEffect(() => {
+    let mounted = true; // exclude memory leak
     let interval = null
     const delay = timer === '0' ? null : 1000 //for delete begin delay
     if (testInfo) {
       interval = setInterval(() => {
-        setTimer(getTimer(testInfo.finish_date))
+        mounted && setTimer(getTimer(testInfo.finish_date))
       }, delay)
       if ((new Date()) >= (new Date(testInfo.finish_date))) {
-        setTestIsFinished(true)
+        mounted && setTestIsFinished(true)
       }
     }
-    return () => clearInterval(interval)
+    return () => {
+      clearInterval(interval)
+      return mounted = false
+    }
   }, [timer, testInfo, setTestIsFinished])
 
   const onSubmit = async ({ answer }) => {

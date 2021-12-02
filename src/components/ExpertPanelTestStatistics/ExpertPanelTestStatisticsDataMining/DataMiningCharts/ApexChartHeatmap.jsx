@@ -24,9 +24,7 @@ const ApexChartHeatmap = memo(({
             ApexOptions(
               theme,
               id,
-              titleText,
-              {},
-              {}
+              titleText
             ).options
           }
           series={series}

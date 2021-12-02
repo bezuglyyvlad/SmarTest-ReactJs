@@ -5,8 +5,8 @@ import { appSelectors } from "../../../../redux/selectors/appSelectors";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { changePerPage } from "../../../../redux/appReducer";
-import { expertPanelTestStatisticsSelectors } from "../../../../redux/selectors/expertPanelTestStatisticsSelectors";
 import { Box, makeStyles } from "@material-ui/core";
+import { expertPanelBreadcrumbsSelectors } from "../../../../redux/selectors/expertPanelBreadcrumbsSelectors";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -57,7 +57,7 @@ const DataMiningMaterialTable = memo(({
 
 const mapStateToProps = (state) => ({
   perPage: appSelectors.getPerPage(state),
-  expertTestName: expertPanelTestStatisticsSelectors.getExpertTestName(state),
+  expertTestName: expertPanelBreadcrumbsSelectors.getExpertTestName(state),
 })
 
 export default compose(connect(mapStateToProps, {

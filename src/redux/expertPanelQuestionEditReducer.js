@@ -1,6 +1,6 @@
 import { expertPanelAnswersAPI, expertPanelQuestionAPI } from '../api/api'
 import { initialize, startSubmit, stopSubmit } from 'redux-form'
-import { changeObjectInArray } from '../utils/utils'
+import { changeObjectInArray, thunkErrorHandler, validationErrorHandler } from '../utils/utils'
 
 const SET_QUESTION = 'expertPanelQuestionEdit/SET_QUESTION'
 const SET_ANSWERS = 'expertPanelQuestionEdit/SET_ANSWERS'
@@ -33,12 +33,12 @@ const expertPanelQuestionEditReducer = (state = initialState, action) => {
     case UPDATE_ANSWER:
       return {
         ...state,
-        answers: changeObjectInArray(state.answers, action.newAnswer.answer_id, 'answer_id', action.newAnswer)
+        answers: changeObjectInArray(state.answers, action.oldAnswerId, 'id', action.newAnswer)
       }
     case DELETE_ANSWER:
       return {
         ...state,
-        answers: state.answers.filter(item => item.answerId !== action.answerId)
+        answers: state.answers.filter(item => item.id !== action.answerId)
       }
     default:
       return state
@@ -48,50 +48,79 @@ const expertPanelQuestionEditReducer = (state = initialState, action) => {
 const setQuestionAC = (question) => ({ type: SET_QUESTION, question })
 const setAnswersAC = (answers) => ({ type: SET_ANSWERS, answers })
 const addAnswerAC = (newAnswer) => ({ type: ADD_ANSWER, newAnswer })
-const updateAnswerAC = (newAnswer) => ({ type: UPDATE_ANSWER, newAnswer })
+const updateAnswerAC = (oldAnswerId, newAnswer) => ({ type: UPDATE_ANSWER, oldAnswerId, newAnswer })
 const deleteAnswerAC = (answerId) => ({ type: DELETE_ANSWER, answerId })
 
 export const getExpertQuestion = (questionId) => async (dispatch) => {
-  const response = await expertPanelQuestionAPI.getQuestion(questionId)
-  dispatch(setQuestionAC(response.data))
+  try {
+    const response = await expertPanelQuestionAPI.getQuestion(questionId)
+    dispatch(setQuestionAC(response.data.data))
+  } catch (e) {
+    thunkErrorHandler(e, dispatch)
+  }
 }
 
 export const editQuestion = (data, questionId) => async (dispatch) => {
-  dispatch(startSubmit('questionForm'))
-  const response = await expertPanelQuestionAPI.updateQuestion(data, questionId)
-  dispatch(setQuestionAC(response.data))
-  dispatch(initialize('questionForm', data))
-  dispatch(stopSubmit('questionForm'))
+  try {
+    const response = await expertPanelQuestionAPI.updateQuestion(data, questionId)
+    dispatch(setQuestionAC(response.data.data))
+  } catch (e) {
+    thunkErrorHandler(e, dispatch)
+  }
 }
 
 export const uploadQuestionImage = (data, questionId) => async (dispatch) => {
-  const response = await expertPanelQuestionAPI.uploadImage(data, questionId)
-  dispatch(setQuestionAC(response.data))
+  try {
+    const response = await expertPanelQuestionAPI.uploadImage(data, questionId)
+    dispatch(setQuestionAC(response.data.data))
+  } catch (e) {
+    thunkErrorHandler(e, dispatch)
+  }
 }
 
 export const deleteQuestionImage = (questionId) => async (dispatch) => {
-  const response = await expertPanelQuestionAPI.deleteImage(questionId)
-  dispatch(setQuestionAC(response.data))
+  try {
+    const response = await expertPanelQuestionAPI.deleteImage(questionId)
+    dispatch(setQuestionAC(response.data.data))
+  } catch (e) {
+    thunkErrorHandler(e, dispatch)
+  }
 }
 
 export const getExpertAnswers = (questionId) => async (dispatch) => {
-  const response = await expertPanelAnswersAPI.getAnswers(questionId)
-  dispatch(setAnswersAC(response.data))
+  try {
+    const response = await expertPanelAnswersAPI.getAnswers(questionId)
+    dispatch(setAnswersAC(response.data.data))
+  } catch (e) {
+    thunkErrorHandler(e, dispatch)
+  }
 }
 
 export const addAnswer = (data) => async (dispatch) => {
-  const response = await expertPanelAnswersAPI.addAnswer(data)
-  dispatch(addAnswerAC(response.data))
+  try {
+    const response = await expertPanelAnswersAPI.addAnswer(data)
+    dispatch(addAnswerAC(response.data.data))
+  } catch (e) {
+    thunkErrorHandler(e, dispatch)
+  }
 }
 
 export const updateAnswer = (data) => async (dispatch) => {
-  const response = await expertPanelAnswersAPI.updateAnswer(data)
-  dispatch(updateAnswerAC(response.data))
+  try {
+    const response = await expertPanelAnswersAPI.updateAnswer(data)
+    dispatch(updateAnswerAC(data.id, response.data.data))
+  } catch (e) {
+    thunkErrorHandler(e, dispatch)
+  }
 }
 
 export const deleteAnswer = (answerId) => async (dispatch) => {
-  await expertPanelAnswersAPI.deleteAnswer(answerId)
-  dispatch(deleteAnswerAC(answerId))
+  try {
+    await expertPanelAnswersAPI.deleteAnswer(answerId)
+    dispatch(deleteAnswerAC(answerId))
+  } catch (e) {
+    thunkErrorHandler(e, dispatch)
+  }
 }
 
 export default expertPanelQuestionEditReducer

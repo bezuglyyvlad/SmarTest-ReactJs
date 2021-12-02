@@ -6,7 +6,7 @@ import {
   setAccessTokenToLS,
   setRefreshTokenToLS
 } from '../utils/localStorage'
-import { defaultThunkReject } from '../utils/utils'
+import { thunkErrorHandler } from '../utils/utils'
 
 const SET_USER_DATA = 'user/SET_USER_DATA'
 const SET_NAME_AND_EMAIL = 'user/SET_NAME_AND_EMAIL'
@@ -52,7 +52,7 @@ export const getUserData = () => async (dispatch) => {
     const { id, name, email, roles } = response.data.data
     dispatch(setAuthUserData(id, name, email, roles, true))
   } catch (e) {
-    await defaultThunkReject(e, dispatch)
+    thunkErrorHandler(e, dispatch)
   }
 }
 
@@ -62,7 +62,7 @@ export const signIn = (email, password) => async (dispatch) => {
     const response = await userAPI.signIn(email, password)
     setAccessTokenToLS(response.data.access_token)
     setRefreshTokenToLS(response.data.refresh_token)
-    await dispatch(getUserData())
+    dispatch(getUserData())
     dispatch(stopSubmit('signin'))
   } catch (e) {
     if (e.response && e.response.status === 400 && e.response.data) {
@@ -79,13 +79,13 @@ export const signUp = (name, email, password, passwordConfirmation) => async (di
   try {
     dispatch(startSubmit('signup'))
     await userAPI.signUp(name, email, password, passwordConfirmation)
-    await dispatch(signIn(email, password))
+    dispatch(signIn(email, password))
     dispatch(stopSubmit('signup'))
   } catch (e) {
     if (e.response && e.response.status === 422 && e.response.data) {
       dispatch(stopSubmit('signup', e.response.data.errors))
     } else {
-      await defaultThunkReject(e, dispatch)
+      thunkErrorHandler(e, dispatch)
     }
   }
 }
@@ -95,7 +95,7 @@ export const signOut = () => async (dispatch) => {
     await userAPI.signOut()
     kickUser(dispatch)
   } catch (e) {
-    await defaultThunkReject(e, dispatch)
+    thunkErrorHandler(e, dispatch)
   }
 }
 
@@ -111,7 +111,7 @@ export const updateUser = (userId, name, email, password, passwordConfirmation) 
     if (e.response && e.response.status === 422 && e.response.data) {
       dispatch(stopSubmit('profile', e.response.data.errors))
     } else {
-      await defaultThunkReject(e, dispatch)
+      thunkErrorHandler(e, dispatch)
     }
   }
 }
@@ -121,7 +121,7 @@ export const deleteUser = (userId) => async (dispatch) => {
     await userAPI.deleteUser(userId)
     kickUser(dispatch)
   } catch (e) {
-    await defaultThunkReject(e, dispatch)
+    thunkErrorHandler(e, dispatch)
   }
 }
 

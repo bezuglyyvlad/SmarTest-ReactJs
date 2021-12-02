@@ -1,5 +1,5 @@
 import { memo, useState, useEffect } from 'react'
-import { Box, Breadcrumbs, Container, Link, makeStyles, Typography } from "@material-ui/core"
+import { Box, Container, Link, makeStyles, Typography } from "@material-ui/core"
 import { compose } from "redux"
 import { withUnAuthRedirect } from "../../hoc/withUnAuthRedirect"
 import { connect } from "react-redux"
@@ -7,17 +7,16 @@ import { Preloader } from "../common/Preloader"
 import { withNotExpertRedirect } from "../../hoc/withNotExpertRedirect"
 import { NavLink, Redirect } from "react-router-dom"
 import { withRouter } from "react-router"
-import { testCategorySelectors } from "../../redux/selectors/testCategorySelectors"
-import { expertTestSelectors } from "../../redux/selectors/expertTestSelectors"
-import { getTestCategory } from "../../redux/testCategoryReducer"
-import { getExpertTest } from "../../redux/expertTestReducer"
 import ExpertPanelAnswerAddTable from "./ExpertPanelAnswerAddTable/ExpertPanelAnswerAddTable"
 import { addQuestion } from "../../redux/expertPanelQuestionsReducer"
 import ExpertQuestionForm from "../common/ExpertQuestionForm/ExpertQuestionForm"
-import { uploadImageQuestionValidate } from "../../utils/validators"
-import { getFormData } from "../../utils/utils"
+import { answerValidation, uploadImageQuestionValidate } from "../../utils/validators"
+import { getFormData, validationErrorHandler } from "../../utils/utils"
 import { UploadBox } from "../common/UIElements"
 import { useSnackbar } from "notistack"
+import { expertPanelBreadcrumbsSelectors } from "../../redux/selectors/expertPanelBreadcrumbsSelectors";
+import { getExpertPanelBreadcrumbs } from "../../redux/expertPanelBreadcrumbsReducer";
+import ExpertPanelTestCategoryBreadcrumbs from "../common/ExpertPanel/ExpertPanelTestCategoryBreadcrumbs";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,8 +29,11 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const ExpertPanelQuestionAdd = memo(({
-                                       match, getTestCategory, getExpertTest,
-                                       testCategoryName, expertTestName, addQuestion
+                                       match,
+                                       breadcrumbs,
+                                       expertTestName,
+                                       getExpertPanelBreadcrumbs,
+                                       addQuestion
                                      }) => {
   const classes = useStyles()
   const [showPreloader, setShowPreloader] = useState(true)
@@ -47,12 +49,11 @@ const ExpertPanelQuestionAdd = memo(({
     let mounted = true; // exclude memory leak
     (async () => {
       setShowPreloader(true)
-      await getTestCategory(test_category_id)
-      await getExpertTest(expert_test_id)
+      await getExpertPanelBreadcrumbs(test_category_id, expert_test_id)
       mounted && setShowPreloader(false)
     })()
     return () => mounted = false
-  }, [test_category_id, getTestCategory, getExpertTest, expert_test_id])
+  }, [test_category_id, expert_test_id, getExpertPanelBreadcrumbs])
 
   if (showPreloader) {
     return <Preloader />
@@ -68,19 +69,26 @@ const ExpertPanelQuestionAdd = memo(({
     })
   }
 
-  const onSubmit = (data) => {
+  const onSubmit = async (formikData, setSubmitting) => {
     let errors = []
-    answers.length < 2 && errors.push('Кількість відповідей не може бути менше 2.')
-    answers.filter(i => i.is_right === '1').length === 0 && errors.push('Хоча б одна відповідь повинна бути вірною.')
+    errors = answerValidation(answers, errors)
     if (errors.length !== 0) {
       showError(errors)
     } else {
       answers.map(i => (delete i.tableData))
-      const dataObject = { ...data, image, expert_test_id, answers }
+      const dataObject = { ...formikData, image, expert_test_id, answers }
       const formData = new FormData()
       getFormData(formData, dataObject)
-      addQuestion(formData)
-      setAdded(true)
+      setSubmitting(true)
+      await addQuestion(formData)
+        .then(() => {
+          setAdded(true)
+        })
+        .catch((e) => {
+          setSubmitting(false)
+          const errors = validationErrorHandler(e)
+          showError(errors)
+        })
     }
   }
 
@@ -93,21 +101,19 @@ const ExpertPanelQuestionAdd = memo(({
 
   return (
     <Container component="main" maxWidth="lg" className={classes.root}>
-      <Breadcrumbs aria-label="breadcrumb">
-        <Link color="inherit" component={NavLink} to='/expertPanel'>
-          Expert панель
-        </Link>
-        <Link color="inherit" component={NavLink} to={`/expertPanel/${expert_test_id}`}>
-          {testCategoryName}
-        </Link>
-        <Link color="inherit" component={NavLink} to={`/expertPanel/${test_category_id}/${expert_test_id}`}>
-          {expertTestName}
-        </Link>
-        <Typography color="textPrimary">Створення питання</Typography>
-      </Breadcrumbs>
+      {
+        breadcrumbs &&
+        <ExpertPanelTestCategoryBreadcrumbs breadcrumbs={breadcrumbs}>
+          <Link color='inherit' component={NavLink}
+                to={`/expertPanel/${test_category_id}/${expert_test_id}`}>
+            {expertTestName}
+          </Link>
+          <Typography color="textPrimary">Створення питання</Typography>
+        </ExpertPanelTestCategoryBreadcrumbs>
+      }
       <Container component='main'>
         <UploadBox onUploadChange={onUploadChange} image={image} setImage={setImage} />
-        <ExpertQuestionForm onSubmit={onSubmit} initialValues={{ lvl: 1, type: 1 }} />
+        <ExpertQuestionForm onSubmit={onSubmit} />
         <Box className={classes.table}>
           <ExpertPanelAnswerAddTable answers={answers} setAnswers={setAnswers} />
         </Box>
@@ -117,12 +123,11 @@ const ExpertPanelQuestionAdd = memo(({
 })
 
 const mapStateToProps = (state) => ({
-  categoryName: testCategorySelectors.getName(state),
-  subcategoryName: expertTestSelectors.getName(state),
+  breadcrumbs: expertPanelBreadcrumbsSelectors.getBreadcrumbs(state),
+  expertTestName: expertPanelBreadcrumbsSelectors.getExpertTestName(state),
 })
 
 export default compose(withUnAuthRedirect, withNotExpertRedirect, withRouter, connect(mapStateToProps, {
-  getTestCategory,
-  getExpertTest,
+  getExpertPanelBreadcrumbs,
   addQuestion
 }))(ExpertPanelQuestionAdd)

@@ -3,8 +3,8 @@ import { Box, makeStyles } from "@material-ui/core"
 import { compose } from "redux"
 import { connect } from "react-redux"
 import { Preloader } from "../../common/Preloader"
-import { getExpertPanelTestCategories } from "../../../redux/expertPanelTestCatalogReducer"
-import ExpertPanelTestCategoriesTable from "./ExpertPanelTestCatalogTestCategoriesTable/ExpertPanelTestCategoriesTable"
+import { getExpertPanelTestCategories } from "../../../redux/testCategoriesCRUDReducer";
+import TestCategoriesCRUDTable from "../../common/testCategoriesCRUD/testCategoriesCRUDTable";
 
 const useStyles = makeStyles(theme => ({
   table: {
@@ -41,12 +41,11 @@ const ExpertPanelTestCatalogTestCategories = memo(({
 
   return (
     <Box className={classes.table}>
-      <ExpertPanelTestCategoriesTable rowClick={rowClick} showError={showError}
-                                      test_category_id={test_category_id} />
+      <TestCategoriesCRUDTable rowClick={rowClick} test_category_id={test_category_id} showError={showError}/>
     </Box>
   )
 })
 
 export default compose(connect(null, {
-  getExpertPanelTestCategories,
+  getExpertPanelTestCategories
 }))(ExpertPanelTestCatalogTestCategories)

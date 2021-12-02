@@ -5,17 +5,18 @@ import { compose } from 'redux'
 import { connect } from "react-redux"
 import { expertPanelQuestionEditSelectors } from "../../../redux/selectors/expertPanelQuestionEditSelectors"
 import { addAnswer, deleteAnswer, updateAnswer } from "../../../redux/expertPanelQuestionEditReducer"
+import { answerValidation } from "../../../utils/validators";
+import { validationErrorHandler } from "../../../utils/utils";
 
 const ExpertPanelAnswersTable = memo(({ answers, showError, addAnswer, question_id, updateAnswer, deleteAnswer }) => {
   const columns = [
     { title: 'Текст*', field: 'text' },
-    { title: 'Є вірною*', field: 'is_right', lookup: { 0: 'Ні', 1: 'Так' }, initialEditValue: 0 },
+    { title: 'Є вірною*', field: 'is_correct', lookup: { 0: 'Ні', 1: 'Так' }, initialEditValue: 0 },
   ]
 
   const validate = (answers) => {
     let errors = []
-    answers.length < 2 && errors.push('Кількість відповідей не може бути менше 2.')
-    answers.filter(i => i.is_right === '1' || i.is_right === 1).length === 0 && errors.push('Хоча б одна відповідь повинна бути вірною.')
+    errors = answerValidation(answers, errors)
     showError(errors)
     return errors.length === 0
   }
@@ -36,7 +37,14 @@ const ExpertPanelAnswersTable = memo(({ answers, showError, addAnswer, question_
               reject()
             } else {
               await addAnswer({ ...newData, question_id })
-              resolve()
+                .then(() => {
+                  resolve()
+                })
+                .catch((e) => {
+                  const errors = validationErrorHandler(e)
+                  showError(errors)
+                  reject()
+                })
             }
           }),
         onRowUpdate: (newData, oldData) =>
@@ -51,6 +59,11 @@ const ExpertPanelAnswersTable = memo(({ answers, showError, addAnswer, question_
               delete myOldData.tableData
               if (JSON.stringify(newData) !== JSON.stringify(myOldData)) {
                 await updateAnswer(newData)
+                  .catch((e) => {
+                    const errors = validationErrorHandler(e)
+                    showError(errors)
+                    reject()
+                  })
               }
               resolve()
             }
@@ -63,7 +76,11 @@ const ExpertPanelAnswersTable = memo(({ answers, showError, addAnswer, question_
             if (!validate(resultData)) {
               reject()
             } else {
-              await deleteAnswer(oldData.answer_id)
+              await deleteAnswer(oldData.id)
+                .catch((e) => {
+                  const errors = validationErrorHandler(e)
+                  showError(errors)
+                })
               resolve()
             }
           }),

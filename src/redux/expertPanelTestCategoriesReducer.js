@@ -1,7 +1,7 @@
 import { expertPanelTestCategoriesAPI } from '../api/api'
-import { defaultThunkReject } from '../utils/utils'
+import { thunkErrorHandler } from '../utils/utils'
 
-const SET_TEST_CATEGORIES = 'expertPanelCategories/SET_TEST_CATEGORIES'
+const SET_TEST_CATEGORIES = 'expertPanelTestCategories/SET_TEST_CATEGORIES'
 
 const initialState = {
   testCategories: null
@@ -26,7 +26,7 @@ export const getExpertTestCategories = () => async (dispatch) => {
     const response = await expertPanelTestCategoriesAPI.getTestCategories()
     dispatch(setTestCategoriesAC(response.data.data))
   } catch (e) {
-    await defaultThunkReject(e, dispatch)
+    thunkErrorHandler(e, dispatch)
   }
 }
 

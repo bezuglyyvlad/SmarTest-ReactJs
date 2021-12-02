@@ -2,14 +2,15 @@ import { memo } from 'react'
 import { email, fieldMatch, maxLengthCreator, minLengthCreator, required } from '../../utils/validators'
 import { Field } from 'redux-form'
 import {
+  Box,
   Button, Checkbox,
   FormControl,
   FormControlLabel,
   FormHelperText, Grid,
   InputLabel,
-  makeStyles, RadioGroup,
-  Select,
-  TextField
+  makeStyles, MenuItem, RadioGroup,
+  Select, Slider,
+  TextField, Typography
 } from '@material-ui/core'
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -137,7 +138,7 @@ export const TextareaField = memo(({ label, name, validators }) => (
     validate={validators}
     label={label}
     multiline
-    rowsMax='10'
+    maxRows='10'
     margin='normal'
     fullWidth
   />
@@ -194,4 +195,92 @@ export const TestResultAnswers = memo(({ answer, user_answer, children }) => {
     }
     {children}
   </Grid>
+})
+
+export const TextareaFieldFormik = memo(({ name, label, placeholder = label, formik }) => (
+  <TextField
+    fullWidth
+    multiline
+    id={name}
+    name={name}
+    label={label}
+    placeholder={placeholder}
+    maxRows='10'
+    margin='normal'
+    value={formik.values[name]}
+    onChange={formik.handleChange}
+    error={formik.touched[name] && Boolean(formik.errors[name])}
+    helperText={formik.touched[name] && formik.errors[name]}
+  />
+))
+
+const useStylesSliderFormik = makeStyles(theme => ({
+  slider: {
+    marginTop: theme.spacing(2),
+  }
+}))
+
+export const SliderFormik = memo(({ name, label, min, max, step, formik }) => {
+  const classes = useStylesSliderFormik()
+
+  return (
+    <Box className={classes.slider}>
+      <Typography id={name} color='textSecondary'>
+        {label}
+      </Typography>
+      <Slider
+        getAriaValueText={(value) => (value)}
+        aria-labelledby={name}
+        valueLabelDisplay="auto"
+        step={step}
+        marks
+        min={min}
+        max={max}
+        value={formik.values[name]}
+        onChange={(event, value) => formik.setFieldValue(name, value)}
+      />
+    </Box>
+  )
+})
+
+const useStylesSelectFieldFormik = makeStyles(theme => ({
+  formControl: {
+    marginTop: theme.spacing(1),
+  },
+}))
+
+export const SelectFieldFormik = memo(({ name, label, formik, children }) => {
+  const classes = useStylesSelectFieldFormik()
+
+  return (
+    <FormControl fullWidth className={classes.formControl}>
+      <InputLabel id={`${name}-label`}>{label}</InputLabel>
+      <Select
+        id={name}
+        name={name}
+        labelId={`${name}-label`}
+        value={formik.values[name]}
+        onChange={formik.handleChange}
+      >
+        {children}
+      </Select>
+    </FormControl>
+  )
+})
+
+export const SubmitButtonFormik = memo(({ text, formik }) => {
+  const classes = useStylesSubmitButton()
+
+  return (
+    <Button
+      type='submit'
+      fullWidth
+      variant='contained'
+      color='primary'
+      className={classes.submit}
+      disabled={!formik.dirty || formik.isSubmitting}
+    >
+      {text}
+    </Button>
+  )
 })

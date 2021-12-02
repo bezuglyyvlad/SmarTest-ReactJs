@@ -1,5 +1,5 @@
 import { statisticsAPI } from '../api/api'
-import { defaultThunkReject } from '../utils/utils'
+import { thunkErrorHandler } from '../utils/utils'
 
 const SET_RATING = 'statistics/SET_RATING'
 const SET_TESTS = 'statistics/SET_TESTS'
@@ -36,7 +36,7 @@ export const getRating = () => async (dispatch) => {
     const response = await statisticsAPI.getRating()
     dispatch(setRatingAC(response.data))
   } catch (e) {
-    await defaultThunkReject(e, dispatch)
+    thunkErrorHandler(e, dispatch)
   }
 }
 
@@ -46,7 +46,7 @@ export const getTests = (page, perPage) => async (dispatch) => {
     const { data, meta } = response.data
     dispatch(setTestsAC(data, meta))
   } catch (e) {
-    await defaultThunkReject(e, dispatch)
+    thunkErrorHandler(e, dispatch)
   }
 }
 

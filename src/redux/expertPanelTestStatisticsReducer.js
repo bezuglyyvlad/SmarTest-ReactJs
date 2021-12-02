@@ -1,13 +1,11 @@
 import { expertPanelTestCatalogAPI } from '../api/api'
-import { defaultThunkReject } from '../utils/utils'
+import { thunkErrorHandler } from '../utils/utils'
 
 const SET_TESTS = 'expertPanelTestStatistics/SET_TESTS'
 const SET_DATA_MINING = 'expertPanelTestStatistics/SET_DATA_MINING'
 
 const initialState = {
   tests: null,
-  testCategoryBreadcrumbs: null,
-  expertTestName: null,
   dataMining: null
 }
 
@@ -16,9 +14,7 @@ const expertPanelTestStatisticsReducer = (state = initialState, action) => {
     case SET_TESTS:
       return {
         ...state,
-        tests: action.tests,
-        testCategoryBreadcrumbs: action.testCategoryBreadcrumbs,
-        expertTestName: action.expertTestName
+        tests: action.tests
       }
     case SET_DATA_MINING:
       return {
@@ -30,11 +26,9 @@ const expertPanelTestStatisticsReducer = (state = initialState, action) => {
   }
 }
 
-const setTestsAC = (tests, testCategoryBreadcrumbs, expertTestName) => ({
+const setTestsAC = ({ tests }) => ({
   type: SET_TESTS,
-  tests,
-  testCategoryBreadcrumbs,
-  expertTestName
+  tests
 })
 const setDataMiningAC = (dataMining) => ({
   type: SET_DATA_MINING,
@@ -44,10 +38,9 @@ const setDataMiningAC = (dataMining) => ({
 export const getExpertTestStatistics = (expertTestId) => async (dispatch) => {
   try {
     const response = await expertPanelTestCatalogAPI.getTestStatistics(expertTestId)
-    const { tests, testCategoryBreadcrumbs, expertTestName } = response.data
-    dispatch(setTestsAC(tests, testCategoryBreadcrumbs, expertTestName))
+    dispatch(setTestsAC(response.data))
   } catch (e) {
-    await defaultThunkReject(e, dispatch)
+    thunkErrorHandler(e, dispatch)
   }
 }
 
@@ -56,7 +49,7 @@ export const getExpertDataMining = (expertTestId) => async (dispatch) => {
     const response = await expertPanelTestCatalogAPI.getDataMining(expertTestId)
     dispatch(setDataMiningAC(response.data))
   } catch (e) {
-    await defaultThunkReject(e, dispatch)
+    thunkErrorHandler(e, dispatch)
   }
 }
 

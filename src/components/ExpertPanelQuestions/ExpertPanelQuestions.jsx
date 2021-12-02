@@ -1,20 +1,18 @@
 import { memo, useState, useEffect } from 'react'
-import { Box, Breadcrumbs, Container, Link, makeStyles, Typography } from '@material-ui/core'
+import { Box, Container, makeStyles, Typography } from '@material-ui/core'
 import { compose } from 'redux'
 import { withUnAuthRedirect } from '../../hoc/withUnAuthRedirect'
 import { connect } from 'react-redux'
 import { Preloader } from '../common/Preloader'
 import { withNotExpertRedirect } from '../../hoc/withNotExpertRedirect'
-import { NavLink } from 'react-router-dom'
 import { withRouter } from 'react-router'
-import { getTestCategory } from '../../redux/testCategoryReducer'
-import { testCategorySelectors } from '../../redux/selectors/testCategorySelectors'
-import { getExpertTest } from '../../redux/expertTestReducer'
-import { expertTestSelectors } from '../../redux/selectors/expertTestSelectors'
 import { exportQuestions, getExpertQuestions } from '../../redux/expertPanelQuestionsReducer'
 import ExpertQuestionsTable from './ExpertPanelQuestionsTable/ExpertPanelQuestionsTable'
 import { useSnackbar } from 'notistack'
 import { expertPanelQuestionsSelectors } from '../../redux/selectors/expertPanelQuestionsSelectors'
+import ExpertPanelTestCategoryBreadcrumbs from "../common/ExpertPanel/ExpertPanelTestCategoryBreadcrumbs";
+import { getExpertPanelBreadcrumbs } from "../../redux/expertPanelBreadcrumbsReducer";
+import { expertPanelBreadcrumbsSelectors } from "../../redux/selectors/expertPanelBreadcrumbsSelectors";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,32 +25,32 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const ExpertPanelQuestions = memo(({
-                                     match, getCategory, getSubcategory, categoryName, subcategoryName,
-                                     getExpertQuestions, history, exportQuestions, serverErrors
+                                     match,
+                                     history,
+                                     getExpertQuestions,
+                                     getExpertPanelBreadcrumbs,
+                                     exportQuestions,
+                                     breadcrumbs,
+                                     expertTestName
                                    }) => {
   const classes = useStyles()
   const [showPreloader, setShowPreloader] = useState(true)
   const [disableExport, setDisableExport] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
 
-  const category_id = match.params.category_id
-  const subcategory_id = match.params.subcategory_id
+  const test_category_id = match.params.test_category_id
+  const expert_test_id = match.params.expert_test_id
 
   useEffect(() => {
     let mounted = true; // exclude memory leak
     (async () => {
       setShowPreloader(true)
-      await getCategory(category_id)
-      await getSubcategory(subcategory_id)
-      await getExpertQuestions(subcategory_id)
+      await getExpertPanelBreadcrumbs(test_category_id, expert_test_id)
+      await getExpertQuestions(expert_test_id)
       mounted && setShowPreloader(false)
     })()
     return () => mounted = false
-  }, [category_id, getCategory, getExpertQuestions, getSubcategory, subcategory_id])
-
-  useEffect(() => {
-    serverErrors && showError(serverErrors)
-  })
+  }, [getExpertQuestions, expert_test_id, getExpertPanelBreadcrumbs, test_category_id])
 
   if (showPreloader) {
     return <Preloader />
@@ -66,23 +64,20 @@ const ExpertPanelQuestions = memo(({
 
   async function exportQuestionsAction () {
     setDisableExport(true)
-    await exportQuestions(subcategory_id, categoryName, subcategoryName)
+    await exportQuestions(expert_test_id, expertTestName)
     setDisableExport(false)
   }
 
   return (
     <Container component='main' maxWidth='lg' className={classes.root}>
-      <Breadcrumbs aria-label='breadcrumb'>
-        <Link color='inherit' component={NavLink} to='/expertPanel'>
-          Expert панель
-        </Link>
-        <Link color='inherit' component={NavLink} to={`/expertPanel/${category_id}`}>
-          {categoryName}
-        </Link>
-        <Typography color='textPrimary'>{subcategoryName}</Typography>
-      </Breadcrumbs>
+      {
+        breadcrumbs &&
+        <ExpertPanelTestCategoryBreadcrumbs breadcrumbs={breadcrumbs}>
+          <Typography color="textPrimary">{expertTestName}</Typography>
+        </ExpertPanelTestCategoryBreadcrumbs>
+      }
       <Box className={classes.table}>
-        <ExpertQuestionsTable history={history} category_id={category_id} subcategory_id={subcategory_id}
+        <ExpertQuestionsTable history={history} test_category_id={test_category_id} expert_test_id={expert_test_id}
                               showError={showError} exportQuestionsAction={exportQuestionsAction}
                               disableExport={disableExport} />
       </Box>
@@ -91,14 +86,12 @@ const ExpertPanelQuestions = memo(({
 })
 
 const mapStateToProps = (state) => ({
-  categoryName: testCategorySelectors.getName(state),
-  subcategoryName: expertTestSelectors.getName(state),
-  serverErrors: expertPanelQuestionsSelectors.getServerErrors(state)
+  breadcrumbs: expertPanelBreadcrumbsSelectors.getBreadcrumbs(state),
+  expertTestName: expertPanelBreadcrumbsSelectors.getExpertTestName(state)
 })
 
 export default compose(withUnAuthRedirect, withNotExpertRedirect, withRouter, connect(mapStateToProps, {
-  getTestCategory,
-  getExpertTest,
+  getExpertPanelBreadcrumbs,
   getExpertQuestions,
   exportQuestions
 }))(ExpertPanelQuestions)

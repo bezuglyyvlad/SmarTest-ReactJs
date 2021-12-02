@@ -28,7 +28,7 @@ const ApexChartBarChart = memo(({
             id,
             titleText,
             { categories: xaxisCategories, title: { text: xaxisTitleText } },
-            { title: { text: yaxisTitleText } }
+            yaxisTitleText
           ).options}
           series={series}
           type='bar'

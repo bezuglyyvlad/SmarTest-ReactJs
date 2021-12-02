@@ -37,9 +37,7 @@ const TestResult = memo(({
                            test,
                            questions,
                            answers,
-                           count_of_right_answers,
-                           basicPoints,
-                           correctionCoef
+                           count_of_right_answers
                          }) => {
   const classes = useStyles()
   const [showPreloader, setShowPreloader] = useState(true)
@@ -63,7 +61,6 @@ const TestResult = memo(({
     { title: 'Категорія', value: test.test_category.title },
     { title: 'Початок тесту', value: (new Date(test.start_date)).toLocaleString() },
     { title: 'Завершення тесту', value: (new Date(test.finish_date)).toLocaleString() },
-    // {title: 'Співвідношення складності питань (легкі/середні/складні)', value: complexity},
     { title: 'Правильних відповідей', value: count_of_right_answers },
     { title: 'Балів', value: test.score },
   ]
@@ -94,9 +91,7 @@ const TestResult = memo(({
       {questions.map(q => (
         <Question key={q.id}
                   q={q}
-                  answers={answers[q.question.id]}
-                  points={basicPoints}
-                  correctionCoef={correctionCoef} />
+                  answers={answers[q.question.id]} />
       ))}
     </Container>
   )
@@ -106,8 +101,6 @@ const mapStateToProps = (state) => ({
   test: testResultSelectors.getTest(state),
   questions: testResultSelectors.getQuestions(state),
   answers: testResultSelectors.getAnswers(state),
-  basicPoints: testResultSelectors.getBasicPoints(state),
-  correctionCoef: testResultSelectors.getCorrectionCoef(state),
   count_of_right_answers: testResultSelectors.getCountOfCorrectAnswers(state)
 })
 

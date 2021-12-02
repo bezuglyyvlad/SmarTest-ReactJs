@@ -7,10 +7,6 @@ import { Preloader } from "../common/Preloader"
 import { withNotExpertRedirect } from "../../hoc/withNotExpertRedirect"
 import { NavLink } from "react-router-dom"
 import { withRouter } from "react-router"
-import { testCategorySelectors } from "../../redux/selectors/testCategorySelectors"
-import { expertTestSelectors } from "../../redux/selectors/expertTestSelectors"
-import { getTestCategory } from "../../redux/testCategoryReducer"
-import { getExpertTest } from "../../redux/expertTestReducer"
 import ExpertQuestionForm from "../common/ExpertQuestionForm/ExpertQuestionForm"
 import {
   deleteQuestionImage,
@@ -22,9 +18,12 @@ import {
 import { expertPanelQuestionEditSelectors } from "../../redux/selectors/expertPanelQuestionEditSelectors"
 import ExpertAnswersTable from "./ExpertPanelAnswersTable/ExpertPanelAnswersTable"
 import { uploadImageQuestionValidate } from "../../utils/validators"
-import { getFormData } from "../../utils/utils"
+import { getFormData, validationErrorHandler } from "../../utils/utils"
 import ImageBox, { UploadBox } from "../common/UIElements"
 import { useSnackbar } from "notistack"
+import { getExpertPanelBreadcrumbs } from "../../redux/expertPanelBreadcrumbsReducer";
+import ExpertPanelTestCategoryBreadcrumbs from "../common/ExpertPanel/ExpertPanelTestCategoryBreadcrumbs";
+import { expertPanelBreadcrumbsSelectors } from "../../redux/selectors/expertPanelBreadcrumbsSelectors";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,30 +36,51 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const ExpertPanelQuestionEdit = memo(({
-                                        match, getTestCategory, getExpertTest,
-                                        testCategoryName, expertTestName, getExpertQuestion, question, editQuestion,
-                                        getExpertAnswers, uploadQuestionImage, deleteQuestionImage
+                                        match,
+                                        history,
+                                        location,
+                                        breadcrumbs,
+                                        expertTestName,
+                                        question,
+                                        getExpertPanelBreadcrumbs,
+                                        getExpertQuestion,
+                                        getExpertAnswers,
+                                        uploadQuestionImage,
+                                        deleteQuestionImage,
+                                        editQuestion
                                       }) => {
   const classes = useStyles()
   const [showPreloader, setShowPreloader] = useState(true)
+  const [questionId, setQuestionId] = useState(match.params.question_id)
+  const [initialQuestionId] = useState(match.params.question_id)
   const { enqueueSnackbar } = useSnackbar()
 
   const test_category_id = match.params.test_category_id
   const expert_test_id = match.params.expert_test_id
-  const question_id = match.params.question_id
 
   useEffect(() => {
     let mounted = true; // exclude memory leak
     (async () => {
       setShowPreloader(true)
-      await getTestCategory(test_category_id)
-      await getExpertTest(expert_test_id)
-      await getExpertQuestion(question_id)
-      await getExpertAnswers(question_id)
+      await getExpertPanelBreadcrumbs(test_category_id, expert_test_id)
+      await getExpertQuestion(initialQuestionId)
+      await getExpertAnswers(initialQuestionId)
       mounted && setShowPreloader(false)
     })()
     return () => mounted = false
-  }, [test_category_id, getTestCategory, getExpertAnswers, getExpertQuestion, getExpertTest, question_id, expert_test_id])
+  }, [expert_test_id, getExpertAnswers, getExpertPanelBreadcrumbs, getExpertQuestion, initialQuestionId, test_category_id])
+
+  useEffect(() => {
+    let mounted = true; // exclude memory leak
+    if (question && question.id !== +questionId) {
+      const pathNameParts = location.pathname.split('/')
+      pathNameParts[pathNameParts.length - 1] = question.id
+      const newPathname = pathNameParts.join('/')
+      history.push(newPathname)
+      mounted && setQuestionId(question.id)
+    }
+    return () => mounted = false
+  }, [history, location.pathname, question, questionId])
 
   if (showPreloader) {
     return <Preloader />
@@ -72,8 +92,14 @@ const ExpertPanelQuestionEdit = memo(({
     })
   }
 
-  const onSubmit = (data) => {
-    editQuestion(data, question_id)
+  const onSubmit = async (formikData, setSubmitting) => {
+    setSubmitting(true)
+    await editQuestion(formikData, questionId)
+      .catch((e) => {
+        const errors = validationErrorHandler(e)
+        showError(errors)
+      })
+    setSubmitting(false)
   }
 
   const onUploadChange = (e) => {
@@ -81,40 +107,47 @@ const ExpertPanelQuestionEdit = memo(({
     if (files.length && uploadImageQuestionValidate(files[0], showError)) {
       const formData = new FormData()
       getFormData(formData, { image: files[0] })
-      uploadQuestionImage(formData, question_id)
+      uploadQuestionImage(formData, questionId)
+        .catch((e) => {
+          const errors = validationErrorHandler(e)
+          showError(errors)
+        })
     }
   }
 
   return (
     <Container component="main" maxWidth="lg" className={classes.root}>
-      <Breadcrumbs aria-label="breadcrumb">
-        <Link color="inherit" component={NavLink} to='/expertPanel'>
-          Expert панель
-        </Link>
-        <Link color="inherit" component={NavLink} to={`/expertPanel/${test_category_id}`}>
-          {testCategoryName}
-        </Link>
-        <Link color="inherit" component={NavLink} to={`/expertPanel/${test_category_id}/${expert_test_id}`}>
-          {expertTestName}
-        </Link>
-        <Typography color="textPrimary">Редагування питання</Typography>
-      </Breadcrumbs>
+      {
+        breadcrumbs &&
+        <ExpertPanelTestCategoryBreadcrumbs breadcrumbs={breadcrumbs}>
+          <Link color='inherit' component={NavLink}
+                to={`/expertPanel/${test_category_id}/${expert_test_id}`}>
+            {expertTestName}
+          </Link>
+          <Typography color="textPrimary">Редагування питання</Typography>
+        </ExpertPanelTestCategoryBreadcrumbs>
+      }
       <Container component='main'>
         {question.image &&
         <ImageBox imageSrc={question.image} />}
         <UploadBox onUploadChange={onUploadChange} image={false} setImage={() => {
         }} visibleDelete={!!question.image} deleteAction={() => {
-          deleteQuestionImage(question_id)
+          deleteQuestionImage(questionId)
+            .catch((e) => {
+              const errors = validationErrorHandler(e)
+              showError(errors)
+            })
         }} />
-        <ExpertQuestionForm onSubmit={onSubmit}
-                            initialValues={{
-                              text: question.text,
-                              description: question.description,
-                              lvl: question.lvl,
-                              type: question.type
-                            }} />
+        <ExpertQuestionForm onSubmit={onSubmit} initialValues={{
+          text: question.text,
+          description: question.description,
+          complexity: question.complexity,
+          significance: question.significance,
+          relevance: question.relevance,
+          type: question.type
+        }} />
         <Box className={classes.table}>
-          <ExpertAnswersTable showError={showError} question_id={question_id} />
+          <ExpertAnswersTable showError={showError} question_id={questionId} />
         </Box>
       </Container>
     </Container>
@@ -122,17 +155,16 @@ const ExpertPanelQuestionEdit = memo(({
 })
 
 const mapStateToProps = (state) => ({
-  testCategoryName: testCategorySelectors.getName(state),
-  expertTestName: expertTestSelectors.getName(state),
+  breadcrumbs: expertPanelBreadcrumbsSelectors.getBreadcrumbs(state),
+  expertTestName: expertPanelBreadcrumbsSelectors.getExpertTestName(state),
   question: expertPanelQuestionEditSelectors.getQuestion(state),
 })
 
 export default compose(withUnAuthRedirect, withNotExpertRedirect, withRouter, connect(mapStateToProps, {
-  getTestCategory,
-  getExpertTest,
+  getExpertPanelBreadcrumbs,
   getExpertQuestion,
+  getExpertAnswers,
   uploadQuestionImage,
   deleteQuestionImage,
   editQuestion,
-  getExpertAnswers,
 }))(ExpertPanelQuestionEdit)

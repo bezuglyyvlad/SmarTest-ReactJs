@@ -37,11 +37,13 @@ const TestsTable = memo(({ history, perPage, pagination, tests, getTests }) => {
   const [dense, setDense] = useState(false)
 
   useEffect(() => {
+    let mounted = true; // exclude memory leak
     (async () => {
       setTestsRequest(true)
       await getTests(page, perPage)
-      setTestsRequest(false)
+      mounted && setTestsRequest(false)
     })()
+    return () => mounted = false
   }, [getTests, page, perPage])
 
   const handleChangeDense = event => {

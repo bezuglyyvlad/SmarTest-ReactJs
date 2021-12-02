@@ -1,5 +1,5 @@
 import { testCategoriesAPI } from '../api/api'
-import { defaultThunkReject } from '../utils/utils'
+import { thunkErrorHandler } from '../utils/utils'
 
 const SET_TEST_CATEGORIES = 'testCategories/SET_TEST_CATEGORIES'
 
@@ -31,7 +31,7 @@ export const getTestCategories = (testCategoryId, page) => async (dispatch) => {
     const response = await testCategoriesAPI.getData(testCategoryId, page)
     dispatch(setTestCategories(response.data.data, response.data.breadcrumbs, response.data.meta))
   } catch (e) {
-    await defaultThunkReject(e, dispatch)
+    thunkErrorHandler(e, dispatch)
   }
 }
 

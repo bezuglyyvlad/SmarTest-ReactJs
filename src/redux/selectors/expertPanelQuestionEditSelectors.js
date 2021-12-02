@@ -1,8 +1,8 @@
 export const expertPanelQuestionEditSelectors = {
   getQuestion (state) {
-    return state.expertQuestionEdit.question
+    return state.expertPanelQuestionEdit.question
   },
   getAnswers (state) {
-    return state.expertQuestionEdit.answers
+    return state.expertPanelQuestionEdit.answers
   }
 }

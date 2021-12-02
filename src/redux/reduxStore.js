@@ -7,15 +7,14 @@ import testCategoriesReducer from './testCategoriesReducer'
 import testReducer from './testReducer'
 import testResultReducer from './testResultReducer'
 import statisticsReducer from './statisticsReducer'
-import adminPanelReducer from './adminPanelReducer'
+import testCategoriesCRUDReducer from './testCategoriesCRUDReducer'
 import expertPanelTestCategoriesReducer from './expertPanelTestCategoriesReducer'
 import expertPanelTestCatalogReducer from './expertPanelTestCatalogReducer'
-import expertTestReducer from './expertTestReducer'
 import expertPanelQuestionsReducer from './expertPanelQuestionsReducer'
 import expertPanelQuestionEditReducer from './expertPanelQuestionEditReducer'
 import expertPanelTestStatisticsReducer from './expertPanelTestStatisticsReducer'
 import expertTestsReducer from './expertTestsReducer'
-import testCategoryReducer from './testCategoryReducer'
+import expertPanelBreadcrumbsReducer from "./expertPanelBreadcrumbsReducer";
 
 const reducers = combineReducers({
   form: formReducer,
@@ -23,12 +22,11 @@ const reducers = combineReducers({
   app: appReducer,
   testCategories: testCategoriesReducer,
   expertTests: expertTestsReducer,
-  testCategory: testCategoryReducer,
-  expertTest: expertTestReducer,
   test: testReducer,
   testResult: testResultReducer,
   statistics: statisticsReducer,
-  adminPanel: adminPanelReducer,
+  testCategoriesCRUD: testCategoriesCRUDReducer,
+  expertPanelBreadcrumbs: expertPanelBreadcrumbsReducer,
   expertPanelTestCatalog: expertPanelTestCatalogReducer,
   expertPanelCategories: expertPanelTestCategoriesReducer,
   expertPanelTestStatistics: expertPanelTestStatisticsReducer,

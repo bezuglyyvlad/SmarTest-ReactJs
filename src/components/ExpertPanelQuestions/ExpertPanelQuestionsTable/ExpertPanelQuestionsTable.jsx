@@ -8,7 +8,7 @@ import { materialTableLocalization } from '../../../utils/localization'
 import { expertPanelQuestionsSelectors } from '../../../redux/selectors/expertPanelQuestionsSelectors'
 import { deleteQuestion, importQuestions } from '../../../redux/expertPanelQuestionsReducer'
 import { Box, IconButton, makeStyles, Tooltip } from '@material-ui/core'
-import { getFormData, importAcceptTypes } from '../../../utils/utils'
+import { getFormData, importAcceptTypes, validationErrorHandler } from '../../../utils/utils'
 import { importQuestionsValidate } from '../../../utils/validators'
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
 import InfoIcon from '@material-ui/icons/Info'
@@ -39,8 +39,9 @@ const ExpertPanelQuestionsTable = memo(({
       editable: 'never',
       render: rowData => rowData.tableData.id + 1
     },
+    { title: 'Ідентифікатор', field: 'id' },
     { title: 'Текст', field: 'text' },
-    { title: 'Складність', field: 'lvl', lookup: { 1: 'Легкий', 2: 'Середній', 3: 'Складний' } },
+    { title: 'Складність', field: 'condComplexity', lookup: { 1: 'Низька', 2: 'Середня', 3: 'Висока' } },
     { title: 'Тип', field: 'type', lookup: { 1: 'Одиночний', 2: 'Множинний' } },
     { title: 'Опис', field: 'description' },
   ]
@@ -53,10 +54,13 @@ const ExpertPanelQuestionsTable = memo(({
     const files = e.target.files
     if (files.length && importQuestionsValidate(files[0], showError)) {
       const formData = new FormData()
-      getFormData(formData, { 'import': files[0], expert_test_id })
+      getFormData(formData, { 'importFile': files[0], expert_test_id })
       setLoading(true)
-      const error = await importQuestions(formData, expert_test_id)
-      Array.isArray(error) && showError(error)
+      await importQuestions(formData, expert_test_id)
+        .catch((e) => {
+          const errors = validationErrorHandler(e)
+          showError(errors)
+        })
       setLoading(false)
     }
   }
@@ -74,7 +78,11 @@ const ExpertPanelQuestionsTable = memo(({
         editable={{
           onRowDelete: oldData =>
             new Promise(async (resolve, reject) => {
-              await deleteQuestion(oldData.question_id)
+              await deleteQuestion(oldData.id)
+                .catch((e) => {
+                  const errors = validationErrorHandler(e)
+                  showError(errors)
+                })
               resolve()
             })
         }}
@@ -89,7 +97,7 @@ const ExpertPanelQuestionsTable = memo(({
             icon: 'edit',
             tooltip: 'Редагувати',
             onClick: (event, rowData) =>
-              history.push(`/expertPanel/${test_category_id}/${expert_test_id}/edit/${rowData.question_id}`)
+              history.push(`/expertPanel/${test_category_id}/${expert_test_id}/edit/${rowData.id}`)
           },
           {
             icon: () => {

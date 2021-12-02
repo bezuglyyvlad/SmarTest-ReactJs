@@ -1,6 +1,6 @@
 import { testAPI } from '../api/api'
 import { startSubmit, reset } from 'redux-form'
-import { defaultThunkReject } from '../utils/utils'
+import { thunkErrorHandler } from '../utils/utils'
 
 const SET_TEST_DATA = 'test/SET_TEST_DATA'
 const GET_NEXT_QUESTION = 'test/GET_NEXT_QUESTION'
@@ -46,14 +46,10 @@ export const setTestIsFinished = (testIsFinished) => ({ type: SET_TEST_IS_FINISH
 export const getTest = (testId) => async (dispatch) => {
   try {
     const response = await testAPI.getTest(testId)
-    if (response.data.length !== 0) {
-      const { test, question, answers } = response.data
-      dispatch(setTestDataAC(test, question, answers))
-    } else {
-      await Promise.reject(new Error('403 Forbidden'))
-    }
+    const { test, question, answers } = response.data
+    dispatch(setTestDataAC(test, question, answers))
   } catch (e) {
-    await defaultThunkReject(e, dispatch)
+    thunkErrorHandler(e, dispatch)
   }
 }
 
@@ -69,7 +65,7 @@ export const nextQuestion = (testId, answer) => async (dispatch) => {
       dispatch(setTestIsFinished(true))
     }
   } catch (e) {
-    await defaultThunkReject(e, dispatch)
+    thunkErrorHandler(e, dispatch)
   }
 }
 

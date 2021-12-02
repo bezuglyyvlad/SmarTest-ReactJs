@@ -2,20 +2,21 @@ import { memo } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import {
-  addTestCategoryAdminPanel,
-  deleteTestCategoryAdminPanel,
-  updateTestCategoryAdminPanel
-} from '../../../redux/adminPanelReducer'
+  addTestCategory,
+  deleteTestCategory,
+  updateTestCategory
+} from '../../../redux/testCategoriesCRUDReducer'
 import { changePerPage } from '../../../redux/appReducer'
-import { adminPanelSelectors } from '../../../redux/selectors/adminPanelSelectors'
+import { testCategoriesCRUDSelectors } from '../../../redux/selectors/testCategoriesCRUDSelectors'
 import { appSelectors } from '../../../redux/selectors/appSelectors'
 import { materialTableLocalization } from '../../../utils/localization'
 import MaterialTable from 'material-table'
 import { email, maxLengthCreator, required } from '../../../utils/validators'
+import { validationErrorHandler } from "../../../utils/utils";
 
-const AdminPanelTable = memo(({
+const TestCategoriesCRUDTable = memo(({
                                 showError, testCategories, addTestCategory, updateTestCategory,
-                                deleteTestCategory, perPage, changePerPage
+                                deleteTestCategory, perPage, changePerPage, rowClick, test_category_id
                               }) => {
   const columns = [
     {
@@ -48,6 +49,7 @@ const AdminPanelTable = memo(({
       options={{ sorting: true, pageSize: +perPage }}
       localization={materialTableLocalization}
       onChangeRowsPerPage={setPerPage}
+      onRowClick={rowClick}
       editable={{
         onRowAdd: newData =>
           new Promise(async (resolve, reject) => {
@@ -55,12 +57,15 @@ const AdminPanelTable = memo(({
               title: newData.title,
               userEmail: newData.user ? newData.user.email : null,
             }
-            const apiErrors = await addTestCategory(title, userEmail)
-            if (apiErrors) {
-              showError(apiErrors)
-              reject()
-            }
-            resolve()
+            await addTestCategory(title, userEmail, test_category_id)
+              .then(() => {
+                resolve()
+              })
+              .catch((e) => {
+                const errors = validationErrorHandler(e)
+                showError(errors)
+                reject()
+              })
           }),
         onRowUpdate: (newData, oldData) =>
           new Promise(async (resolve, reject) => {
@@ -72,11 +77,12 @@ const AdminPanelTable = memo(({
                 title: newData.title,
                 userEmail: newData.user ? newData.user.email : null,
               }
-              const apiErrors = await updateTestCategory(id, title, userEmail)
-              if (apiErrors) {
-                showError(apiErrors)
-                reject()
-              }
+              await updateTestCategory(id, title, userEmail)
+                .catch((e) => {
+                  const errors = validationErrorHandler(e)
+                  showError(errors)
+                  reject()
+                })
             }
             resolve()
           }),
@@ -91,13 +97,13 @@ const AdminPanelTable = memo(({
 })
 
 const mapStateToProps = (state) => ({
-  testCategories: adminPanelSelectors.getCategories(state),
+  testCategories: testCategoriesCRUDSelectors.getCategories(state),
   perPage: appSelectors.getPerPage(state),
 })
 
 export default compose(connect(mapStateToProps, {
-  updateTestCategory: updateTestCategoryAdminPanel,
-  addTestCategory: addTestCategoryAdminPanel,
-  deleteTestCategory: deleteTestCategoryAdminPanel,
-  changePerPage,
-}))(AdminPanelTable)
+  updateTestCategory,
+  addTestCategory,
+  deleteTestCategory,
+  changePerPage
+}))(TestCategoriesCRUDTable)

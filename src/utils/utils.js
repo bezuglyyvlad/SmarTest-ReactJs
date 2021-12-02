@@ -71,7 +71,15 @@ export function getFormData (formData, data, previousKey) {
   }
 }
 
-export const imageAcceptTypes = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp']
+export const imageAcceptTypes = [
+  'image/png',
+  'image/jpg',
+  'image/jpeg',
+  'image/webp',
+  'image/gif',
+  'image/bmp',
+  'image/svg+xml'
+]
 export const importAcceptTypes = ['text/xml']
 
 export const downloadFile = (data, fileName) => {
@@ -91,15 +99,6 @@ export const changeObjectInArray = (items, itemId, objPropName, newObj) => {
     }
     return u
   })
-}
-
-export const defaultThunkReject = (e, dispatch) => {
-  if (e?.response?.status === 401 && e.response?.config?.url === 'oauth/token/refresh') {
-    console.log('refresh_token is invalid')
-    kickUser(dispatch)
-    return true
-  }
-  return Promise.reject(e)
 }
 
 export const getDoublePaginationsUrlParams = (
@@ -128,12 +127,20 @@ const errorInArrayOfString = errors => {
   return Object.values(errors).flat()
 }
 
-export const errorHandling = (e, dispatch) => {
+export const thunkErrorHandler = (e, dispatch) => {
+  if (e?.response?.status === 401 && e.response?.config?.url === 'oauth/token/refresh') {
+    console.log('refresh_token is invalid')
+    kickUser(dispatch)
+  } else {
+    throw e
+  }
+}
+
+export const validationErrorHandler = (e) => {
   if (e.response && e.response.status === 422 && e.response.data) {
     return errorInArrayOfString(e.response.data.errors)
-  } else {
-    defaultThunkReject(e, dispatch)
   }
+  throw e
 }
 
 export const ApexOptions = (
@@ -141,7 +148,7 @@ export const ApexOptions = (
   id,
   titleText,
   xaxis = {},
-  yaxis = {},
+  yaxisTitleText = undefined,
   tooltip = {}
 ) => {
   return {
@@ -170,7 +177,11 @@ export const ApexOptions = (
         locales: [apexChartsLocalization]
       },
       xaxis: xaxis,
-      yaxis: yaxis,
+      yaxis: {
+        title: {
+          text: yaxisTitleText
+        }
+      },
       theme: {
         mode: theme.palette.type,
         palette: 'palette1'
@@ -182,6 +193,11 @@ export const ApexOptions = (
       tooltip: tooltip,
       dataLabels: {
         enabled: false
+      },
+      legend: {
+        onItemClick: {
+          toggleDataSeries: false
+        }
       },
       plotOptions: {
         boxPlot: {
@@ -251,9 +267,9 @@ export const ApexOptions = (
 }
 
 export const isObjectEmpty = (obj) => {
-  return obj &&
-    Object.keys(obj).length === 0 &&
-    Object.getPrototypeOf(obj) === Object.prototype
+  return !obj ||
+    (Object.keys(obj).length === 0 &&
+      Object.getPrototypeOf(obj) === Object.prototype)
 }
 
 export const getApexChartBarChartSeries = (seriesName, seriesData) => (
@@ -270,27 +286,32 @@ export const getApexChartHeatmapSeries = (seriesData) => (
   }))
 )
 
-export const getApexChartBoxplotSeries = (seriesBoxData, seriesOutliersData) => (
-  [
+export const getApexChartBoxplotSeries = (seriesBoxData, seriesOutliersData) => {
+  let boxData = seriesBoxData.map((x, index) => ({
+    x: index + 1,
+    y: [x.min, x['25%'], x['50%'], x['75%'], x.max]
+  }));
+
+  // fix error when one box plot and multiple scatter values
+  boxData = [{ x: 0, y: [] }, ...boxData, { x: seriesBoxData.length + 1, y: [] }]
+
+  return [
     {
       name: 'box',
       type: 'boxPlot',
-      data: seriesBoxData.map(x => ({
-        x: typeof x[0] === 'string' ? +/\d+/.exec(x[0])[0] : x[0],
-        y: [x[1].min, x[1]['25%'], x[1]['50%'], x[1]['75%'], x[1].max]
-      }))
+      data: boxData
     },
     {
       name: 'outliers',
       type: 'scatter',
-      data: seriesOutliersData.map(x => {
+      data: seriesOutliersData.map((x, index) => {
         let i = 0
         const result = []
-        const outliersLength = x[1].length
+        const outliersLength = x.length
         while (i < outliersLength) {
           result[i] = {
-            x: typeof x[0] === 'string' ? +/\d+/.exec(x[0])[0] : x[0],
-            y: x[1][i]
+            x: index + 1,
+            y: x[i]
           }
           i++
         }
@@ -298,4 +319,4 @@ export const getApexChartBoxplotSeries = (seriesBoxData, seriesOutliersData) => 
       }).flat()
     }
   ]
-)
+}

@@ -9,12 +9,6 @@ export const testResultSelectors = {
   },
   getAnswers (state) {
     return state.testResult.answers
-  },
-  getBasicPoints (state) {
-    return state.testResult.basicPoints
-  },
-  getCorrectionCoef (state) {
-    return state.testResult.correctionCoef
   }
 }
 

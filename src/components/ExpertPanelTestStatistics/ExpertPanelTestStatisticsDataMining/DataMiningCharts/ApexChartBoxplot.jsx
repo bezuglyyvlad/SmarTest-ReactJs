@@ -13,7 +13,8 @@ const ApexChartBoxplot = memo(({
                                  titleText,
                                  series,
                                  defaultWidth = 350,
-                                 xaxisTitleText = undefined
+                                 xaxisTitleText = undefined,
+                                 tooltipFormatter = undefined,
                                }) => {
     const theme = useTheme()
     const chartWidth = contentRect.bounds.width ?? defaultWidth
@@ -29,9 +30,14 @@ const ApexChartBoxplot = memo(({
               {
                 type: 'numeric',
                 title: { text: xaxisTitleText },
-                decimalsInFloat: 0
+                decimalsInFloat: 0,
+                tooltip: {
+                  formatter: tooltipFormatter && function (val) {
+                    return tooltipFormatter[val - 1]
+                  }
+                }
               },
-              {},
+              undefined,
               {
                 shared: false,
                 intersect: true

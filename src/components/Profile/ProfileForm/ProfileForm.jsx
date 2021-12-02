@@ -19,7 +19,9 @@ const ProfileForm = memo(({ handleSubmit, pristine, submitting, error, ...props 
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    setOpen(!submitting && !props.submitFailed && props.submitSucceeded)
+    let mounted = true; // exclude memory leak
+    mounted && setOpen(!submitting && !props.submitFailed && props.submitSucceeded)
+    return () => mounted = false
   }, [submitting, props.submitFailed, props.submitSucceeded])
 
   const handleClose = (event, reason) => {

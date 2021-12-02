@@ -1,5 +1,5 @@
 import { expertTestsAPI, testAPI } from '../api/api'
-import { defaultThunkReject } from '../utils/utils'
+import { thunkErrorHandler } from '../utils/utils'
 
 const SET_EXPERT_TESTS = 'expertTests/SET_EXPERT_TESTS'
 const SET_TEST_CREATED = 'expertTests/SET_TEST_CREATED'
@@ -39,7 +39,7 @@ export const getExpertTests = (testCategoryId, page) => async (dispatch) => {
     // dispatch(setTestCreated(null))
     dispatch(setExpertTests(response.data.data, response.data.meta))
   } catch (e) {
-    await defaultThunkReject(e, dispatch)
+    thunkErrorHandler(e, dispatch)
   }
 }
 
@@ -49,7 +49,7 @@ export const createTest = (expertTestId) => async (dispatch) => {
     const { test } = response.data
     dispatch(setTestCreated(test.id))
   } catch (e) {
-    await defaultThunkReject(e, dispatch)
+    thunkErrorHandler(e, dispatch)
   }
 }
 

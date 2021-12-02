@@ -137,23 +137,22 @@ export const testCategoryAPI = {
   getData (testCategoryId) {
     return instance.get('categories/' + testCategoryId)
   },
-  updateCategory (id, title, parentId, userEmail) {
+  updateCategory (id, title, userEmail) {
     return instance.put(
       `test-categories/${id}`,
       {
         title,
-        ...(parentId) && { parent_id: parentId },
         ...(userEmail) && { user_email: userEmail }
       }
     )
   },
-  addCategory (title, parentId, userEmail) {
+  addCategory (title, userEmail, parentId) {
     return instance.post(
       'test-categories',
       {
         title,
-        ...(parentId) && { parent_id: parentId },
-        ...(userEmail) && { user_email: userEmail }
+        ...(userEmail) && { user_email: userEmail },
+        ...(parentId) && { parent_id: parentId }
       }
     )
   },
@@ -163,8 +162,8 @@ export const testCategoryAPI = {
 }
 
 export const expertTestAPI = {
-  getData (subcategoryId) {
-    return instance.get(`subcategories/${subcategoryId}?fields=subcategory_id,name`)
+  getData (expertTestId) {
+    return instance.get(`subcategories/${expertTestId}?fields=subcategory_id,name`)
   }
 }
 
@@ -205,11 +204,16 @@ export const expertPanelTestCategoriesAPI = {
 }
 
 export const expertPanelTestCatalogAPI = {
+  getBreadcrumbs (testCategoryId, expertTestId) {
+    return instance.get(
+      `expert-panels/breadcrumbs?test_category_id=${testCategoryId}&expert_test_id=${expertTestId}`
+    )
+  },
   getExpertTests (testCategoryId) {
-    return instance.get(`expert-panels/expertTests/${testCategoryId}`)
+    return instance.get(`expert-panels/expertTests?test_category_id=${testCategoryId}`)
   },
   getTestCategories (testCategoryId) {
-    return instance.get(`expert-panels/${testCategoryId}`)
+    return instance.get(`expert-panels/testCategories?test_category_id=${testCategoryId}`)
   },
   getTestStatistics (expertTestId) {
     return instance.get(`expert-panels/testStatistics/${expertTestId}`)
@@ -229,22 +233,22 @@ export const expertPanelTestCatalogAPI = {
 }
 
 export const expertPanelQuestionsAPI = {
-  getQuestions (subcategoryId) {
-    return instance.get('experts/questions?subcategory_id=' + subcategoryId)
+  getQuestions (expertTestId) {
+    return instance.get(`expert-panels/questions/${expertTestId}`)
   },
   deleteQuestion (questionId) {
     return instance.delete(`questions/${questionId}`)
   },
   addQuestion (data) {
-    return instance.post('experts/question', data,
+    return instance.post('expert-panels/question', data,
       { headers: { 'Content-Type': 'multipart/form-data' } })
   },
   importQuestions (data) {
-    return instance.post('experts/import', data,
+    return instance.post('expert-panels/importQuestions', data,
       { headers: { 'Content-Type': 'multipart/form-data' } })
   },
-  exportQuestions (subcategoryId) {
-    return instance.get(`experts/export?id=${subcategoryId}&expand=answers`)
+  exportQuestions (expertTestId) {
+    return instance.get(`expert-panels/exportQuestions/${expertTestId}`)
   }
 }
 
@@ -256,11 +260,11 @@ export const expertPanelQuestionAPI = {
     return instance.put(`questions/${questionId}`, data)
   },
   uploadImage (data, questionId) {
-    return instance.post(`experts/upload?id=${questionId}`, data,
+    return instance.post(`questions/uploadImage/${questionId}`, data,
       { headers: { 'Content-Type': 'multipart/form-data' } })
   },
   deleteImage (questionId) {
-    return instance.delete(`experts/deleteImage?id=${questionId}`)
+    return instance.delete(`questions/deleteImage/${questionId}`)
   }
 }
 
@@ -272,7 +276,7 @@ export const expertPanelAnswersAPI = {
     return instance.post('answers', data)
   },
   updateAnswer (data) {
-    return instance.put(`answers/${data.answer_id}`, data)
+    return instance.put(`answers/${data.id}`, data)
   },
   deleteAnswer (answerId) {
     return instance.delete(`answers/${answerId}`)

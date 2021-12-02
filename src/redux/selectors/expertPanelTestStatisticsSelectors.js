@@ -1,15 +1,14 @@
 import { createSelector } from 'reselect'
-import { getApexChartBarChartSeries, getApexChartBoxplotSeries, getApexChartHeatmapSeries } from '../../utils/utils'
+import {
+  getApexChartBarChartSeries,
+  getApexChartBoxplotSeries,
+  getApexChartHeatmapSeries,
+  isObjectEmpty
+} from '../../utils/utils'
 
 export const expertPanelTestStatisticsSelectors = {
   getTests (state) {
     return state.expertPanelTestStatistics.tests
-  },
-  getTestCategoryBreadcrumbs (state) {
-    return state.expertPanelTestStatistics.testCategoryBreadcrumbs
-  },
-  getExpertTestName (state) {
-    return state.expertPanelTestStatistics.expertTestName
   },
   getDataMining (state) {
     return state.expertPanelTestStatistics.dataMining
@@ -19,7 +18,7 @@ export const expertPanelTestStatisticsSelectors = {
 expertPanelTestStatisticsSelectors.getScoreHistSeries = createSelector(
   expertPanelTestStatisticsSelectors.getDataMining,
   dataMining => (
-    dataMining &&
+    !isObjectEmpty(dataMining) &&
     getApexChartBarChartSeries(['Кількість'], [dataMining.score_hist_count])
   )
 )
@@ -27,7 +26,7 @@ expertPanelTestStatisticsSelectors.getScoreHistSeries = createSelector(
 expertPanelTestStatisticsSelectors.getSpentTimeHistSeries = createSelector(
   expertPanelTestStatisticsSelectors.getDataMining,
   dataMining => (
-    dataMining &&
+    !isObjectEmpty(dataMining) &&
     getApexChartBarChartSeries(['Кількість'], [dataMining.spent_time_m_hist_count])
   )
 )
@@ -35,7 +34,7 @@ expertPanelTestStatisticsSelectors.getSpentTimeHistSeries = createSelector(
 expertPanelTestStatisticsSelectors.getNumberOfTestPassesHistSeries = createSelector(
   expertPanelTestStatisticsSelectors.getDataMining,
   dataMining => (
-    dataMining &&
+    !isObjectEmpty(dataMining) &&
     getApexChartBarChartSeries(['Кількість'], [dataMining.number_of_test_passes_hist_count])
   )
 )
@@ -43,7 +42,7 @@ expertPanelTestStatisticsSelectors.getNumberOfTestPassesHistSeries = createSelec
 expertPanelTestStatisticsSelectors.getScoreByYearSeries = createSelector(
   expertPanelTestStatisticsSelectors.getDataMining,
   dataMining => (
-    dataMining &&
+    !isObjectEmpty(dataMining) &&
     getApexChartBarChartSeries(['Оцінка (медіана)'], [dataMining.score_by_year.data.flat()])
   )
 )
@@ -51,7 +50,7 @@ expertPanelTestStatisticsSelectors.getScoreByYearSeries = createSelector(
 expertPanelTestStatisticsSelectors.getDataByNumberOfTestPassesSeries = createSelector(
   expertPanelTestStatisticsSelectors.getDataMining,
   dataMining => (
-    dataMining &&
+    !isObjectEmpty(dataMining) &&
     getApexChartBarChartSeries(
       [
         'Оцінка (медіана)',
@@ -68,7 +67,7 @@ expertPanelTestStatisticsSelectors.getDataByNumberOfTestPassesSeries = createSel
 expertPanelTestStatisticsSelectors.getQuestionHistSeriesArray = createSelector(
   expertPanelTestStatisticsSelectors.getDataMining,
   dataMining => (
-    dataMining &&
+    !isObjectEmpty(dataMining) &&
     Object.entries(dataMining.question_hists).map((value, index) => (
       getApexChartBarChartSeries(['Кількість'], [value[1][0]])
     ))
@@ -78,10 +77,10 @@ expertPanelTestStatisticsSelectors.getQuestionHistSeriesArray = createSelector(
 expertPanelTestStatisticsSelectors.getNumberOfQuestionsBoxplotSeries = createSelector(
   expertPanelTestStatisticsSelectors.getDataMining,
   dataMining => (
-    dataMining &&
+    !isObjectEmpty(dataMining) &&
     getApexChartBoxplotSeries(
-      [[0, dataMining.number_of_questions_describe]],
-      [[0, dataMining.number_of_questions_outliers]]
+      [dataMining.number_of_questions_describe],
+      [dataMining.number_of_questions_outliers]
     )
   )
 )
@@ -89,10 +88,10 @@ expertPanelTestStatisticsSelectors.getNumberOfQuestionsBoxplotSeries = createSel
 expertPanelTestStatisticsSelectors.getQuestionsBoxplotSeries = createSelector(
   expertPanelTestStatisticsSelectors.getDataMining,
   dataMining => (
-    dataMining &&
+    !isObjectEmpty(dataMining) &&
     getApexChartBoxplotSeries(
-      Object.entries(dataMining.questions_describe),
-      Object.entries(dataMining.question_outliers)
+      Object.values(dataMining.questions_describe),
+      Object.values(dataMining.question_outliers)
     )
   )
 )
@@ -100,7 +99,7 @@ expertPanelTestStatisticsSelectors.getQuestionsBoxplotSeries = createSelector(
 expertPanelTestStatisticsSelectors.getQuestionCorrelationSeries = createSelector(
   expertPanelTestStatisticsSelectors.getDataMining,
   dataMining => (
-    dataMining &&
+    !isObjectEmpty(dataMining) &&
     getApexChartHeatmapSeries(Object.entries(dataMining.question_correlation))
   )
 )

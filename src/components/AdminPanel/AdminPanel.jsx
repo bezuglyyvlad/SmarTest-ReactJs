@@ -4,10 +4,10 @@ import { compose } from 'redux'
 import { withUnAuthRedirect } from '../../hoc/withUnAuthRedirect'
 import { connect } from 'react-redux'
 import { withNotAdminRedirect } from '../../hoc/withNotAdminRedirect'
-import { getAdminTestCategories } from '../../redux/adminPanelReducer'
+import { getAdminTestCategories } from '../../redux/testCategoriesCRUDReducer'
 import { Preloader } from '../common/Preloader'
-import AdminTable from './AdminPanelTable/AdminPanelTable'
 import { useSnackbar } from 'notistack'
+import TestCategoriesCRUDTable from "../common/testCategoriesCRUD/testCategoriesCRUDTable";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -50,12 +50,12 @@ const AdminPanel = memo(({ getAdminTestCategories }) => {
         Admin панель
       </Typography>
       <Box className={classes.table}>
-        <AdminTable showError={showError} />
+        <TestCategoriesCRUDTable showError={showError} />
       </Box>
     </Container>
   )
 })
 
 export default compose(withUnAuthRedirect, withNotAdminRedirect, connect(null, {
-  getAdminTestCategories,
+  getAdminTestCategories
 }))(AdminPanel)

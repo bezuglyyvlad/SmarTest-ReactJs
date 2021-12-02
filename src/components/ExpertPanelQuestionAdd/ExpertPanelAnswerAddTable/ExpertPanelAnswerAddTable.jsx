@@ -5,7 +5,7 @@ import { materialTableLocalization } from "../../../utils/localization"
 const ExpertPanelAnswerAddTable = memo(({ answers, setAnswers }) => {
   const columns = [
     { title: 'Текст*', field: 'text' },
-    { title: 'Є вірною*', field: 'is_right', lookup: { 0: 'Ні', 1: 'Так' }, initialEditValue: 0 },
+    { title: 'Є вірною*', field: 'is_correct', lookup: { 0: 'Ні', 1: 'Так' }, initialEditValue: 0 },
   ]
 
   return (

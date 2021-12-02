@@ -1,15 +1,17 @@
-import { memo } from 'react'
-import { Box, Breadcrumbs, Container, Link, makeStyles, Typography } from "@material-ui/core"
+import { memo, useEffect, useState } from 'react'
+import { Box, Container, makeStyles, Typography } from "@material-ui/core"
 import { compose } from "redux"
 import { withUnAuthRedirect } from "../../hoc/withUnAuthRedirect"
 import { connect } from "react-redux"
 import { withNotExpertRedirect } from "../../hoc/withNotExpertRedirect"
-import { NavLink } from "react-router-dom"
 import { withRouter } from "react-router"
 import ExpertTestStatisticsTable from "./ExpertPanelTestStatisticsTable/ExpertPanelTestStatisticsTable"
-import { expertPanelTestStatisticsSelectors } from "../../redux/selectors/expertPanelTestStatisticsSelectors"
 import ExpertPanelTestStatisticsDataMining
   from "./ExpertPanelTestStatisticsDataMining/ExpertPanelTestStatisticsDataMining"
+import { expertPanelBreadcrumbsSelectors } from "../../redux/selectors/expertPanelBreadcrumbsSelectors";
+import ExpertPanelTestCategoryBreadcrumbs from "../common/ExpertPanel/ExpertPanelTestCategoryBreadcrumbs";
+import { Preloader } from "../common/Preloader";
+import { getExpertPanelBreadcrumbs } from "../../redux/expertPanelBreadcrumbsReducer";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,30 +24,35 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const ExpertPanelTestStatistics = memo(({
-                                          match, testCategoryBreadcrumbs, expertTestName
+                                          match, breadcrumbs, expertTestName, getExpertPanelBreadcrumbs
                                         }) => {
   const classes = useStyles()
+  const [showPreloader, setShowPreloader] = useState(true)
 
+  const test_category_id = match.params.test_category_id
   const expert_test_id = match.params.expert_test_id
+
+  useEffect(() => {
+    let mounted = true; // exclude memory leak
+    (async () => {
+      setShowPreloader(true)
+      await getExpertPanelBreadcrumbs(test_category_id, expert_test_id)
+      mounted && setShowPreloader(false)
+    })()
+    return () => mounted = false
+  }, [getExpertPanelBreadcrumbs, test_category_id, expert_test_id])
+
+  if (showPreloader) {
+    return <Preloader />
+  }
 
   return (
     <Container component="main" maxWidth="lg" className={classes.root}>
       {
-        Array.isArray(testCategoryBreadcrumbs) && testCategoryBreadcrumbs.length ?
-          <Breadcrumbs aria-label="breadcrumb">
-            <Link color="inherit" component={NavLink} to='/expertPanel'>
-              Expert панель
-            </Link>
-            {
-              testCategoryBreadcrumbs.map(value =>
-                <Link key={value.id} color="inherit" component={NavLink}
-                      to={`/expertPanel/${value.id}`}>
-                  {value.title}
-                </Link>
-              )
-            }
-            <Typography color="textPrimary">{`${expertTestName} (статистика)`}</Typography>
-          </Breadcrumbs> : ''
+        breadcrumbs &&
+        <ExpertPanelTestCategoryBreadcrumbs breadcrumbs={breadcrumbs}>
+          <Typography color="textPrimary">{`${expertTestName} (статистика)`}</Typography>
+        </ExpertPanelTestCategoryBreadcrumbs>
       }
       <Box className={classes.table}>
         <ExpertTestStatisticsTable expert_test_id={expert_test_id} expertTestName={expertTestName} />
@@ -56,9 +63,9 @@ const ExpertPanelTestStatistics = memo(({
 })
 
 const mapStateToProps = (state) => ({
-  testCategoryBreadcrumbs: expertPanelTestStatisticsSelectors.getTestCategoryBreadcrumbs(state),
-  expertTestName: expertPanelTestStatisticsSelectors.getExpertTestName(state),
+  breadcrumbs: expertPanelBreadcrumbsSelectors.getBreadcrumbs(state),
+  expertTestName: expertPanelBreadcrumbsSelectors.getExpertTestName(state),
 })
 
 export default compose(withUnAuthRedirect, withNotExpertRedirect, withRouter,
-  connect(mapStateToProps, null))(ExpertPanelTestStatistics)
+  connect(mapStateToProps, { getExpertPanelBreadcrumbs }))(ExpertPanelTestStatistics)

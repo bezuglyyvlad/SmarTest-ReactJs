@@ -19,10 +19,10 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const Question = memo(({ q, answers, points, correctionCoef }) => {
+const Question = memo(({ q, answers }) => {
   const classes = useStyles()
 
-  const maxQuestionPoints = roundToTwo(points * q.question.quality_coef * correctionCoef)
+  const maxScore = roundToTwo(q.max_score)
   const score = roundToTwo(q.score)
 
   return (
@@ -33,7 +33,7 @@ const Question = memo(({ q, answers, points, correctionCoef }) => {
       >
         <Grid item>
           <Typography variant='subtitle2'>
-            Бали - {`${score > maxQuestionPoints ? maxQuestionPoints : score} из ${maxQuestionPoints}`}
+            Бали - {`${score > maxScore ? maxScore : score} из ${maxScore}`}
           </Typography>
         </Grid>
         <Grid item>

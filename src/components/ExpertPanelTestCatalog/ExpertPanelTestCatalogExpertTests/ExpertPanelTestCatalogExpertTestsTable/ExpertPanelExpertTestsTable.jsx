@@ -13,6 +13,7 @@ import {
   updateExpertTestExpertPanel
 } from '../../../../redux/expertPanelTestCatalogReducer'
 import BarChartIcon from '@material-ui/icons/BarChart'
+import { validationErrorHandler } from "../../../../utils/utils";
 
 const ExpertPanelExpertTestsTable = memo(({
                                             perPage,
@@ -41,7 +42,7 @@ const ExpertPanelExpertTestsTable = memo(({
     {
       title: 'Доступ*',
       field: 'is_published',
-      lookup: { null: 'Закритий', 0: 'Закритий', 1: 'Відкритий' },
+      lookup: { 0: 'Закритий', 1: 'Відкритий' },
       editable: 'onUpdate',
       initialEditValue: 0
     },
@@ -64,12 +65,15 @@ const ExpertPanelExpertTestsTable = memo(({
         onRowAdd: newData =>
           new Promise(async (resolve, reject) => {
             const { title } = newData
-            const apiErrors = await addTest({ title, test_category_id })
-            if (apiErrors) {
-              showError(apiErrors)
-              reject()
-            }
-            resolve()
+            await addTest({ title, is_published: 0, test_category_id })
+              .then(() => {
+                resolve()
+              })
+              .catch((e) => {
+                const errors = validationErrorHandler(e)
+                showError(errors)
+                reject()
+              })
           }),
         onRowUpdate: (newData, oldData) =>
           new Promise(async (resolve, reject) => {
@@ -77,11 +81,12 @@ const ExpertPanelExpertTestsTable = memo(({
             delete myOldData.tableData
             if (JSON.stringify(newData) !== JSON.stringify(myOldData)) {
               const { id, title, is_published } = newData
-              const apiErrors = await updateTest(id, title, is_published)
-              if (apiErrors) {
-                showError(apiErrors)
-                reject()
-              }
+              await updateTest(id, title, is_published)
+                .catch((e) => {
+                  const errors = validationErrorHandler(e)
+                  showError(errors)
+                  reject()
+                })
             }
             resolve()
           }),
