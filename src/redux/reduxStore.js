@@ -1,4 +1,3 @@
-import { reducer as formReducer } from 'redux-form'
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import userReducer from './userReducer'
@@ -14,10 +13,9 @@ import expertPanelQuestionsReducer from './expertPanelQuestionsReducer'
 import expertPanelQuestionEditReducer from './expertPanelQuestionEditReducer'
 import expertPanelTestStatisticsReducer from './expertPanelTestStatisticsReducer'
 import expertTestsReducer from './expertTestsReducer'
-import expertPanelBreadcrumbsReducer from "./expertPanelBreadcrumbsReducer";
+import expertPanelBreadcrumbsReducer from './expertPanelBreadcrumbsReducer'
 
 const reducers = combineReducers({
-  form: formReducer,
   user: userReducer,
   app: appReducer,
   testCategories: testCategoriesReducer,

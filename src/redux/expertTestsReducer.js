@@ -36,7 +36,7 @@ const setTestCreated = (id) => ({ type: SET_TEST_CREATED, id })
 export const getExpertTests = (testCategoryId, page) => async (dispatch) => {
   try {
     const response = await expertTestsAPI.getData(testCategoryId, page)
-    // dispatch(setTestCreated(null))
+    dispatch(setTestCreated(null))
     dispatch(setExpertTests(response.data.data, response.data.meta))
   } catch (e) {
     thunkErrorHandler(e, dispatch)

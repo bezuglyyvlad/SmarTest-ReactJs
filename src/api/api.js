@@ -134,9 +134,6 @@ export const expertTestsAPI = {
 }
 
 export const testCategoryAPI = {
-  getData (testCategoryId) {
-    return instance.get('categories/' + testCategoryId)
-  },
   updateCategory (id, title, userEmail) {
     return instance.put(
       `test-categories/${id}`,
@@ -158,12 +155,6 @@ export const testCategoryAPI = {
   },
   deleteCategory (id) {
     return instance.delete(`test-categories/${id}`)
-  }
-}
-
-export const expertTestAPI = {
-  getData (expertTestId) {
-    return instance.get(`subcategories/${expertTestId}?fields=subcategory_id,name`)
   }
 }
 

@@ -1,6 +1,5 @@
 import { expertPanelAnswersAPI, expertPanelQuestionAPI } from '../api/api'
-import { initialize, startSubmit, stopSubmit } from 'redux-form'
-import { changeObjectInArray, thunkErrorHandler, validationErrorHandler } from '../utils/utils'
+import { changeObjectInArray, thunkErrorHandler } from '../utils/utils'
 
 const SET_QUESTION = 'expertPanelQuestionEdit/SET_QUESTION'
 const SET_ANSWERS = 'expertPanelQuestionEdit/SET_ANSWERS'

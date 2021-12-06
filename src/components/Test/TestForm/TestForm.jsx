@@ -1,9 +1,8 @@
-import { memo } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { makeStyles } from '@material-ui/core'
-import { reduxForm } from 'redux-form'
-import { compose } from 'redux'
-import { SubmitButton } from '../../common/FormElements'
+import { SubmitButtonFormik } from '../../common/FormElements'
 import Answers from './Answers/Answers'
+import { useFormik } from "formik";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -12,16 +11,32 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const TestForm = memo(({ handleSubmit, pristine, submitting, answers, type }) => {
+const TestForm = memo(({ onSubmit, answers, type }) => {
   const classes = useStyles()
+  const formIsMounted = useRef(true)
+
+  // exclude memory leak
+  useEffect(() => {
+    return () => {
+      formIsMounted.current = false;
+    }
+  }, []);
+
+  const formik = useFormik({
+    initialValues: {
+      answer: [],
+    },
+    onSubmit: (values) => {
+      return onSubmit(values, formik.setSubmitting, formik.resetForm, formIsMounted)
+    }
+  });
+
   return (
-    <form className={classes.root} onSubmit={handleSubmit}>
-      <Answers type={type} data={answers} />
-      <SubmitButton textButton='Відповісти' disabled={pristine || submitting} />
+    <form className={classes.root} onSubmit={formik.handleSubmit}>
+      <Answers type={type} data={answers} formik={formik}/>
+      <SubmitButtonFormik text='Відповісти' formik={formik} />
     </form>
   )
 })
 
-export default compose(reduxForm({
-  form: 'test',
-}))(TestForm)
+export default TestForm

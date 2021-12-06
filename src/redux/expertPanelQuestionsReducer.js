@@ -51,7 +51,7 @@ export const deleteQuestion = (questionId) => async (dispatch) => {
 
 export const addQuestion = (data) => async (dispatch) => {
   try {
-    await expertPanelQuestionsAPI.addQuestion(data);
+    await expertPanelQuestionsAPI.addQuestion(data)
   } catch (e) {
     thunkErrorHandler(e, dispatch)
   }

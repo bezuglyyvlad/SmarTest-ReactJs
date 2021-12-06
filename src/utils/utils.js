@@ -9,8 +9,11 @@ export const getAvatarName = (name) => {
 export const getTimer = (dataFinish) => {
   const current = new Date()
   const finish = new Date(dataFinish)
-  const timer = finish.getTime() - current.getTime()
+  // seconds accurate
+  return Math.round((finish.getTime() - current.getTime()) / 1000) * 1000
+}
 
+export const getTimerString = (timer) => {
   const day = parseInt(timer / (60 * 60 * 1000 * 24))
   let hour = parseInt(timer / (60 * 60 * 1000)) % 24
   if (day !== 0) hour += day * 24
@@ -139,6 +142,23 @@ export const thunkErrorHandler = (e, dispatch) => {
 export const validationErrorHandler = (e) => {
   if (e.response && e.response.status === 422 && e.response.data) {
     return errorInArrayOfString(e.response.data.errors)
+  }
+  throw e
+}
+
+export const badRequestErrorHandler = (e) => {
+  if (e.response && e.response.status === 400 && e.response.data) {
+    return e.response.data.message
+  }
+  throw e
+}
+
+export const validationErrorHandlerFormik = (e) => {
+  if (e.response && e.response.status === 422 && e.response.data) {
+    return Object.fromEntries(Object.entries(e.response.data.errors).map(x => {
+      x[1] = x[1].join(' ')
+      return x
+    }))
   }
   throw e
 }
@@ -290,7 +310,7 @@ export const getApexChartBoxplotSeries = (seriesBoxData, seriesOutliersData) => 
   let boxData = seriesBoxData.map((x, index) => ({
     x: index + 1,
     y: [x.min, x['25%'], x['50%'], x['75%'], x.max]
-  }));
+  }))
 
   // fix error when one box plot and multiple scatter values
   boxData = [{ x: 0, y: [] }, ...boxData, { x: seriesBoxData.length + 1, y: [] }]

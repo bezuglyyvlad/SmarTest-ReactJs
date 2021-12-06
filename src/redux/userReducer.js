@@ -1,5 +1,4 @@
 import { userAPI } from '../api/api'
-import { stopSubmit, startSubmit, setSubmitSucceeded, clearFields, initialize } from 'redux-form'
 import {
   removeAccessTokenFromLS,
   removeRefreshTokenFromLS,
@@ -56,37 +55,19 @@ export const getUserData = () => async (dispatch) => {
   }
 }
 
-export const signIn = (email, password) => async (dispatch) => {
-  try {
-    dispatch(startSubmit('signin'))
-    const response = await userAPI.signIn(email, password)
-    setAccessTokenToLS(response.data.access_token)
-    setRefreshTokenToLS(response.data.refresh_token)
-    dispatch(getUserData())
-    dispatch(stopSubmit('signin'))
-  } catch (e) {
-    if (e.response && e.response.status === 400 && e.response.data) {
-      const message = 'Неправильні дані користувача'
-      dispatch(initialize('signin', { email, password }))
-      dispatch(stopSubmit('signin', { _error: message }))
-    } else {
-      await Promise.reject(e)
-    }
-  }
+export const signIn = ({ email, password }) => async (dispatch) => {
+  const response = await userAPI.signIn(email, password)
+  setAccessTokenToLS(response.data.access_token)
+  setRefreshTokenToLS(response.data.refresh_token)
+  dispatch(getUserData())
 }
 
-export const signUp = (name, email, password, passwordConfirmation) => async (dispatch) => {
+export const signUp = ({ name, email, password, password_confirmation: passwordConfirmation }) => async (dispatch) => {
   try {
-    dispatch(startSubmit('signup'))
     await userAPI.signUp(name, email, password, passwordConfirmation)
-    dispatch(signIn(email, password))
-    dispatch(stopSubmit('signup'))
+    dispatch(signIn({ email, password }))
   } catch (e) {
-    if (e.response && e.response.status === 422 && e.response.data) {
-      dispatch(stopSubmit('signup', e.response.data.errors))
-    } else {
-      thunkErrorHandler(e, dispatch)
-    }
+    thunkErrorHandler(e, dispatch)
   }
 }
 
@@ -99,20 +80,20 @@ export const signOut = () => async (dispatch) => {
   }
 }
 
-export const updateUser = (userId, name, email, password, passwordConfirmation) => async (dispatch) => {
+export const updateUser = (
+  userId,
+  {
+    name,
+    email,
+    password,
+    password_confirmation: passwordConfirmation
+  }
+) => async (dispatch) => {
   try {
-    dispatch(startSubmit('profile'))
     const response = await userAPI.updateData(userId, name, email, password, passwordConfirmation)
     dispatch(setNameAndEmail(response.data.data.name, response.data.data.email))
-    dispatch(stopSubmit('profile'))
-    dispatch(clearFields('profile', false, false, 'password', 'password_confirmation'))
-    dispatch(setSubmitSucceeded('profile'))
   } catch (e) {
-    if (e.response && e.response.status === 422 && e.response.data) {
-      dispatch(stopSubmit('profile', e.response.data.errors))
-    } else {
-      thunkErrorHandler(e, dispatch)
-    }
+    thunkErrorHandler(e, dispatch)
   }
 }
 

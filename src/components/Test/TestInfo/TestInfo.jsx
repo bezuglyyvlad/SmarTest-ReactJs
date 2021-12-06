@@ -1,5 +1,6 @@
 import { memo } from 'react'
 import { Grid, makeStyles, Typography } from '@material-ui/core'
+import { getTimerString } from "../../../utils/utils";
 
 const useStyles = makeStyles(theme => ({
   info: {
@@ -11,6 +12,9 @@ const useStyles = makeStyles(theme => ({
 
 const TestInfo = memo(({ expert_test_name, test_category_name, timer }) => {
   const classes = useStyles()
+
+  const timerString = getTimerString(timer)
+
   return (
     <Grid
       container
@@ -23,7 +27,7 @@ const TestInfo = memo(({ expert_test_name, test_category_name, timer }) => {
       </Grid>
       <Grid item md={2} xs={4}>
         <Typography variant='subtitle1' align='right'>
-          {timer}
+          {timerString}
         </Typography>
       </Grid>
     </Grid>

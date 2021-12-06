@@ -1,5 +1,5 @@
 import { memo, useState, useEffect } from 'react'
-import { Box, Breadcrumbs, Container, Link, makeStyles, Typography } from "@material-ui/core"
+import { Box, Container, Link, makeStyles, Typography } from "@material-ui/core"
 import { compose } from "redux"
 import { withUnAuthRedirect } from "../../hoc/withUnAuthRedirect"
 import { connect } from "react-redux"
@@ -92,14 +92,14 @@ const ExpertPanelQuestionEdit = memo(({
     })
   }
 
-  const onSubmit = async (formikData, setSubmitting) => {
+  const onSubmit = async (formikData, setSubmitting, formIsMounted) => {
     setSubmitting(true)
     await editQuestion(formikData, questionId)
       .catch((e) => {
         const errors = validationErrorHandler(e)
         showError(errors)
       })
-    setSubmitting(false)
+    formIsMounted.current && setSubmitting(false)
   }
 
   const onUploadChange = (e) => {
@@ -140,7 +140,7 @@ const ExpertPanelQuestionEdit = memo(({
         }} />
         <ExpertQuestionForm onSubmit={onSubmit} initialValues={{
           text: question.text,
-          description: question.description,
+          description: question.description ?? '',
           complexity: question.complexity,
           significance: question.significance,
           relevance: question.relevance,

@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from 'react'
+import { memo, useState, useEffect, useRef } from 'react'
 import { Box, Container, Link, makeStyles, Typography } from "@material-ui/core"
 import { compose } from "redux"
 import { withUnAuthRedirect } from "../../hoc/withUnAuthRedirect"
@@ -41,18 +41,24 @@ const ExpertPanelQuestionAdd = memo(({
   const [image, setImage] = useState('')
   const { enqueueSnackbar } = useSnackbar()
   const [added, setAdded] = useState(false)
+  const isMounted = useRef(true)
 
   const test_category_id = match.params.test_category_id
   const expert_test_id = match.params.expert_test_id
 
+  // exclude memory leak
   useEffect(() => {
-    let mounted = true; // exclude memory leak
+    return () => {
+      isMounted.current = false;
+    }
+  }, []);
+
+  useEffect(() => {
     (async () => {
       setShowPreloader(true)
       await getExpertPanelBreadcrumbs(test_category_id, expert_test_id)
-      mounted && setShowPreloader(false)
+      isMounted.current && setShowPreloader(false)
     })()
-    return () => mounted = false
   }, [test_category_id, expert_test_id, getExpertPanelBreadcrumbs])
 
   if (showPreloader) {
@@ -69,7 +75,7 @@ const ExpertPanelQuestionAdd = memo(({
     })
   }
 
-  const onSubmit = async (formikData, setSubmitting) => {
+  const onSubmit = async (formikData, setSubmitting, formIsMounted) => {
     let errors = []
     errors = answerValidation(answers, errors)
     if (errors.length !== 0) {
@@ -82,10 +88,10 @@ const ExpertPanelQuestionAdd = memo(({
       setSubmitting(true)
       await addQuestion(formData)
         .then(() => {
-          setAdded(true)
+          isMounted.current && setAdded(true)
         })
         .catch((e) => {
-          setSubmitting(false)
+          formIsMounted.current && setSubmitting(false)
           const errors = validationErrorHandler(e)
           showError(errors)
         })

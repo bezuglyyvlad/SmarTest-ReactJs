@@ -1,23 +1,14 @@
-import { memo } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import {
-  Box,
-  Button, FormControl,
-  FormHelperText,
-  InputLabel,
   makeStyles,
-  MenuItem, Select,
-  Slider,
-  TextField,
-  Typography
+  MenuItem
 } from '@material-ui/core'
-import { reduxForm, Field } from 'redux-form'
 import {
-  SelectField, SelectFieldFormik, SliderFormik,
-  SubmitButton, SubmitButtonFormik, TextareaField, TextareaFieldFormik,
+  SelectFieldFormik, SliderFormik,
+  SubmitButtonFormik, TextareaFieldFormik,
 } from '../FormElements'
-import { questionValidationSchema, required } from '../../../utils/validators'
-import { useFormik } from "formik";
-import * as yup from 'yup'
+import { questionValidationSchema } from '../../../utils/validators'
+import { useFormik } from "formik"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -38,15 +29,22 @@ const ExpertQuestionForm = memo(({
                                    }
                                  }) => {
   const classes = useStyles()
+  const formIsMounted = useRef(true)
+
+  // exclude memory leak
+  useEffect(() => {
+    return () => {
+      formIsMounted.current = false;
+    }
+  }, []);
 
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: questionValidationSchema,
     onSubmit: (values) => {
-      formik.resetForm({ values: values })
-      return onSubmit(values, formik.setSubmitting)
-    },
-    enableReinitialize: true
+      formik.resetForm({ values })
+      return onSubmit(values, formik.setSubmitting, formIsMounted)
+    }
   });
 
   return (
@@ -55,7 +53,7 @@ const ExpertQuestionForm = memo(({
       <TextareaFieldFormik name='description' label='Опис (пояснення відповіді)' formik={formik} />
 
       <SliderFormik name="complexity" label='Складність' min={0} max={10} step={1} formik={formik} />
-      <SliderFormik name="significance" label='Значущість' min={0} max={10} step={1} formik={formik} />
+      <SliderFormik name="significance" label='Значимість' min={0} max={10} step={1} formik={formik} />
       <SliderFormik name="relevance" label='Актуальність' min={0} max={10} step={1} formik={formik} />
 
       <SelectFieldFormik name='type' label='Тип' formik={formik}>

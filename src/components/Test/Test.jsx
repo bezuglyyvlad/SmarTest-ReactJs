@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from 'react'
+import { memo, useState, useEffect, useRef, useCallback } from 'react'
 import { compose } from 'redux'
 import { withUnAuthRedirect } from '../../hoc/withUnAuthRedirect'
 import { connect } from 'react-redux'
@@ -41,57 +41,67 @@ const Test = memo(({
                    }) => {
   const classes = useStyles()
   const [showPreloader, setShowPreloader] = useState(true)
-  const [timer, setTimer] = useState('0')
+  const [timer, setTimer] = useState()
+  const isMounted = useRef(true)
+  const onSubmit = useCallback(async ({ answer }, setSubmitting, resetForm, formIsMounted) => {
+    setSubmitting(true)
+    answer = Array.isArray(answer) ? answer.map(Number) : [Number(answer)]
+    await nextQuestion(testInfo.id, answer)
+    formIsMounted.current && resetForm()
+    formIsMounted.current && setSubmitting(false)
+  }, [nextQuestion, testInfo])
 
   const test_id = match.params.test_id
 
+  // exclude memory leak
   useEffect(() => {
-    let mounted = true; // exclude memory leak
+    return () => {
+      isMounted.current = false;
+    }
+  }, []);
+
+  useEffect(() => {
     (async () => {
       setShowPreloader(true)
       await getTest(test_id)
-      mounted && setShowPreloader(false)
+      isMounted.current && setShowPreloader(false)
     })()
-    return () => mounted = false
   }, [getTest, test_id])
 
+  // set up initial timer time
   useEffect(() => {
-    let mounted = true; // exclude memory leak
-    let interval = null
-    const delay = timer === '0' ? null : 1000 //for delete begin delay
     if (testInfo) {
-      interval = setInterval(() => {
-        mounted && setTimer(getTimer(testInfo.finish_date))
-      }, delay)
-      if ((new Date()) >= (new Date(testInfo.finish_date))) {
-        mounted && setTestIsFinished(true)
+      const initialTimer = getTimer(testInfo.finish_date);
+      isMounted.current && setTimer(initialTimer)
+    }
+  }, [testInfo])
+
+  // timer tick
+  useEffect(() => {
+    let timerInterval = null
+    let testIsFinishedInterval = null
+
+    if (timer !== undefined) {
+      timerInterval = setInterval(() => {
+        isMounted.current && setTimer(timer => timer - 1000)
+      }, 1000)
+
+      if (timer <= 1000) {
+        testIsFinishedInterval = setInterval(() => {
+          isMounted.current && setTestIsFinished(true)
+        }, 100)
       }
     }
+
     return () => {
-      clearInterval(interval)
-      return mounted = false
+      clearInterval(timerInterval)
+      clearInterval(testIsFinishedInterval)
     }
-  }, [timer, testInfo, setTestIsFinished])
-
-  const onSubmit = async ({ answer }) => {
-    //swap array [0: '', ..., 85(answer_id): true] to array [85]
-    if (Array.isArray(answer)) {
-      const answerObject = { ...answer }
-      answer = Object.keys(
-        Object.fromEntries(Object.entries(answerObject).filter(([key, val]) => val === true))
-      ).map(key => parseInt(key))
-    } else {
-      answer = [parseInt(answer)]
-    }
-    setShowPreloader(true)
-    await nextQuestion(testInfo.id, answer)
-    setShowPreloader(false)
-  }
-
-  if (testIsFinished) return <Redirect
-    to={`/test/${testInfo.id}/result`} />
+  }, [setTestIsFinished, timer])
 
   if (showPreloader) return <Preloader />
+
+  if (testIsFinished) return <Redirect to={`/test/${testInfo.id}/result`} />
 
   return (
     <Container component='main' maxWidth='lg' className={classes.root}>
@@ -105,7 +115,11 @@ const Test = memo(({
         <Typography component='h2' className={classes.question} variant='h6'>
           {`${question.serial_number}. ${question.question.text}`}
         </Typography>
-        {question.image && <ImageBox imageSrc={question.question.image} />}
+        {
+          question.question &&
+          question.question.image &&
+          <ImageBox imageSrc={question.question.image} />
+        }
         <TestForm onSubmit={onSubmit} answers={answers} type={question.question.type} />
       </Paper>
     </Container>

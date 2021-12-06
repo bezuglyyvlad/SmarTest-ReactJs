@@ -61,8 +61,9 @@ const TestResult = memo(({
     { title: 'Категорія', value: test.test_category.title },
     { title: 'Початок тесту', value: (new Date(test.start_date)).toLocaleString() },
     { title: 'Завершення тесту', value: (new Date(test.finish_date)).toLocaleString() },
+    { title: 'Кількість питань', value: questions.length },
     { title: 'Правильних відповідей', value: count_of_right_answers },
-    { title: 'Балів', value: test.score },
+    { title: 'Балів', value: test.score }
   ]
 
   return (

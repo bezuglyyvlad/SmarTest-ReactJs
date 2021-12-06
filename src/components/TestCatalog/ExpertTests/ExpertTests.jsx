@@ -35,14 +35,15 @@ const ExpertTests = memo(({
     return () => mounted = false
   }, [expert_test_page, getExpertTests, test_category_id])
 
-  const startTest = (expert_test_id) => {
+  const startTest = async (expert_test_id) => {
     setShowPreloader(true)
-    createTest(expert_test_id)
+    await createTest(expert_test_id)
+    setShowPreloader(false)
   }
 
-  if (testCreatedId) return <Redirect to={`/test/${testCreatedId}`} />
-
   if (showPreloader) return <Preloader />
+
+  if (testCreatedId) return <Redirect to={`/test/${testCreatedId}`} />
 
   const { mainPath, linkPageName } = getDoublePaginationsUrlParams(
     'expert_test_page',

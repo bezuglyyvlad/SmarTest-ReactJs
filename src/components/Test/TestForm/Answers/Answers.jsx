@@ -1,22 +1,23 @@
 import { memo } from 'react'
-import { Field } from 'redux-form'
-import { radioButtons, renderCheckbox } from '../../../common/FormElements'
+import { CheckboxFormik, RadioFormik } from '../../../common/FormElements'
 import { FormControlLabel, Radio } from '@material-ui/core'
 
-const Answers = memo(({ type, data }) => {
+const Answers = memo(({ type, data, formik }) => {
   let answers
   switch (type) {
     case 1:
-      answers = <Field name='answer' component={radioButtons}>
-        {data.map((value, key) => (
-          <FormControlLabel key={key} value={String(value.id)} control={<Radio color='primary' />}
-                            label={value.text} />))}
-      </Field>
+      answers = <RadioFormik name="answer" formik={formik}>
+        {data.map((value) => (
+          <FormControlLabel key={value.id} value={String(value.id)} control={<Radio color='primary' />}
+                            label={value.text} />))
+        }
+      </RadioFormik>
       break
     case 2:
-      answers = data.map((value, key) => (
-        <Field key={key} name={`answer.${value.id}`} component={renderCheckbox}
-               label={value.text} />))
+      answers = data.map((value) => (
+        <CheckboxFormik key={value.id} name='answer' value={String(value.id)} label={value.text}
+                        formik={formik} />
+      ))
       break
     default:
       answers = <></>

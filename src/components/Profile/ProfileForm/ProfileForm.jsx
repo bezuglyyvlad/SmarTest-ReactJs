@@ -1,10 +1,8 @@
-import { memo, useState, useEffect } from 'react'
-import { FormHelperText, makeStyles, Snackbar } from '@material-ui/core'
-import { reduxForm } from 'redux-form'
-import {
-  EmailField, NameField, PasswordConfirmationField, PasswordField, SubmitButton
-} from '../../common/FormElements'
-import { Alert } from '../../common/UIElements'
+import { memo, useEffect, useRef } from 'react'
+import { makeStyles } from '@material-ui/core'
+import { SubmitButtonFormik, TextFieldFormik } from '../../common/FormElements'
+import { useFormik } from "formik";
+import { signUpValidationSchema } from "../../../utils/validators";
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -13,44 +11,40 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const ProfileForm = memo(({ handleSubmit, pristine, submitting, error, ...props }) => {
+const ProfileForm = memo(({
+                            onSubmit,
+                            initialValues
+                          }) => {
   const classes = useStyles()
+  const formIsMounted = useRef(true)
 
-  const [open, setOpen] = useState(false)
-
+  // exclude memory leak
   useEffect(() => {
-    let mounted = true; // exclude memory leak
-    mounted && setOpen(!submitting && !props.submitFailed && props.submitSucceeded)
-    return () => mounted = false
-  }, [submitting, props.submitFailed, props.submitSucceeded])
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return
+    return () => {
+      formIsMounted.current = false;
     }
-    setOpen(false)
-  }
+  }, []);
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema: signUpValidationSchema,
+    onSubmit: (values) => {
+      // values for disable button after invalid submit
+      // touched for show error through setErrors
+      formik.resetForm({ values, touched: formik.touched })
+      return onSubmit(values, formik.setSubmitting, formik.setErrors, formIsMounted)
+    }
+  });
 
   return (
-    <>
-      <form className={classes.form} onSubmit={handleSubmit}>
-        <NameField />
-        <EmailField />
-        <PasswordField labelText='Новий пароль' />
-        <PasswordConfirmationField labelText='Підтвердження паролю' />
-        {error && <FormHelperText error={!!error}>{error}</FormHelperText>}
-        <SubmitButton textButton='Змінити' disabled={pristine || submitting} />
-      </form>
-
-      {open && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity='success'>
-          Профіль успішно оновлено!
-        </Alert>
-      </Snackbar>}
-    </>
+    <form className={classes.form} onSubmit={formik.handleSubmit}>
+      <TextFieldFormik name='name' label='Ім`я користувача' formik={formik} />
+      <TextFieldFormik name='email' label='Електронна пошта' formik={formik} />
+      <TextFieldFormik name='password' label='Новий пароль' type='password' formik={formik} />
+      <TextFieldFormik name='password_confirmation' label='Підтвердження паролю' type='password' formik={formik} />
+      <SubmitButtonFormik text='Змінити' formik={formik} />
+    </form>
   )
 })
 
-export default reduxForm({
-  form: 'profile',
-})(ProfileForm)
+export default ProfileForm

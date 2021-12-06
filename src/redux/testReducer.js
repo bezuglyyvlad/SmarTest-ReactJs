@@ -1,5 +1,4 @@
 import { testAPI } from '../api/api'
-import { startSubmit, reset } from 'redux-form'
 import { thunkErrorHandler } from '../utils/utils'
 
 const SET_TEST_DATA = 'test/SET_TEST_DATA'
@@ -47,6 +46,7 @@ export const getTest = (testId) => async (dispatch) => {
   try {
     const response = await testAPI.getTest(testId)
     const { test, question, answers } = response.data
+    dispatch(setTestIsFinished(false))
     dispatch(setTestDataAC(test, question, answers))
   } catch (e) {
     thunkErrorHandler(e, dispatch)
@@ -55,12 +55,10 @@ export const getTest = (testId) => async (dispatch) => {
 
 export const nextQuestion = (testId, answer) => async (dispatch) => {
   try {
-    dispatch(startSubmit('test'))
     const response = await testAPI.nextQuestion(testId, answer)
     if (response.data.length !== 0) {
       const { question, answers } = response.data
       dispatch(setNewQuestion(question, answers))
-      dispatch(reset('test'))
     } else {
       dispatch(setTestIsFinished(true))
     }

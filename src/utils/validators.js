@@ -1,5 +1,5 @@
 import { imageAcceptTypes, importAcceptTypes } from './utils'
-import * as yup from "yup";
+import * as yup from 'yup'
 
 export const email = value => {
   if (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
@@ -64,10 +64,45 @@ export const questionValidationSchema = yup.object({
   description: yup
     .string()
     .max(10000, 'Максимум 10000 символів')
-});
+})
+
+export const signInValidationSchema = yup.object({
+  email: yup
+    .string()
+    .required('Це поле є обов`язковим для заповнення')
+    .email('Некоректна адреса електронної пошти'),
+  password: yup
+    .string()
+    .required('Це поле є обов`язковим для заповнення')
+    .min(6, 'Значення занадто коротке (мінімум 6).')
+    .max(255, 'Значення задовге (максимум 255).')
+})
+
+export const signUpValidationSchema = yup.object({
+  name: yup
+    .string()
+    .required('Це поле є обов`язковим для заповнення')
+    .min(2, 'Значення занадто коротке (мінімум 2)')
+    .max(255, 'Значення задовге (максимум 255)'),
+  email: yup
+    .string()
+    .required('Це поле є обов`язковим для заповнення')
+    .email('Некоректна адреса електронної пошти'),
+  password: yup
+    .string()
+    .required('Це поле є обов`язковим для заповнення')
+    .min(6, 'Значення занадто коротке (мінімум 6)')
+    .max(255, 'Значення задовге (максимум 255)'),
+  password_confirmation: yup
+    .string()
+    .required('Це поле є обов`язковим для заповнення')
+    .min(6, 'Значення занадто коротке (мінімум 6)')
+    .max(255, 'Значення задовге (максимум 255)')
+    .oneOf([yup.ref('password'), null], 'Паролі не співпадають')
+})
 
 export const answerValidation = (answers, errors) => {
   answers.length < 2 && errors.push('Кількість відповідей не може бути менше 2.')
-  answers.filter(i => i.is_correct === '1' || i.is_correct === 1).length === 0 && errors.push('Хоча б одна відповідь повинна бути вірною.')
+  answers.length > 20 && errors.push('Кількість відповідей не може бути більше 20.')
   return errors
 }

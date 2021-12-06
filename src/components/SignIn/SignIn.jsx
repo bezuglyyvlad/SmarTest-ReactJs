@@ -1,15 +1,18 @@
 import { memo } from 'react'
-import { Avatar, Container, makeStyles, Typography } from '@material-ui/core'
+import { Avatar, Container, Grid, Link, makeStyles, Typography } from '@material-ui/core'
 import SignInForm from './SignInForm/SignInForm'
 import { connect } from 'react-redux'
 import { signIn } from '../../redux/userReducer'
 import { withAuthRedirect } from '../../hoc/withAuthRedirect'
 import { compose } from 'redux'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import { badRequestErrorHandler } from "../../utils/utils";
+import { NavLink } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(5),
+    marginBottom: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -24,8 +27,14 @@ const SignIn = memo(({ signIn }) => {
 
   const classes = useStyles()
 
-  const onSubmit = ({ email, password }) => {
-    signIn(email, password)
+  const onSubmit = async (formikData, setSubmitting, setStatus, formIsMounted) => {
+    setSubmitting(true)
+    await signIn(formikData)
+      .catch((e) => {
+        formIsMounted.current && setSubmitting(false)
+        badRequestErrorHandler(e)
+        formIsMounted.current && setStatus({ error: 'Неправильні дані користувача' })
+      })
   }
 
   return (
@@ -38,6 +47,13 @@ const SignIn = memo(({ signIn }) => {
           Вхід
         </Typography>
         <SignInForm onSubmit={onSubmit} />
+        <Grid container justifyContent='flex-end'>
+          <Grid item>
+            <Link component={NavLink} to='/signup' variant='body2'>
+              У вас немає облікового запису? Зареєструватися
+            </Link>
+          </Grid>
+        </Grid>
       </div>
     </Container>
   )
@@ -45,4 +61,5 @@ const SignIn = memo(({ signIn }) => {
 
 export default compose(
   connect(null, { signIn }),
-  withAuthRedirect)(SignIn)
+  withAuthRedirect
+)(SignIn)
