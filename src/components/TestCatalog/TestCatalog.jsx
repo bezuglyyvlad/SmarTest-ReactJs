@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import React, { memo } from 'react'
 import { Breadcrumbs, Container, Link, makeStyles, Typography } from '@material-ui/core'
 import { compose } from 'redux'
 import { withRouter } from 'react-router'

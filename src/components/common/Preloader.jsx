@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import React, { memo } from 'react'
 import { LinearProgress } from '@material-ui/core'
 
 export const Preloader = memo(() => {

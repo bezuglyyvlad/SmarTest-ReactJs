@@ -1,4 +1,4 @@
-import { PureComponent } from 'react'
+import React, { PureComponent } from 'react'
 import Error from './Error'
 import { withRouter } from 'react-router'
 import { isObjectEmpty } from "../../utils/utils";

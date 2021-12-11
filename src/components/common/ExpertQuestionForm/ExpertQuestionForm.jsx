@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from 'react'
+import React, { memo, useEffect, useRef } from 'react'
 import {
   makeStyles,
   MenuItem
@@ -42,8 +42,7 @@ const ExpertQuestionForm = memo(({
     initialValues: initialValues,
     validationSchema: questionValidationSchema,
     onSubmit: (values) => {
-      formik.resetForm({ values })
-      return onSubmit(values, formik.setSubmitting, formIsMounted)
+      return onSubmit(values, formik.setSubmitting, formik.resetForm, formIsMounted)
     }
   });
 

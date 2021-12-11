@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import React, { memo } from 'react'
 import { Container, makeStyles, Typography } from '@material-ui/core'
 import overallStructureXml from '../../images/overallStructureXml.png'
 import questionXml from '../../images/questionXml.png'

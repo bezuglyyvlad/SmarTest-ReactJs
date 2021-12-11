@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import React, { memo } from 'react'
 import { CssBaseline, Grid, IconButton, makeStyles, Typography } from '@material-ui/core'
 import { NavLink } from 'react-router-dom'
 import ErrorIcon from '@material-ui/icons/Error'

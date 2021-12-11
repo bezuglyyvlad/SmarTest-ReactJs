@@ -1,3 +1,4 @@
+import React from 'react'
 import { Preloader } from '../components/common/Preloader'
 import LazyLoad from 'react-lazyload'
 

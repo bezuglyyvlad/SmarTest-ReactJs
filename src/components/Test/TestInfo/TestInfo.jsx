@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import React, { memo } from 'react'
 import { Grid, makeStyles, Typography } from '@material-ui/core'
 import { getTimerString } from "../../../utils/utils";
 

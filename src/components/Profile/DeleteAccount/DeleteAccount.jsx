@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import React, { memo, useState } from 'react'
 import { DialogCreator } from '../../common/UIElements'
 import { Button, Link } from '@material-ui/core'
 

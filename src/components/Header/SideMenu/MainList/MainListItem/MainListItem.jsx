@@ -1,5 +1,5 @@
+import React, { memo } from 'react'
 import { NavLink } from 'react-router-dom'
-import { memo } from 'react'
 import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 
 const MainListItem = memo(({ link, listItemIsActive, text, icon, ...props }) => {

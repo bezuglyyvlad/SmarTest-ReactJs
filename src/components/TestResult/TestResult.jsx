@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from 'react'
+import React, { memo, useState, useEffect } from 'react'
 import {
   Breadcrumbs,
   Container,
@@ -91,8 +91,7 @@ const TestResult = memo(({
       </TableContainer>
       {questions.map(q => (
         <Question key={q.id}
-                  q={q}
-                  answers={answers[q.question.id]} />
+                  q={q} />
       ))}
     </Container>
   )

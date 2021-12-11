@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from 'react'
+import React, { memo, useState, useEffect } from 'react'
 import { Box, makeStyles } from "@material-ui/core"
 import { compose } from "redux"
 import { connect } from "react-redux"

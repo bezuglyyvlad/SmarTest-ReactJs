@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import MaterialTable from 'material-table'
 import { compose } from "redux"
 import { connect } from "react-redux"

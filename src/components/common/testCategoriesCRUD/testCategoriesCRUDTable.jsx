@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import React, { memo } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import {
@@ -15,9 +15,9 @@ import { email, maxLengthCreator, required } from '../../../utils/validators'
 import { validationErrorHandler } from "../../../utils/utils";
 
 const TestCategoriesCRUDTable = memo(({
-                                showError, testCategories, addTestCategory, updateTestCategory,
-                                deleteTestCategory, perPage, changePerPage, rowClick, test_category_id
-                              }) => {
+                                        showError, testCategories, addTestCategory, updateTestCategory,
+                                        deleteTestCategory, perPage, changePerPage, rowClick, test_category_id
+                                      }) => {
   const columns = [
     {
       title: '№',

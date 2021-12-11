@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import React, { memo } from 'react'
 import { Grid, makeStyles, Paper, Typography } from '@material-ui/core'
 import Answers from './Answers/Answers'
 import ImageBox from '../../common/UIElements'
@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const Question = memo(({ q, answers }) => {
+const Question = memo(({ q }) => {
   const classes = useStyles()
 
   const maxScore = roundToTwo(q.max_score)
@@ -47,7 +47,7 @@ const Question = memo(({ q, answers }) => {
       </Typography>
       {q.question.image && <ImageBox imageSrc={q.question.image} />}
       <Answers type={q.question.type}
-               data={answers}
+               data={q.answers}
                user_answer={q.user_answer} />
       {q.question.description && <Typography variant='subtitle1'>
         <strong>Пояснення: </strong> {q.question.description}

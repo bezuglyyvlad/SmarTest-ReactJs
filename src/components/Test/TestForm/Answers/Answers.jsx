@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import React, { memo } from 'react'
 import { CheckboxFormik, RadioFormik } from '../../../common/FormElements'
 import { FormControlLabel, Radio } from '@material-ui/core'
 

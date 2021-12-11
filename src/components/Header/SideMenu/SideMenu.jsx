@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import React, { memo, useState } from 'react'
 import MainList from './MainList/MainList'
 import SettingsList from './SettingsList/SettingsList'
 import { Box, Drawer, IconButton } from '@material-ui/core'

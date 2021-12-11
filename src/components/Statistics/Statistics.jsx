@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from 'react'
+import React, { memo, useState, useEffect } from 'react'
 import { Container, makeStyles, Typography } from '@material-ui/core'
 import { compose } from 'redux'
 import { withUnAuthRedirect } from '../../hoc/withUnAuthRedirect'

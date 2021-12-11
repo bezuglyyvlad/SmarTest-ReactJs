@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import React, { memo } from 'react'
 import { Avatar, Container, Grid, Link, makeStyles, Typography } from '@material-ui/core'
 import SignInForm from './SignInForm/SignInForm'
 import { connect } from 'react-redux'

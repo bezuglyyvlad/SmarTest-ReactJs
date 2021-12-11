@@ -1,4 +1,4 @@
-import { lazy, memo, useEffect } from 'react'
+import React, { lazy, memo, useEffect } from 'react'
 import './App.css'
 import { BrowserRouter, Route } from 'react-router-dom'
 import { Switch } from 'react-router'

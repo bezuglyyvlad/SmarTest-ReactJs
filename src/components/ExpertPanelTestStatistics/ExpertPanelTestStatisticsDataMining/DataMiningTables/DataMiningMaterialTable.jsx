@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import React, { memo } from 'react'
 import { materialTableLocalization } from "../../../../utils/localization";
 import MaterialTable from "material-table";
 import { appSelectors } from "../../../../redux/selectors/appSelectors";

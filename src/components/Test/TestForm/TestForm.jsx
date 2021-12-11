@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from 'react'
+import React, { memo, useEffect, useRef } from 'react'
 import { makeStyles } from '@material-ui/core'
 import { SubmitButtonFormik } from '../../common/FormElements'
 import Answers from './Answers/Answers'
@@ -33,7 +33,7 @@ const TestForm = memo(({ onSubmit, answers, type }) => {
 
   return (
     <form className={classes.root} onSubmit={formik.handleSubmit}>
-      <Answers type={type} data={answers} formik={formik}/>
+      <Answers type={type} data={answers} formik={formik} />
       <SubmitButtonFormik text='Відповісти' formik={formik} />
     </form>
   )

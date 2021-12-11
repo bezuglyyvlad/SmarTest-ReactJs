@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import React, { memo } from 'react'
 import { Button, Container, makeStyles, Paper, Typography } from '@material-ui/core'
 import { NavLink } from 'react-router-dom'
 

@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import React, { memo } from 'react'
 import { withRouter } from 'react-router-dom'
 import MainListItem from './MainListItem/MainListItem'
 import { compose } from 'redux'

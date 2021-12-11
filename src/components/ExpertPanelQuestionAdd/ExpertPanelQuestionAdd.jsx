@@ -1,4 +1,4 @@
-import { memo, useState, useEffect, useRef } from 'react'
+import React, { memo, useState, useEffect, useRef } from 'react'
 import { Box, Container, Link, makeStyles, Typography } from "@material-ui/core"
 import { compose } from "redux"
 import { withUnAuthRedirect } from "../../hoc/withUnAuthRedirect"
@@ -75,7 +75,7 @@ const ExpertPanelQuestionAdd = memo(({
     })
   }
 
-  const onSubmit = async (formikData, setSubmitting, formIsMounted) => {
+  const onSubmit = async (formikData, setSubmitting, resetForm, formIsMounted) => {
     let errors = []
     errors = answerValidation(answers, errors)
     if (errors.length !== 0) {
@@ -88,6 +88,7 @@ const ExpertPanelQuestionAdd = memo(({
       setSubmitting(true)
       await addQuestion(formData)
         .then(() => {
+          formIsMounted.current && resetForm({ values: formikData })
           isMounted.current && setAdded(true)
         })
         .catch((e) => {

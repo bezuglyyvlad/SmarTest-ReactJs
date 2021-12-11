@@ -1,5 +1,5 @@
+import React, { memo, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { memo, useState } from 'react'
 import { getAvatarName } from '../../../utils/utils'
 import { Avatar, IconButton, Menu, MenuItem } from '@material-ui/core'
 

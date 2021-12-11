@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import React, { memo } from 'react'
 import { appSelectors } from '../../../../redux/selectors/appSelectors'
 import { compose } from 'redux'
 import { connect } from 'react-redux'

@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import React, { memo, useState } from 'react'
 import MaterialTable, { MTableAction } from 'material-table'
 import { compose } from 'redux'
 import { connect } from 'react-redux'

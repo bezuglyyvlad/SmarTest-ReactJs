@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { compose } from "redux"
 import { connect } from "react-redux"
 import { expertPanelTestStatisticsSelectors } from "../../../redux/selectors/expertPanelTestStatisticsSelectors"
